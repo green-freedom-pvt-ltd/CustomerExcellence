@@ -99,7 +99,7 @@ export default class UserDetail extends Component {
 
   loadLocation(item) {
 
-    fetch("http://dev.impactrun.com/api/ced/runLocations/" + item.run_id, {
+    fetch('http://dev.impactrun.com/api/ced/runLocations/' + item.run_id +'/', {
       method: 'GET',
       headers: {
         'Accept': 'application/json',

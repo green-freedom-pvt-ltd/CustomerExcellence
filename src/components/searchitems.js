@@ -15,7 +15,7 @@ export default class SearchItem extends Component {
     }
     fetchResults(query) {
         console.log("Data", 'http://dev.impactrun.com/api/ced/users' + query)
-        fetch("http://dev.impactrun.com/api/ced/users" + query, {
+        fetch("http://dev.impactrun.com/api/ced/users/" + query, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
