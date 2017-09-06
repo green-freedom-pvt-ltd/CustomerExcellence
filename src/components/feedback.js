@@ -23,7 +23,12 @@ export default class Feedback extends Component{
     this.state = {
       data: null,
       loading:false,
-     
+      fetchUrl:'http://dev.impactrun.com/api/ced/userFeedback/'
+    }
+    if (props.user_id){
+      this.state.fetchUrl+= '?user_id=' + props.user_id
+      console.log("inside feedback fetchUrl", this.state.fetchUrl);
+
     }
   }
 
@@ -91,7 +96,9 @@ export default class Feedback extends Component{
   }
 
   componentWillMount(){
-    return fetch('http://dev.impactrun.com/api/ced/userFeedback/', {
+
+
+    return fetch(this.state.fetchUrl, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
