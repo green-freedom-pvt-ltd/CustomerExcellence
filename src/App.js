@@ -4,13 +4,9 @@ import './App.css';
 import Runs from './components/runs';
 import Feedback from './components/feedback';
 import League from './components/league';
-<<<<<<< HEAD
 import Team from './components/team';
 import SearchList from './components/searchitems'
-=======
-import SearchList from './components/searchitems';
 import _ from "lodash";
->>>>>>> origin/master
 
 import {
   Pagination, ButtonGroup, Button, ButtonToolbar, ToggleButtonGroup,
