@@ -4,7 +4,8 @@ import './App.css';
 import Runs from './components/runs';
 import Feedback from './components/feedback';
 import League from './components/league';
-import SearchList from './components/searchitems';
+import Team from './components/team';
+import SearchList from './components/searchitems'
 import _ from "lodash";
 
 import {
@@ -380,6 +381,7 @@ class App extends Component {
             <Route path="/search_list" render={() => <SearchList />} />
             <Route path="/feedback" render={() => <Feedback />} />
             <Route path="/league" render={() => <League />} />
+            <Route path="/league/teams" render={() => <Team />} />
             <Route path="/userdetail" render={() => <UserDetail />} />
             <Route path="/runs" render={() => <Runs />} />
 

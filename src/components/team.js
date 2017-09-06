@@ -1,14 +1,13 @@
 import React, {Component} from 'react';
 import { Button, Grid, Row, Col, Table, FormControl,Form, FormGroup,ControlLabel } from 'react-bootstrap';
 
-export default class League extends Component{
+export default class Team extends Component{
   constructor(props) {
     console.log("inside league container", props);
     super(props);
     this.state = {
       data: null,
       loading:false,
-     
     }
   }
 
@@ -20,9 +19,13 @@ export default class League extends Component{
           return (
               <tr key={index}  >
                   <td>{index +1}</td>
-                  <td>{league.impactleague_name}</td>
-                  <td>{league.is_active ? "true" : "False"}</td>
-                  <td>{league.start_date+" to "+league.end_date}</td>
+                  <td>{league.impactleague}</td>
+                  <td>{league.team_name}</td>
+                  <td>{league.team_captain}</td>
+                  <td>{league.team_captain_phone}</td>
+                  <td>{league.team_captain_email_id}</td>
+                  <td>{league.team_code}</td>
+                  <td>{league.team_count}</td>
               </tr>)
             });
     }
@@ -30,15 +33,19 @@ export default class League extends Component{
 
     return (
        <div>
-          <h1> League list </h1>
+          <h1> Team list </h1>
          <div>
             <Table striped bordered condensed hover>
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>League  Name</th>
-                  <th>Is active</th>
-                  <th>Duration</th>
+                  <th>League</th>
+                  <th>Team Name</th>
+                  <th>Team Captain</th>
+                  <th>Captain Phone</th>
+                  <th>Captain Email</th>
+                  <th>Code</th>
+                  <th>Count</th>
                 </tr>
               </thead>
               <tbody>
@@ -51,7 +58,7 @@ export default class League extends Component{
   }
 
   componentWillMount(){
-    return fetch('http://dev.impactrun.com/api/ced/impactleague/', {
+    return fetch('http://dev.impactrun.com/api/ced/teams/', {
       method: 'GET',
       headers: {
         'Accept': 'application/json',

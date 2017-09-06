@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Map from "./map.js";
 import { Pagination } from 'react-bootstrap';
+import Feedback from './feedback';
 
 export default class UserDetail extends Component {
   constructor(props) {
@@ -114,7 +115,7 @@ export default class UserDetail extends Component {
 
   loadLocation(item,itemId) {
 
-    fetch("http://dev.impactrun.com/api/ced/runLocations/" + item.run_id, {
+    fetch('http://dev.impactrun.com/api/ced/runLocations/' + item.run_id +'/', {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -306,6 +307,11 @@ export default class UserDetail extends Component {
                     </div>
                   </div>
 
+                </div>
+                <div className="row">
+                  <div className="col-sm-5">
+                    <Feedback user_id={dataObject.user_id}/>
+                  </div>
                 </div>
 
 
