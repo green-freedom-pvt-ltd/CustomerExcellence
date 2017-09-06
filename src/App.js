@@ -4,11 +4,16 @@ import './App.css';
 import Runs from './components/runs';
 import Feedback from './components/feedback';
 import League from './components/league';
+<<<<<<< HEAD
 import Team from './components/team';
 import SearchList from './components/searchitems'
+=======
+import SearchList from './components/searchitems';
+import _ from "lodash";
+>>>>>>> origin/master
 
 import {
-  Button, ButtonToolbar, ToggleButtonGroup,
+  Pagination, ButtonGroup, Button, ButtonToolbar, ToggleButtonGroup,
   ToggleButton, Grid, Row, Col, Table, FormControl, Form, FormGroup, ControlLabel
 } from 'react-bootstrap';
 import UserDetail from './components/userdetail';
@@ -62,12 +67,13 @@ class NameForm extends React.Component {
     this.setState({ user_email: event.target.value });
   }
   handleSearch(value) {
+
     this.setState({
-            error: "none",
-            search_by: value
-          })
-  
-    // this.setState({ search_by: value });
+      error: "none",
+      search_by: value
+    })
+
+
 
   }
   handleSubmit(event) {
@@ -76,50 +82,50 @@ class NameForm extends React.Component {
     console.log('-------------------------------A name was submitted: ' + JSON.stringify(this.state));
     switch (this.state.search_by) {
       case 1:
-        if (( this.state.first_name === "")&&( this.state.last_name === "")) {
+        if ((this.state.first_name === "") && (this.state.last_name === "")) {
           this.setState({
             error: "block",
           })
           console.log("/searchitem?first_name=" + this.state.first_name);
         }
-        else if((this.state.first_name !== "")&&(this.state.last_name !== "")){
+        else if ((this.state.first_name !== "") && (this.state.last_name !== "")) {
           this.setState({
             error: "none",
           })
-          window.location = "/search_list?first_name=" + this.state.first_name+"&last_name="+ this.state.last_name;
-          console.log("/searchitem?first_name=" + this.state.first_name+"&last_name="+ this.state.last_name);
-        } 
-        else if((this.state.first_name !== "")&&(this.state.last_name === "")){
+          window.location = "/search_list?first_name=" + this.state.first_name + "&last_name=" + this.state.last_name;
+          console.log("/searchitem?first_name=" + this.state.first_name + "&last_name=" + this.state.last_name);
+        }
+        else if ((this.state.first_name !== "") && (this.state.last_name === "")) {
           window.location = "/search_list?first_name=" + this.state.first_name;
           console.log("SEARCh /searchitem?first_name=" + this.state.first_name);
         }
-        else{
-          window.location = "/search_list?last_name="+ this.state.last_name;
+        else {
+          window.location = "/search_list?last_name=" + this.state.last_name;
           console.log("/searchitem?last_name=" + this.state.last_name);
         }
-       
+
         break;
       case 2:
-      if ( this.state.user_id === "") {
+        if (this.state.user_id === "") {
           this.setState({
             error: "block",
           })
         }
-        else{
-          window.location = "/userdetail/"+ this.state.user_id;
+        else {
+          window.location = "/userdetail/" + this.state.user_id;
         }
-        
+
         break;
       case 3:
-      if ( this.state.user_email === "") {
+        if (this.state.user_email === "") {
           this.setState({
             error: "block",
           })
         }
-        else{
+        else {
           window.location = "/search_list?email=" + this.state.user_email;
         }
-       
+
         break;
 
       default:
@@ -133,7 +139,7 @@ class NameForm extends React.Component {
     console.log("SEARCH", this.state.search_by);
     return (
       <div>
-        <ButtonToolbar style={{paddingBottom:"10px"}}>
+        <ButtonToolbar style={{ paddingBottom: "10px" }}>
           <ToggleButtonGroup type="radio" onChange={this.handleSearch} name="options" defaultValue={1}>
             <ToggleButton value={1}>
               Search By Name
@@ -144,7 +150,7 @@ class NameForm extends React.Component {
           </ToggleButtonGroup>
         </ButtonToolbar>
         <span style={{ display: this.state.error }}>Enter search parameters</span>
-        <Form style={{paddingBottom:"10px"}} onSubmit={this.handleSubmit}>
+        <Form style={{ paddingBottom: "10px" }} onSubmit={this.handleSubmit}>
           <FormGroup style={this.state.search_by === 1 ? { display: "block" } : { display: "none" }} controlId="formInlineFirstName">
             <ControlLabel>First Name</ControlLabel>
             {' '}
@@ -184,24 +190,30 @@ class NameForm extends React.Component {
 
 
 
-
-
-
-
 class User extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
       data: null,
-      loading: false
-    }
+      loading: false,
+      userPath: 'http://dev.impactrun.com/api/leagueleaderboard/?impactleague=7',
+      nextPage: '',
+      prevPage: '',
+      activePage: 1,
 
+    }
+    this.handleSelect = this.handleSelect.bind(this);
   }
 
   componentWillMount() {
     console.log("In Will MOunt");
-    fetch('http://dev.impactrun.com/api/leagueleaderboard/?impactleague=7', {
+
+    this.fetchLeaderboard(this.state.userPath);
+  }
+
+  fetchLeaderboard(path) {
+    fetch(path, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -211,22 +223,41 @@ class User extends Component {
     })
       .then((Response) => Response.json())
       .then((responseJson) => {
+
         this.setState({
           data: responseJson,
-          loading: true
+          loading: true,
+          prevPage: responseJson.previous,
+          userPath: this.state.nextPage,
+          nextPage: responseJson.next,
 
         })
-        console.log(this.state.data);
-
+        console.log("Data", this.state.data);
 
       });
   }
+  // handleNext() {
+
+  //   this.fetchLeaderboard(this.state.nextPage);
+
+  // }
+  // handlePrev() {
+  //   console.log("Prev", this.state.prevPage)
+  //   this.fetchLeaderboard(this.state.prevPage);
+  // }
   leaderboard() {
     if (this.state.data === null) {
       return;
     }
     else {
+      if (this.state.prevPage === null) {
+        this.state.pageCount = Math.ceil(this.state.data.count / this.state.data.results.length);
+      }
+
+      console.log("Total Page", this.state.pageCount)
       if (this.state.data != null) {
+
+
         var runList = this.state.data.results.map((item, index) => {
 
           return (
@@ -251,7 +282,24 @@ class User extends Component {
 
     }
   }
+  handleSelect(eventKey) {
+    console.log("Current Page", eventKey)
+    console.log("Page", this.state.userPath)
+    console.log("Prev Page", this.state.prevPage)
+    if (this.state.activePage < eventKey) {
+      this.fetchLeaderboard(this.state.nextPage);
+    }
+    else if (this.state.activePage > eventKey) {
+      this.fetchLeaderboard(this.state.prevPage);
+    }
+    else {
 
+    }
+    this.setState({
+      activePage: eventKey,
+
+    });
+  }
   render() {
     return (
       <div className="User">
@@ -286,6 +334,24 @@ class User extends Component {
                 {this.leaderboard()}
               </tbody>
             </Table>
+            <div id="test">
+              <Pagination
+                prev
+                next
+                first
+                last
+                ellipsis
+                boundaryLinks
+                items={this.state.pageCount}
+                maxButtons={3}
+                activePage={this.state.activePage}
+                onSelect={this.handleSelect} />
+            </div>
+            {/* <ButtonGroup>
+              <Button onClick={() => this.handlePrev()}>Prev</Button>
+              <Button></Button>
+              <Button onClick={() => this.handleNext()}>Next</Button>
+            </ButtonGroup> */}
           </Col>
         </div>
       </div>

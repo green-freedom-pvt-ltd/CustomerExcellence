@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Map from "./map.js";
+import { Pagination } from 'react-bootstrap';
 
 export default class UserDetail extends Component {
   constructor(props) {
@@ -12,8 +13,12 @@ export default class UserDetail extends Component {
       user_id: path,
       userRun: null,
       runLocation: "",
+      activePage: 1,
+      activeItem:'',
+      id:'',     
     }
     this.Viewruns = this.Viewruns.bind(this);
+    this.handleSelect = this.handleSelect.bind(this);
 
     // searchedItem = window.location.search;       
   }
@@ -57,9 +62,12 @@ export default class UserDetail extends Component {
     })
       .then((Response) => Response.json())
       .then((responseJson) => {
-
+        console.log("PREV", responseJson)
         this.setState({
           userRun: responseJson,
+          prevPage: responseJson.previous,
+          userPath: this.state.nextPage,
+          nextPage: responseJson.next,
 
         })
         console.log("user run", this.state.userRun);
@@ -68,17 +76,24 @@ export default class UserDetail extends Component {
   }
 
   Viewruns() {
+    
     if (this.state.userRun === null) {
       return;
     }
     else {
+      if (this.state.prevPage === null) {
+        this.state.pageCount = Math.ceil(this.state.userRun.count / this.state.userRun.results.length);
+      }
       if (this.state.userRun != null) {
         var runList = this.state.userRun.results.map((item, index) => {
-          console.log("RUN USER", item);
+          var color = (this.state.id === item.run_id )?'active-item':'';
+          
+         console.log('color',color,this.state.id,item.run_id);
+         
           return (
-            
+
             // <li key={index}>{item.run_id}</li>
-            <tr key={index} onClick={() => this.loadLocation(item)}>
+            <tr className={color} key={index} onClick={() => this.loadLocation(item,item.run_id)}>
               <td>{item.run_id}</td>
               <td>{item.cause_run_title}</td>
               <td>{item.distance}</td>
@@ -97,7 +112,7 @@ export default class UserDetail extends Component {
 
 
 
-  loadLocation(item) {
+  loadLocation(item,itemId) {
 
     fetch('http://dev.impactrun.com/api/ced/runLocations/' + item.run_id +'/', {
       method: 'GET',
@@ -115,64 +130,85 @@ export default class UserDetail extends Component {
 
         this.setState({
           runLocation: responseJson,
-          runInform:item,
-          run_id:item.run_id,
-          client_run_id:item.client_run_id,
-          version:item.version,
-          user_id:item.user_id,
-          num_spike:item.num_spikes,
-          steps:item.no_of_steps,
+          runInform: item,
+          run_id: item.run_id,
+          client_run_id: item.client_run_id,
+          version: item.version,
+          user_id: item.user_id,
+          num_spike: item.num_spikes,
+          steps: item.no_of_steps,
+          activeItem: (itemId === item.run_id)?'':'',
+          id:item.run_id,
         })
+        this.Viewruns();
       });
 
   }
+  handleSelect(eventKey) {
+    console.log("Current Page", eventKey)
+    console.log("Page", this.state.userPath)
+    console.log("Prev Page", this.state.prevPage)
+    if (this.state.activePage + 1 === eventKey) {
+      this.fetchRuns(this.state.nextPage);
+    }
+    else if (this.state.activePage - 1 === eventKey) {
+      this.fetchRuns(this.state.prevPage);
+    }
+    else {
+      let runPath = "http://dev.impactrun.com/api/ced/runs/?page=" + eventKey + "&user_id=" + this.state.user_id
+      console.log("Run Path", runPath);
+      this.fetchRuns(runPath);
+    }
+    this.setState({
+      activePage: eventKey,
 
+    });
+  }
 
-  viewDataonClick(){
-    if(this.state.runInform!==null){
-      return(
-        <div>
-        <div className="form-group row">
-          <label htmlFor="user_id-input" className="col-sm-4 col-form-label">User ID</label>
-          <div className="col-sm-8">
-            <input className="form-control" type="text" /*onChange={this.handleChange}*/   value={this.state.user_id=== null?"":this.state.user_id} id="user_id-input"/>
+  viewDataonClick() {
+    if (this.state.runInform !== null) {
+      return (
+        <div style={{ overflowY: "scroll", overflowX: "hidden", maxHeight: "250px" }}>
+          <div className="form-group row">
+            <label htmlFor="user_id-input" className="col-sm-4 col-form-label">User ID</label>
+            <div className="col-sm-8">
+              <input className="form-control" type="text" /*onChange={this.handleChange}*/ value={this.state.user_id === null ? "" : this.state.user_id} id="user_id-input" />
+            </div>
+          </div>
+          <div className="form-group row">
+            <label htmlFor="client_id-input" className="col-sm-4 col-form-label">Client Run ID</label>
+            <div className="col-sm-8">
+              <input className="form-control" /*onChange={this.handleChange1} */ type="text" value={this.state.client_run_id === null ? "" : this.state.client_run_id} id="client_id-input" />
+            </div>
+          </div>
+          <div className="form-group row">
+            <label htmlFor="version-input" className="col-sm-4 col-form-label">Version</label>
+            <div className="col-sm-8">
+              <input className="form-control" type="text" value={this.state.version === null ? "" : this.state.version} id="version-input" />
+            </div>
+          </div>
+          <div className="form-group row">
+            <label htmlFor="spike-input" className="col-sm-4 col-form-label">Run ID</label>
+            <div className="col-sm-8">
+              <input className="form-control" type="text" value={this.state.run_id === null ? "" : this.state.run_id} id="spike-input" />
+            </div>
+          </div>
+          <div className="form-group row">
+            <label htmlFor="app-version-input" className="col-sm-4 col-form-label">Num of Spike</label>
+            <div className="col-sm-8">
+              <input className="form-control" type="text" value={this.state.num_spike === null ? "" : this.state.num_spike} id="app-version-input" />
+            </div>
+          </div>
+          <div className="form-group row">
+            <label htmlFor="app-version-input" className="col-sm-4 col-form-label">Num of Steps</label>
+            <div className="col-sm-8">
+              <input className="form-control" type="text" value={this.state.steps === null ? "" : this.state.steps} id="app-version-input" />
+            </div>
           </div>
         </div>
-        <div className="form-group row">
-          <label htmlFor="client_id-input" className="col-sm-4 col-form-label">Client Run ID</label>
-          <div className="col-sm-8">
-            <input className="form-control" /*onChange={this.handleChange1} */ type="text" value={this.state.client_run_id=== null?"":this.state.client_run_id} id="client_id-input" />
-          </div>
-        </div>
-        <div className="form-group row">
-          <label htmlFor="version-input" className="col-sm-4 col-form-label">Version</label>
-          <div className="col-sm-8">
-            <input className="form-control"  type="text" value={this.state.version=== null?"":this.state.version} id="version-input" />
-          </div>
-        </div>
-        <div className="form-group row">
-          <label htmlFor="spike-input" className="col-sm-4 col-form-label">Run ID</label>
-          <div className="col-sm-8">
-            <input className="form-control"  type="text" value={this.state.run_id=== null?"":this.state.run_id} id="spike-input" />
-          </div>
-        </div>
-        <div className="form-group row">
-          <label htmlFor="app-version-input" className="col-sm-4 col-form-label">Num of Spike</label>
-          <div className="col-sm-8">
-            <input className="form-control" type="text" value={this.state.num_spike=== null?"":this.state.num_spike} id="app-version-input" />
-          </div>
-        </div>
-        <div className="form-group row">
-          <label htmlFor="app-version-input" className="col-sm-4 col-form-label">Num of Steps</label>
-          <div className="col-sm-8">
-            <input className="form-control" type="text" value={this.state.steps=== null?"":this.state.steps} id="app-version-input" />
-          </div>
-        </div>
-      </div>
       )
     }
-    else
-    {
+    else {
       return;
     }
   }
@@ -195,15 +231,15 @@ export default class UserDetail extends Component {
                   <div className="col-sm-7" >
                     <div className="box-top-left" >
 
-                      <div className="col-sm-7">
+                      <div className="col-sm-8">
                         <div style={{ display: "flex", padding: "10px 0px" }}>
                           <div style={{ marginRight: "10px" }}>
                             <img src={dataObject.social_thumb} alt={"social-thumb-" + dataObject.first_name} style={{ width: "80px" }} className="img-circle" />
                           </div>
                           <div>
-                            <h4 style={{ margin: "auto" }}>{dataObject.first_name + ' ' + dataObject.last_name}</h4>
+                            <h4 style={{ margin: "auto" }}>{dataObject.user_id + ' ' + dataObject.first_name + ' ' + dataObject.last_name}</h4>
                             <ul style={{ listStyle: "none", padding: "0px" }}>
-                              <li>User Id : {dataObject.user_id}</li>
+                              <li>Email : {dataObject.email}</li>
                               <li> Gender : {dataObject.gender_user}</li>
                               <li>Weight : {dataObject.body_weight}</li>
                             </ul>
@@ -226,7 +262,7 @@ export default class UserDetail extends Component {
 
 
                       </div>
-                      <div className="col-sm-5">
+                      <div className="col-sm-4">
 
                       </div>
 
@@ -246,11 +282,22 @@ export default class UserDetail extends Component {
                           {this.Viewruns()}
                         </tbody>
                       </table>
+                      <Pagination
+                        prev
+                        next
+                        first
+                        last
+                        ellipsis
+                        boundaryLinks
+                        items={this.state.pageCount}
+                        maxButtons={3}
+                        activePage={this.state.activePage}
+                        onSelect={this.handleSelect} />
                     </div>
                   </div>
                   <div className="col-sm-5">
                     <div className="box-top-left" style={{ minHeight: "400px", width: "100%" }}>
-                      <div style={{ width: "100%", height: "274px", marginBottom: "15px", backgroundColor: "blue" }}>
+                      <div style={{ width: "100%", height: "274px", marginBottom: "15px", backgroundColor: "rgba(173, 186, 216, 0.45)",border:"6px solid rgba(51, 122, 183, 0.61)" }}>
                         {this.loadMap()}
                       </div>
                       <div>
