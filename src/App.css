@@ -47,6 +47,14 @@ h1,h2,h3,h4,h5{
   overflow:hidden;
 }
 
+.active-item{
+  z-index: 3;
+  color: #fff;
+  cursor: default;
+  background-color: #337ab7 !important;
+  border-color: #337ab7;
+}
+
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }

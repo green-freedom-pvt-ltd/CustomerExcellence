@@ -15,7 +15,7 @@ export default class SearchItem extends Component {
     }
     fetchResults(query) {
         console.log("Data", 'http://dev.impactrun.com/api/ced/users' + query)
-        fetch("http://dev.impactrun.com/api/ced/users" + query, {
+        fetch("http://dev.impactrun.com/api/ced/users/" + query, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -43,52 +43,52 @@ export default class SearchItem extends Component {
             return;
         }
         else {
-           
-                var runList = this.state.data.results.map((item, index) => {
-                    console.log("RUN USER", item);
-                    return (
 
-                        // <li key={index}>{item.run_id}</li>
-                        <tr key={index}>
-                            <td>
-                                <Link to={"/userdetail/"+ item.user_id}>
+            var runList = this.state.data.results.map((item, index) => {
+                console.log("RUN USER", item);
+                return (
+
+                    // <li key={index}>{item.run_id}</li>
+                    <tr key={index}>
+                        <td>
+                            <Link to={"/userdetail/" + item.user_id}>
                                 {item.user_id}
-                                </Link>
-                                </td>
-                            <td>{item.first_name +" "+item.last_name}</td>
-                            <td>{item.email}</td>
-                            <td>{item.birthday}</td>
-                        </tr>
-                    )
-                })
-           
+                            </Link>
+                        </td>
+                        <td>{item.first_name + " " + item.last_name}</td>
+                        <td>{item.email}</td>
+                        <td>{item.birthday}</td>
+                    </tr>
+                )
+            })
+
             return runList;
 
         }
     }
 
     render() {
-        if(this.state.data !== null || this.state.data != ''){
+        if (this.state.data !== null || this.state.data != '') {
             return (
-            <div className="box-top-left" style={{ width: "100%" }}>
+                <div className="box-top-left" style={{ width: "100%" }}>
 
-                <table className="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>User ID</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Birthday</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {this.Viewruns()}
-                    </tbody>
-                </table>
-            </div>
-        );
+                    <table className="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>User ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Birthday</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {this.Viewruns()}
+                        </tbody>
+                    </table>
+                </div>
+            );
         }
-        else{
+        else {
             <div>Test</div>
         }
     }
