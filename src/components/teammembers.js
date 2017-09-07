@@ -6,23 +6,24 @@ import {
   Link
 } from 'react-router-dom'
 
-export default class Team extends Component{
+
+export default class TeamMembers extends Component{
   constructor(props) {
-    console.log("inside team container", props);
+    console.log("inside team member container", props);
     super(props);
      var path = window.location.pathname;
       path = path.split("/");
-      console.log("------111--asd------",path);
+      console.log("------member------",path);
       
       this.state = {
       data: null,
       loading:false,
-      fetchUrl:'http://dev.impactrun.com/api/ced/teams/',
-      league_id: null,     
+      fetchUrl:'http://dev.impactrun.com/api/ced/employeelist/',
+      team_id: null,     
 
     }
     if (path[2]) {
-       this.state.fetchUrl+= '?league_id=' + path[2]
+       this.state.fetchUrl+= '?team_id=' + path[2]
       console.log("inside feedback fetchUrl", this.state.fetchUrl);
     }
   }
@@ -30,31 +31,28 @@ export default class Team extends Component{
   render() {
     var  league_data = this.state.data;
     if(league_data){
-    var leagueList = league_data.results.map((league, index) => {
+    var leagueList = league_data.map((league, index) => {
           return (
               <tr key={index}  >
                   <td>{index +1}</td>
-                  <td>{league.impactleague}</td>
+                  <td>{league.team}</td>
                   <td>
-                    <Link to={"/teammembers/"+league.id +"/"}>
-                      {league.team_name}
+                    <Link to={"/userdetail/"+league.user +"/"}>
+                      {league.user}
                     </Link>
                   </td>
-                  <td>{league.team_captain}</td>
-                  <td>{league.team_captain_phone}</td>
-                  <td>{league.team_captain_email_id}</td>
                   <td>{league.team_code}</td>
-                  <td>{league.team_count}</td>
+                  <td>{league.city}</td>
+                  <td>{league.department}</td>
               </tr>)
             });
     }
 
 
     return (
-        <div>
-         <h1> Team list </h1>
+       <div>
          <div className="row">
-           <div className="col-md-10">
+           <div className="col-sm-6">
                 <Table striped bordered condensed hover>
                   <thead>
                     <tr>
@@ -62,10 +60,6 @@ export default class Team extends Component{
                       <th>League</th>
                       <th>Team Name</th>
                       <th>Team Captain</th>
-                      <th>Captain Phone</th>
-                      <th>Captain Email</th>
-                      <th>Code</th>
-                      <th>Count</th>
                     </tr>
                   </thead>
                   <tbody>

@@ -5,6 +5,7 @@ import Runs from './components/runs';
 import Feedback from './components/feedback';
 import League from './components/league';
 import Team from './components/team';
+import TeamMembers from './components/teammembers';
 import SearchList from './components/searchitems'
 import _ from "lodash";
 
@@ -381,7 +382,8 @@ class App extends Component {
             <Route path="/search_list" render={() => <SearchList />} />
             <Route path="/feedback" render={() => <Feedback />} />
             <Route path="/league" render={() => <League />} />
-            <Route path="/league/teams" render={() => <Team />} />
+            <Route path="/leagueteams" render={() => <Team />} />
+            <Route path="/teammembers" render={() => <TeamMembers />} />
             <Route path="/userdetail" render={() => <UserDetail />} />
             <Route path="/runs" render={() => <Runs />} />
 
