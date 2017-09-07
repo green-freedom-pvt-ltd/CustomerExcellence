@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { Pagination, Grid,Row, Col,Table } from 'react-bootstrap';
+import NameForm from './runform';
+
 
 export default class SearchItem extends Component {
     constructor(props) {
@@ -11,7 +14,6 @@ export default class SearchItem extends Component {
             data: '',
         }
         this.fetchResults(searchQuery);
-
     }
     fetchResults(query) {
         console.log("Data", 'http://dev.impactrun.com/api/ced/users' + query)
@@ -25,29 +27,21 @@ export default class SearchItem extends Component {
         })
             .then((Response) => Response.json())
             .then((responseJson) => {
-
                 this.setState({
                     data: responseJson,
-
                 })
                 console.log(this.state.data);
-
-
             });
-
-
     }
 
-    Viewruns() {
+Viewruns() {
         if (this.state.data === null || this.state.data === "") {
             return;
         }
         else {
-
             var runList = this.state.data.results.map((item, index) => {
                 console.log("RUN USER", item);
                 return (
-
                     // <li key={index}>{item.run_id}</li>
                     <tr key={index}>
                         <td>
@@ -61,15 +55,30 @@ export default class SearchItem extends Component {
                     </tr>
                 )
             })
-
             return runList;
-
         }
     }
 
     render() {
         if (this.state.data !== null || this.state.data != '') {
             return (
+                <div className="User">
+                <div className="User-header">
+                  <Grid>
+                    <Row className="show-grid">
+                      <Col xs={12} md={8}> <h2>User</h2> </Col>
+                    </Row>
+                    <Row className="show-grid">
+        
+                      <Col md={8}>
+                        <NameForm />
+                      </Col>
+        
+        
+                    </Row>
+                  </Grid>
+                </div>
+                <div className="User-header">
                 <div className="box-top-left" style={{ width: "100%" }}>
 
                     <table className="table table-striped">
@@ -85,6 +94,8 @@ export default class SearchItem extends Component {
                             {this.Viewruns()}
                         </tbody>
                     </table>
+                </div>
+                </div>
                 </div>
             );
         }
