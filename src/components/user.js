@@ -67,7 +67,7 @@ class User extends Component {
             this.state.pageCount = Math.ceil(this.state.data.count / this.state.data.results.length);
           }
     
-          console.log("Total Page", this.state.pageCount)
+       
           if (this.state.data != null) {
     
     
