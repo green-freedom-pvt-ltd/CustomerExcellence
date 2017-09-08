@@ -15,8 +15,8 @@ export default class UserDetail extends Component {
       userRun: null,
       runLocation: "",
       activePage: 1,
-      activeItem:'',
-      id:'',     
+      activeItem: '',
+      id: '',
     }
     this.Viewruns = this.Viewruns.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
@@ -77,7 +77,7 @@ export default class UserDetail extends Component {
   }
 
   Viewruns() {
-    
+
     if (this.state.userRun === null) {
       return;
     }
@@ -87,14 +87,14 @@ export default class UserDetail extends Component {
       }
       if (this.state.userRun != null) {
         var runList = this.state.userRun.results.map((item, index) => {
-          var color = (this.state.id === item.run_id )?'active-item':'';
-          
-         console.log('color',color,this.state.id,item.run_id);
-         
+          var color = (this.state.id === item.run_id) ? 'active-item' : '';
+
+          console.log('color', color, this.state.id, item.run_id);
+
           return (
 
             // <li key={index}>{item.run_id}</li>
-            <tr className={color} key={index} onClick={() => this.loadLocation(item,item.run_id)}>
+            <tr className={color} key={index} onClick={() => this.loadLocation(item, item.run_id)}>
               <td>{item.run_id}</td>
               <td>{item.cause_run_title}</td>
               <td>{item.distance}</td>
@@ -113,9 +113,9 @@ export default class UserDetail extends Component {
 
 
 
-  loadLocation(item,itemId) {
+  loadLocation(item, itemId) {
 
-    fetch('http://dev.impactrun.com/api/ced/runLocations/' + item.run_id +'/', {
+    fetch('http://dev.impactrun.com/api/ced/runLocations/' + item.run_id + '/', {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -138,8 +138,16 @@ export default class UserDetail extends Component {
           user_id: item.user_id,
           num_spike: item.num_spikes,
           steps: item.no_of_steps,
-          activeItem: (itemId === item.run_id)?'':'',
-          id:item.run_id,
+          activeItem: (itemId === item.run_id) ? '' : '',
+          id: item.run_id,
+          app_version: item.app_version,
+          cause_run_title: item.cause_run_title,
+          device_name: item.device_name,
+          distance: item.distance,
+          run_amount: item.run_amount,
+          run_duration: item.run_duration,
+
+
         })
         this.Viewruns();
       });
@@ -206,6 +214,45 @@ export default class UserDetail extends Component {
               <input className="form-control" type="text" value={this.state.steps === null ? "" : this.state.steps} id="app-version-input" />
             </div>
           </div>
+
+
+
+          <div className="form-group row">
+            <label htmlFor="app_version-input" className="col-sm-4 col-form-label">App Version</label>
+            <div className="col-sm-8">
+              <input className="form-control" type="text" /*onChange={this.handleChange}*/ value={this.state.app_version === null ? "" : this.state.app_version} id="app_version-input" />
+            </div>
+          </div>
+          <div className="form-group row">
+            <label htmlFor="cause_run_title-input" className="col-sm-4 col-form-label">Cause</label>
+            <div className="col-sm-8">
+              <input className="form-control" /*onChange={this.handleChange1} */ type="text" value={this.state.cause_run_title === null ? "" : this.state.cause_run_title} id="cause_run_title-input" />
+            </div>
+          </div>
+          <div className="form-group row">
+            <label htmlFor="device_name-input" className="col-sm-4 col-form-label">Device Name</label>
+            <div className="col-sm-8">
+              <input className="form-control" type="text" value={this.state.device_name === null ? "" : this.state.device_name} id="device_name-input" />
+            </div>
+          </div>
+          <div className="form-group row">
+            <label htmlFor="distance-input" className="col-sm-4 col-form-label">Distance</label>
+            <div className="col-sm-8">
+              <input className="form-control" type="text" value={this.state.distance === null ? "" : this.state.distance} id="distance-input" />
+            </div>
+          </div>
+          <div className="form-group row">
+            <label htmlFor="run_amount-input" className="col-sm-4 col-form-label">Amount Raised</label>
+            <div className="col-sm-8">
+              <input className="form-control" type="text" value={this.state.run_amount === null ? "" : this.state.run_amount} id="run_amount-input" />
+            </div>
+          </div>
+          <div className="form-group row">
+            <label htmlFor="run_duration-input" className="col-sm-4 col-form-label">Run Duration</label>
+            <div className="col-sm-8">
+              <input className="form-control" type="text" value={this.state.run_duration === null ? "" : this.state.run_duration} id="app-version-input" />
+            </div>
+          </div>
         </div>
       )
     }
@@ -240,7 +287,7 @@ export default class UserDetail extends Component {
                           <div>
                             <h4 style={{ margin: "auto" }}>{dataObject.user_id + ' ' + dataObject.first_name + ' ' + dataObject.last_name}</h4>
                             <ul style={{ listStyle: "none", padding: "0px" }}>
-                              <li>Email : {dataObject.email}</li>
+                              <li>Email : <a href={"mailto:" + dataObject.email}>{dataObject.email}</a></li>
                               <li> Gender : {dataObject.gender_user}</li>
                               <li>Weight : {dataObject.body_weight}</li>
                             </ul>
@@ -298,7 +345,7 @@ export default class UserDetail extends Component {
                   </div>
                   <div className="col-sm-5">
                     <div className="box-top-left" style={{ minHeight: "400px", width: "100%" }}>
-                      <div style={{ width: "100%", height: "274px", marginBottom: "15px", backgroundColor: "rgba(173, 186, 216, 0.45)",border:"6px solid rgba(51, 122, 183, 0.61)" }}>
+                      <div style={{ width: "100%", height: "274px", marginBottom: "15px", backgroundColor: "rgba(173, 186, 216, 0.45)", border: "6px solid rgba(51, 122, 183, 0.61)" }}>
                         {this.loadMap()}
                       </div>
                       <div>
@@ -310,7 +357,7 @@ export default class UserDetail extends Component {
                 </div>
                 <div className="row">
                   <div className="col-sm-5">
-                    <Feedback user_id={dataObject.user_id}/>
+                    <Feedback user_id={dataObject.user_id} />
                   </div>
                 </div>
 

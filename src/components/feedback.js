@@ -32,9 +32,6 @@ export default class Feedback extends Component{
     }
   }
 
-
-  
-
   render() {
     var  feedback_data = this.state.data;
     console.log("------111--------",feedback_data);
@@ -50,7 +47,7 @@ export default class Feedback extends Component{
                       {feedback.user_id}
                   </Link>
                   </td>
-                  <td>{feedback.email}</td>
+                  <td><a href={"mailto:"+feedback.email}>{feedback.email}</a></td>
                   <td>{feedback_date_time.toUTCString()}</td>
                   <td>{feedback.feedback ? feedback.feedback : "-"}</td>
                   <td>{feedback.run_id}</td>
