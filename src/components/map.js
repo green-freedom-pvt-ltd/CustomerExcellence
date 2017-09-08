@@ -10,9 +10,9 @@ const GettingStartedGoogleMap = withGoogleMap(props => (
     <GoogleMap
         ref={props.onMapLoad}
         defaultZoom={16}
-        defaultCenter={props.markers[0].position}
+        defaultCenter={props.markers[0]}
         onClick={props.onMapClick}
-        center={props.markers[0].position}
+        center={props.markers[0]}
     >
 
         {/* {props.markers.map((marker, index) => 
@@ -29,26 +29,20 @@ const GettingStartedGoogleMap = withGoogleMap(props => (
 
             (
                 <Marker
-                    position={index === 0 || index === props.markers.length - 1 ? marker.position : null}
+                    position={index === 0 || index === props.markers.length - 1 ? marker : null}
                     key={index}
                     onRightClick={() => props.onMarkerRightClick(index)}
                 />
             )
-        )
+            )
         }
-
-
 
         <Polyline
             path={props.markers.map((marker, index) => {
-
-                return marker.position
+                return marker
             })}
             geodesic={true}
             options={{strokeColor:"#ff0000",strokeWeight:"5",strokeOpacity:"0.6"}}
-            
-          
-
         />
 
 
@@ -67,19 +61,18 @@ export default class GoogleMap2 extends Component {
             
             function combineBatch(n) {
                 var location = {
-                    position: {
                         lat: n.lat,
                         lng: n.lon
-                    }
 
                 }
                 return location;
             }
-            finalData = _.concat(finalData, _.reverse(_.map(state.location_array, combineBatch)));
+            finalData = _.concat(finalData,_.map(state.location_array, combineBatch));
             console.log("Final Data",finalData.length);
             return finalData;
 
         }
+
 
         if (this.props.location != null && this.props.location != "" && this.props.location.count > 0) {
             var state = this.props.location.results;

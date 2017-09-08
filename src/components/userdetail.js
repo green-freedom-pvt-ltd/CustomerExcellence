@@ -89,7 +89,7 @@ export default class UserDetail extends Component {
         var runList = this.state.userRun.results.map((item, index) => {
           var color = (this.state.id === item.run_id) ? 'active-item' : '';
 
-          console.log('color', color, this.state.id, item.run_id);
+          // console.log('color', color, this.state.id, item.run_id);
 
           return (
 
