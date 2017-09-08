@@ -32,9 +32,6 @@ export default class Feedback extends Component{
     }
   }
 
-
-  
-
   render() {
     var  feedback_data = this.state.data;
     console.log("------111--------",feedback_data);
