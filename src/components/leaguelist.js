@@ -14,7 +14,6 @@ export default class LeagueList extends Component{
     this.state = {
       data: null,
       loading:false,
-     
     }
   }
 

@@ -69,7 +69,7 @@ export default class Feedback extends Component{
        <div>
           <h1> Feedback list </h1>
          <div>
-            <Table striped bordered condensed hover>
+            <Table striped bordered responsive condensed hover>
               <thead>
                 <tr>
                   <th>#</th>

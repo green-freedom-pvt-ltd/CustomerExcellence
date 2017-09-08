@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
-import './App.css';
+import RunsInfo from './dashboards/runsinfo';
 import Runs from './components/runs';
 import Feedback from './components/feedback';
 import League from './components/league';
@@ -386,6 +386,7 @@ class App extends Component {
             <Route path="/teammembers" render={() => <TeamMembers />} />
             <Route path="/userdetail" render={() => <UserDetail />} />
             <Route path="/runs" render={() => <Runs />} />
+            <Route path="/runsinfo" render={() => <RunsInfo />} />
 
             {/* <Route path={path} render={routeProps => <LeaguePage {...routeProps} path={path} />} history={history} />
         <Route path="/description" render={routeProps => <Example {...routeProps} />} history={history} /> */}

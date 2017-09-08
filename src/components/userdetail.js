@@ -309,7 +309,7 @@ export default class UserDetail extends Component {
 
                 </div>
                 <div className="row">
-                  <div className="col-sm-5">
+                  <div className="col-sm-10">
                     <Feedback user_id={dataObject.user_id}/>
                   </div>
                 </div>
