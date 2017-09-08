@@ -10,7 +10,7 @@ class User extends Component {
         this.state = {
           data: null,
           loading: false,
-          userPath: 'http://dev.impactrun.com/api/leagueleaderboard/?impactleague=7',
+          userPath: 'http://dev.impactrun.com/api/ced/users/',
           nextPage: '',
           prevPage: '',
           activePage: 1,
@@ -77,13 +77,19 @@ class User extends Component {
                 // <li key={index}>{item.run_id}</li>
                 <tr key={index}>
                   <td>
-                    <Link to={"/userdetail/" + item.user.user_id}>
-                      {`${item.user.first_name} ${item.user.last_name}`}
+                    {index +1}
+                  </td>
+                  <td>
+                  <Link to={"/userdetail/" + item.user_id}>
+                    {item.user_id}
+                    </Link>
+                    </td>
+                  <td>
+                  <Link to={"/userdetail/" + item.user_id}>
+                      {`${item.first_name} ${item.last_name}`}
                     </Link>
                   </td>
-                  <td>John</td>
-                  <td>Carter</td>
-                  <td>johncarter@mail.com</td>
+                  <td><a href={"mailto:" + item.email}>{item.email}</a></td>
                 </tr>
               )
             })
