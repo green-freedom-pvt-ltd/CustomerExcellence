@@ -25,7 +25,7 @@ class App extends Component {
       <Router>
         <div className="container-fluid">
           <header>
-            <nav className="navbar navbar-default navbar-fixed-top">
+            <nav className="navbar navbar-default navbar-fixed-top" style={{    padding: "5px"}}>
               <div className="container">
                 {/* <!-- Brand and toggle get grouped for better mobile display --> */}
                 <div className="navbar-header page-scroll">
