@@ -90,7 +90,7 @@ export default class SearchItem extends Component {
     render() {
         if (this.state.data !== null || this.state.data != '') {
             return (
-                <div className="User">
+                <div className="container">
                     <div className="User-header">
                         <Grid>
                             <Row className="show-grid">
@@ -106,7 +106,7 @@ export default class SearchItem extends Component {
                             </Row>
                         </Grid>
                     </div>
-                    <div className="User-header">
+                    <div className="container">
                         <div className="box-top-left" style={{ width: "100%" }}>
 
                             <table className="table table-striped">

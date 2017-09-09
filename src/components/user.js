@@ -121,7 +121,7 @@ class User extends Component {
       }
       render() {
         return (
-          <div className="User">
+          <div className="container">
             <div className="User-header">
               <Grid>
                 <Row className="show-grid">
