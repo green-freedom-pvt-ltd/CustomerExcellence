@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Button, Grid, Row, Col, Table, FormControl,Form, FormGroup,ControlLabel } from 'react-bootstrap';
+import {Table } from 'react-bootstrap';
 
 export default class Team extends Component{
   constructor(props) {

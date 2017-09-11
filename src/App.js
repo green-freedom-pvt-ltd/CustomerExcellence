@@ -6,7 +6,7 @@ import Feedback from './components/feedback';
 import League from './components/league';
 import Team from './components/team';
 import SearchList from './components/searchitems'
-import _ from "lodash";
+
 import User from './components/user';
 import UserDetail from './components/userdetail';
 import {

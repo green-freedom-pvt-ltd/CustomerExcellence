@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import _ from "lodash";
-import withScriptjs from 'react-google-maps/lib/async/withScriptjs';
+
 import { withGoogleMap, GoogleMap, Marker, Polyline } from "react-google-maps";
 
 
@@ -84,7 +84,7 @@ export default class GoogleMap2 extends Component {
         if (this.props.location != null && this.props.location != "" && this.props.location.count > 0) {
             var state = this.props.location.results;
             console.log("DATA", this.props.location.results);
-            var finalData = _.map(state, getLocation);
+            finalData = _.map(state, getLocation);
             console.log("Final Data",finalData);
             return (
                 <div style={{ height: `100%` }}>

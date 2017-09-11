@@ -70,29 +70,36 @@ class User extends Component {
        
           if (this.state.data != null) {
     
-    
-            var runList = this.state.data.results.map((item, index) => {
-    
-              return (
-                // <li key={index}>{item.run_id}</li>
-                <tr key={index}>
-                  <td>
-                    {index +1}
-                  </td>
-                  <td>
-                  <Link to={"/userdetail/" + item.user_id}>
-                    {item.user_id}
-                    </Link>
-                    </td>
-                  <td>
-                  <Link to={"/userdetail/" + item.user_id}>
-                      {`${item.first_name} ${item.last_name}`}
-                    </Link>
-                  </td>
-                  <td><a href={"mailto:" + item.email}>{item.email}</a></td>
-                </tr>
-              )
-            })
+    if(this.state.data.results.length<1)
+    {
+      return <tr><td colSpan="3">No Record Found..!!</td></tr>
+
+    }
+    else{
+      var runList = this.state.data.results.map((item, index) => {
+        
+                  return (
+                    // <li key={index}>{item.run_id}</li>
+                    <tr key={index}>
+                      <td>
+                        {index +1}
+                      </td>
+                      <td>
+                      <Link to={"/userdetail/" + item.user_id}>
+                        {item.user_id}
+                        </Link>
+                        </td>
+                      <td>
+                      <Link to={"/userdetail/" + item.user_id}>
+                          {`${item.first_name} ${item.last_name}`}
+                        </Link>
+                      </td>
+                      <td><a href={"mailto:" + item.email}>{item.email}</a></td>
+                    </tr>
+                  )
+                })
+    }
+           
           } else {
             runList;
           }

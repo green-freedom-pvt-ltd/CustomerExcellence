@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import {
-  Pagination, ButtonGroup, Button, ButtonToolbar, ToggleButtonGroup,
-  ToggleButton, Grid, Row, Col, Table, FormControl, Form, FormGroup, ControlLabel
+import { Button, ButtonToolbar, ToggleButtonGroup,
+  ToggleButton, Col, Table, FormControl, Form, FormGroup, ControlLabel
 } from 'react-bootstrap';
 
 
-class NameForm extends React.Component {
+class NameForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -49,10 +48,8 @@ class NameForm extends React.Component {
       error: "none",
       search_by: value
     })
-
-
-
   }
+
   handleSubmit(event) {
 
     console.log("/searchitem?first_name=" + this.state.first_name);
@@ -113,17 +110,17 @@ class NameForm extends React.Component {
 
 
   render() {
-    console.log("SEARCH", this.state.search_by);
+   
     return (
       <div>
-        <ButtonToolbar style={{ paddingBottom: "10px" }}>
-          <ToggleButtonGroup type="radio" onChange={this.handleSearch} name="options" defaultValue={1}>
-            <ToggleButton value={1}>
+        <ButtonToolbar style={{marginBottom:"10px"}} >
+          <ToggleButtonGroup type="radio" name="options" defaultValue={1}>
+            <ToggleButton onClick={() =>this.handleSearch(1)}  value={1}>
               Search By Name
           </ToggleButton>
-            <ToggleButton value={2}>Search By User ID</ToggleButton>
+            <ToggleButton onClick={() =>this.handleSearch(2)}  value={2}>Search By User ID</ToggleButton>
 
-            <ToggleButton value={3}>Search By Email</ToggleButton>
+            <ToggleButton onClick={() =>this.handleSearch(3)}  value={3}>Search By Email</ToggleButton>
           </ToggleButtonGroup>
         </ButtonToolbar>
         <span style={{ display: this.state.error }}>Enter search parameters</span>

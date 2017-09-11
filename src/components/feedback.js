@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import { Pagination, Button, Grid, Row, Col, Table, FormControl, Form, FormGroup, ControlLabel } from 'react-bootstrap';
+import { Pagination, Table } from 'react-bootstrap';
 import {
-  BrowserRouter as Router,
-  Route,
   Link
 } from 'react-router-dom';
 
@@ -83,29 +81,38 @@ export default class Feedback extends Component {
       if (this.state.prevPage === null) {
         this.state.pageCount = Math.ceil(feedback_data.count / feedback_data.results.length);
       }
-      var feedbackList = feedback_data.results.map((feedback, index) => {
-        var epoch_timestamp = feedback.client_time_stamp
-        var feedback_date_time = new Date(epoch_timestamp)
-        return (
-          <tr key={index}>
-            <td>{index + 1}</td>
-            <td>
-              <Link to={"/userdetail/" + feedback.user_id}>
-                {feedback.user_id}
-              </Link>
-            </td>
-            <td><a href={"mailto:" + feedback.email}>{feedback.email}</a></td>
-            <td>{feedback_date_time.toUTCString()}</td>
-            <td>{feedback.feedback ? feedback.feedback : "-"}</td>
-            <td>{feedback.run_id}</td>
-            <td>{feedback.phone_number}</td>
-            <td>{feedback.is_chat ? "yes" : "no"}</td>
-            <td>{feedback.tag}</td>
-            <td>{feedback.sub_tag}</td>
-            <td>{feedback.feedback_app_version}</td>
-            <td>{feedback.is_ios ? "yes" : "no"}</td>
-          </tr>)
-      });
+
+      if (this.state.data.results.length < 1) {
+        return <tr><td colSpan="12" style={{textAlign:"center"}}>No Record Found..!!</td></tr>
+
+      }
+      else{
+        var feedbackList = feedback_data.results.map((feedback, index) => {
+          var epoch_timestamp = feedback.client_time_stamp
+          var feedback_date_time = new Date(epoch_timestamp)
+          return (
+            <tr key={index}>
+              <td>{index + 1}</td>
+              <td>
+                <Link to={"/userdetail/" + feedback.user_id}>
+                  {feedback.user_id}
+                </Link>
+              </td>
+              <td><a href={"mailto:" + feedback.email}>{feedback.email}</a></td>
+              <td>{feedback_date_time.toUTCString()}</td>
+              <td>{feedback.feedback ? feedback.feedback : "-"}</td>
+              <td>{feedback.run_id}</td>
+              <td>{feedback.phone_number}</td>
+              <td>{feedback.is_chat ? "yes" : "no"}</td>
+              <td>{feedback.tag}</td>
+              <td>{feedback.sub_tag}</td>
+              <td>{feedback.feedback_app_version}</td>
+              <td>{feedback.is_ios ? "yes" : "no"}</td>
+            </tr>)
+        });
+
+      }
+     
     }
 
 
