@@ -5,6 +5,7 @@ import Runs from './components/runs';
 import Feedback from './components/feedback';
 import League from './components/league';
 import Team from './components/team';
+import TeamMembers from './components/teammembers';
 import SearchList from './components/searchitems'
 
 import User from './components/user';
@@ -78,7 +79,7 @@ class App extends Component {
                   <Route path="/runs" render={() => <Runs />} />
 
                   {/* <Route path={path} render={routeProps => <LeaguePage {...routeProps} path={path} />} history={history} />
-        <Route path="/description" render={routeProps => <Example {...routeProps} />} history={history} /> */}
+                      <Route path="/description" render={routeProps => <Example {...routeProps} />} history={history} /> */}
                 </div>
               </div>
             </div>
