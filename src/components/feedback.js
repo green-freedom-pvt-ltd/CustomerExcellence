@@ -141,7 +141,7 @@ export default class Feedback extends Component {
               {feedbackList}
             </tbody>
           </Table>
-          <div id="pagination">
+          <div style={{display:this.state.pageCount>1?"block":"none"}} id="pagination">
             <Pagination
               prev
               next

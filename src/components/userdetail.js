@@ -86,24 +86,32 @@ export default class UserDetail extends Component {
         this.state.pageCount = Math.ceil(this.state.userRun.count / this.state.userRun.results.length);
       }
       if (this.state.userRun != null) {
-        var runList = this.state.userRun.results.map((item, index) => {
-          var color = (this.state.id === item.run_id) ? 'active-item' : '';
-          let startTime = this.getTime(item.start_time)
-          let totalDistance = parseFloat(item.distance).toFixed(2);
-          return (
-            
-            // <li key={index}>{item.run_id}</li>
-            <tr className={color} style={{cursor:"pointer"}} key={index} onClick={() => this.loadLocation(item, item.run_id)}>
-              <td>{startTime}</td>
-              <td>{item.cause_run_title}</td>
-              <td>{totalDistance}</td>
-              <td>{item.run_amount}</td>
-              <td>{parseFloat(item.calories_burnt).toFixed(2)}</td>
-              <td>{item.run_duration}</td>
-              
-            </tr>
-          )
-        })
+
+        if (this.state.userRun.results.length < 1) {
+          return <tr><td colSpan="6" style={{textAlign:"center"}}>No Record Found..!!</td></tr>
+
+        }
+        else {
+          var runList = this.state.userRun.results.map((item, index) => {
+            var color = (this.state.id === item.run_id) ? 'active-item' : '';
+            let startTime = this.getTime(item.start_time)
+            let totalDistance = parseFloat(item.distance).toFixed(2);
+            return (
+
+              // <li key={index}>{item.run_id}</li>
+              <tr className={color} style={{ cursor: "pointer" }} key={index} onClick={() => this.loadLocation(item, item.run_id)}>
+                <td>{startTime}</td>
+                <td>{item.cause_run_title}</td>
+                <td>{totalDistance}km</td>
+                <td>&#8377; {item.run_amount}</td>
+                <td>{parseFloat(item.calories_burnt).toFixed(2)}</td>
+                <td>{item.run_duration}</td>
+
+              </tr>
+            )
+          })
+        }
+
       } else {
         runList;
       }
@@ -113,11 +121,11 @@ export default class UserDetail extends Component {
     }
   }
 
-getTime(time){
-  var Date1 = new Date(time)
-  Date1 = Date1.toLocaleString('en-US', { hour: 'numeric',minute:'numeric', hour12: true });
-  return Date1;
-}
+  getTime(time) {
+    var Date1 = new Date(time)
+    Date1 = Date1.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+    return Date1;
+  }
 
   loadLocation(item, itemId) {
 
@@ -130,7 +138,7 @@ getTime(time){
       }
     })
       .then((Response) => {
-       
+
         return Response.json()
       })
       .then((responseJson) => {
@@ -153,24 +161,24 @@ getTime(time){
           distance: item.distance,
           run_amount: item.run_amount,
           run_duration: item.run_duration,
-          avg_speed:item.avg_speed,
+          avg_speed: item.avg_speed,
           calories_burnt: item.calories_burnt,
-          device_id:item.device_id,
+          device_id: item.device_id,
           cause_id: item.cause_id,
-          is_flag:item.is_flag,
-          is_ios:item.is_ios,
-          start_location_lat:item.start_location_lat,
-          start_location_long:item.start_location_long,
-          start_time:item.start_time,
-          start_time_epoch:startEpochTime.toUTCString(),
-          end_location_lat:item.end_location_lat,
-          end_location_long:item.end_location_long,
-          end_time:item.end_time,
-          end_time_epoch:endEpochTime.toUTCString(),
-          num_updates:item.num_updates,
-          os_version:item.os_version,
-          peak_speed:item.peak_speed,
-          team_id:item.team_id
+          is_flag: item.is_flag,
+          is_ios: item.is_ios,
+          start_location_lat: item.start_location_lat,
+          start_location_long: item.start_location_long,
+          start_time: item.start_time,
+          start_time_epoch: startEpochTime.toUTCString(),
+          end_location_lat: item.end_location_lat,
+          end_location_long: item.end_location_long,
+          end_time: item.end_time,
+          end_time_epoch: endEpochTime.toUTCString(),
+          num_updates: item.num_updates,
+          os_version: item.os_version,
+          peak_speed: item.peak_speed,
+          team_id: item.team_id
 
 
         })
@@ -180,7 +188,7 @@ getTime(time){
   }
   handleSelect(eventKey) {
     console.log("Current Page", eventKey)
- 
+
     console.log("Prev Page", this.state.prevPage)
     if (this.state.activePage + 1 === eventKey) {
       this.fetchRuns(this.state.nextPage);
@@ -227,7 +235,7 @@ getTime(time){
               <input className="form-control" readOnly /*onChange={this.handleChange1} */ type="text" value={this.state.start_location_long === null ? "" : this.state.start_location_long} id="start_location_long-input" />
             </div>
           </div>
-         
+
           <div className="form-group row">
             <label htmlFor="start_time_epoch-input" className="col-sm-4 col-form-label">Start Time Epoch</label>
             <div className="col-sm-8">
@@ -253,7 +261,7 @@ getTime(time){
               <input className="form-control" type="text" readOnly /*onChange={this.handleChange}*/ value={this.state.user_id === null ? "" : this.state.user_id} id="user_id-input" />
             </div>
           </div>
-          
+
           <div className="form-group row">
             <label htmlFor="app-version-input" className="col-sm-4 col-form-label">Num of Spike</label>
             <div className="col-sm-8">
@@ -299,7 +307,7 @@ getTime(time){
           <div className="form-group row">
             <label htmlFor="run_duration-input" className="col-sm-4 col-form-label">Run Duration</label>
             <div className="col-sm-8">
-              <input className="form-control"  type="text" value={this.state.run_duration === null ? "" : this.state.run_duration} id="app-version-input" readOnly/>
+              <input className="form-control" type="text" value={this.state.run_duration === null ? "" : this.state.run_duration} id="app-version-input" readOnly />
             </div>
           </div>
           <div className="form-group row">
@@ -335,10 +343,10 @@ getTime(time){
           <div className="form-group row">
             <label htmlFor="is_ios-input" className="col-sm-4 col-form-label">Is IOS</label>
             <div className="col-sm-8">
-              <input className="form-control"  type="text" value={this.state.is_ios === null ? "" : this.state.is_ios} id="is_ios-input" readOnly/>
+              <input className="form-control" type="text" value={this.state.is_ios === null ? "" : this.state.is_ios} id="is_ios-input" readOnly />
             </div>
           </div>
-          
+
           <div className="form-group row">
             <label htmlFor="end_location_lat-input" className="col-sm-4 col-form-label">End Location Lat</label>
             <div className="col-sm-8">
@@ -348,7 +356,7 @@ getTime(time){
           <div className="form-group row">
             <label htmlFor="end_location_long-input" className="col-sm-4 col-form-label">End Location Long</label>
             <div className="col-sm-8">
-              <input className="form-control"  type="text" value={this.state.end_location_long === null ? "" : this.state.end_location_long} id="end_location_long-input" readOnly/>
+              <input className="form-control" type="text" value={this.state.end_location_long === null ? "" : this.state.end_location_long} id="end_location_long-input" readOnly />
             </div>
           </div>
           <div className="form-group row">
@@ -384,7 +392,7 @@ getTime(time){
           <div className="form-group row">
             <label htmlFor="team_id-input" className="col-sm-4 col-form-label">Team ID</label>
             <div className="col-sm-8">
-              <input className="form-control"  type="text" value={this.state.team_id === null ? "" : this.state.team_id} id="team_id-input" readOnly/>
+              <input className="form-control" type="text" value={this.state.team_id === null ? "" : this.state.team_id} id="team_id-input" readOnly />
             </div>
           </div>
 
@@ -423,23 +431,23 @@ getTime(time){
                             <h4 style={{ margin: "auto" }}>{dataObject.user_id + ' ' + dataObject.first_name + ' ' + dataObject.last_name}</h4>
                             <ul style={{ listStyle: "none", padding: "0px" }}>
                               <li>Email : <a href={"mailto:" + dataObject.email}>{dataObject.email}</a></li>
-                              <li> Gender : {dataObject.gender_user}</li>
+                              <li>Gender : {dataObject.gender_user}</li>
                               <li>Weight : {dataObject.body_weight}</li>
                             </ul>
                           </div>
                         </div>
                         <div style={{ display: "flex" }}>
                           <div className="item">
-                            <p style={{color: "rgba(0, 0, 0, 0.37)",fontWeight: "bold"}}>Total Raised</p>
-                            <p>{dataObject.total_amount.total_amount}</p>
+                            <p style={{ color: "rgba(0, 0, 0, 0.37)", fontWeight: "bold" }}>Total Raised</p>
+                            <p>&#8377; {dataObject.total_amount.total_amount === null ? 0 : dataObject.total_amount.total_amount}</p>
                           </div>
                           <div className="item">
-                            <p style={{color: "rgba(0, 0, 0, 0.37)",fontWeight: "bold"}}>No. of Runs</p>
+                            <p style={{ color: "rgba(0, 0, 0, 0.37)", fontWeight: "bold" }}>No. of Runs</p>
                             <p>--</p>
                           </div>
                           <div className="item">
-                            <p style={{color: "rgba(0, 0, 0, 0.37)",fontWeight: "bold"}}>Distance</p>
-                            <p>{totalDistance}</p>
+                            <p style={{ color: "rgba(0, 0, 0, 0.37)", fontWeight: "bold" }}>Distance</p>
+                            <p>{totalDistance === "NaN" ? 0 : totalDistance} km</p>
                           </div>
                         </div>
 
@@ -463,11 +471,12 @@ getTime(time){
                             <th>Duration</th>
                           </tr>
                         </thead>
-                        <tbody>
+                        <tbody style={{ color: "rgba(0, 0, 0, 0.37)", fontWeight: "bold", fontSize: "12px" }}>
                           {this.Viewruns()}
                         </tbody>
                       </table>
-                      <Pagination
+                    <div style={{display:this.state.pageCount>1?"block":"none"}} id="pagination">
+                    <Pagination
                         prev
                         next
                         first
@@ -478,6 +487,8 @@ getTime(time){
                         maxButtons={3}
                         activePage={this.state.activePage}
                         onSelect={this.handleSelect} />
+                    </div>
+                      
                     </div>
                   </div>
                   <div className="col-sm-5">

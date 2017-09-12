@@ -160,7 +160,7 @@ class User extends Component {
                     {this.leaderboard()}
                   </tbody>
                 </Table>
-                <div id="test">
+                <div style={{display:this.state.pageCount>1?"block":"none"}} id="pagination">
                   <Pagination
                     prev
                     next

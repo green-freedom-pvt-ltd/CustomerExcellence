@@ -128,7 +128,7 @@ export default class SearchItem extends Component {
                                     {this.Viewruns()}
                                 </tbody>
                             </Table>
-                            <div id="pagination">
+                            <div style={{display:this.state.pageCount>1?"block":"none"}} id="pagination">
                                 <Pagination
                                     prev
                                     next
