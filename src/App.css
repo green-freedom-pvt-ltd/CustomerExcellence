@@ -66,6 +66,10 @@ padding-top: 65px;
   background-color: #337ab7 !important;
   border-color: #337ab7;
 }
+.run-detail .row{
+      margin-right: 0px;
+    margin-left: 0px;
+}
 
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }

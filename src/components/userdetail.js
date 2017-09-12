@@ -88,16 +88,19 @@ export default class UserDetail extends Component {
       if (this.state.userRun != null) {
         var runList = this.state.userRun.results.map((item, index) => {
           var color = (this.state.id === item.run_id) ? 'active-item' : '';
-
-
+          let startTime = this.getTime(item.start_time)
+          let totalDistance = parseFloat(item.distance).toFixed(2);
           return (
-
+            
             // <li key={index}>{item.run_id}</li>
             <tr className={color} style={{cursor:"pointer"}} key={index} onClick={() => this.loadLocation(item, item.run_id)}>
-              <td>{item.run_id}</td>
+              <td>{startTime}</td>
               <td>{item.cause_run_title}</td>
-              <td>{item.distance}</td>
+              <td>{totalDistance}</td>
+              <td>{item.run_amount}</td>
+              <td>{parseFloat(item.calories_burnt).toFixed(2)}</td>
               <td>{item.run_duration}</td>
+              
             </tr>
           )
         })
@@ -110,7 +113,11 @@ export default class UserDetail extends Component {
     }
   }
 
-
+getTime(time){
+  var Date1 = new Date(time)
+  Date1 = Date1.toLocaleString('en-US', { hour: 'numeric',minute:'numeric', hour12: true });
+  return Date1;
+}
 
   loadLocation(item, itemId) {
 
@@ -123,11 +130,12 @@ export default class UserDetail extends Component {
       }
     })
       .then((Response) => {
-        console.log(Response);
+       
         return Response.json()
       })
       .then((responseJson) => {
-
+        let startEpochTime = new Date(item.start_time_epoch);
+        let endEpochTime = new Date(item.end_time_epoch);
         this.setState({
           runLocation: responseJson,
           runInform: item,
@@ -145,6 +153,24 @@ export default class UserDetail extends Component {
           distance: item.distance,
           run_amount: item.run_amount,
           run_duration: item.run_duration,
+          avg_speed:item.avg_speed,
+          calories_burnt: item.calories_burnt,
+          device_id:item.device_id,
+          cause_id: item.cause_id,
+          is_flag:item.is_flag,
+          is_ios:item.is_ios,
+          start_location_lat:item.start_location_lat,
+          start_location_long:item.start_location_long,
+          start_time:item.start_time,
+          start_time_epoch:startEpochTime.toUTCString(),
+          end_location_lat:item.end_location_lat,
+          end_location_long:item.end_location_long,
+          end_time:item.end_time,
+          end_time_epoch:endEpochTime.toUTCString(),
+          num_updates:item.num_updates,
+          os_version:item.os_version,
+          peak_speed:item.peak_speed,
+          team_id:item.team_id
 
 
         })
@@ -176,82 +202,192 @@ export default class UserDetail extends Component {
   viewDataonClick() {
     if (this.state.runInform !== null) {
       return (
-        <div style={{ overflowY: "scroll", overflowX: "hidden", maxHeight: "250px" }}>
+        <div className="run-detail" style={{ overflowY: "scroll", overflowX: "hidden", maxHeight: "250px" }}>
           <div className="form-group row">
-            <label htmlFor="user_id-input" className="col-sm-4 col-form-label">User ID</label>
-            <div className="col-sm-7">
-              <input className="form-control" type="text" readOnly /*onChange={this.handleChange}*/ value={this.state.user_id === null ? "" : this.state.user_id} id="user_id-input" />
+            <label htmlFor="spike-input" className="col-sm-4 col-form-label">Run ID</label>
+            <div className="col-sm-8">
+              <input className="form-control" readOnly type="text" value={this.state.run_id === null ? "" : this.state.run_id} id="spike-input" />
+            </div>
+          </div>
+          <div className="form-group row">
+            <label htmlFor="start_time-input" className="col-sm-4 col-form-label">Start Time</label>
+            <div className="col-sm-8">
+              <input className="form-control" readOnly type="text" value={this.state.start_time === null ? "" : this.state.start_time} id="start_time-input" />
+            </div>
+          </div>
+          <div className="form-group row">
+            <label htmlFor="start_location_lat-input" className="col-sm-4 col-form-label">Start Location Lat</label>
+            <div className="col-sm-8">
+              <input className="form-control" readOnly type="text" /*onChange={this.handleChange}*/ value={this.state.start_location_lat === null ? "" : this.state.start_location_lat} id="start_location_lat-input" />
+            </div>
+          </div>
+          <div className="form-group row">
+            <label htmlFor="start_location_long-input" className="col-sm-4 col-form-label">Start Location Long</label>
+            <div className="col-sm-8">
+              <input className="form-control" readOnly /*onChange={this.handleChange1} */ type="text" value={this.state.start_location_long === null ? "" : this.state.start_location_long} id="start_location_long-input" />
+            </div>
+          </div>
+         
+          <div className="form-group row">
+            <label htmlFor="start_time_epoch-input" className="col-sm-4 col-form-label">Start Time Epoch</label>
+            <div className="col-sm-8">
+              <input className="form-control" readOnly type="text" value={this.state.start_time_epoch === null ? "" : this.state.start_time_epoch} id="start_time_epoch-input" />
             </div>
           </div>
           <div className="form-group row">
             <label htmlFor="client_id-input" className="col-sm-4 col-form-label">Client Run ID</label>
-            <div className="col-sm-7">
+            <div className="col-sm-8">
               <input className="form-control" readOnly /*onChange={this.handleChange1} */ type="text" value={this.state.client_run_id === null ? "" : this.state.client_run_id} id="client_id-input" />
             </div>
           </div>
           <div className="form-group row">
             <label htmlFor="version-input" className="col-sm-4 col-form-label">Version</label>
-            <div className="col-sm-7">
+            <div className="col-sm-8">
               <input className="form-control" readOnly type="text" value={this.state.version === null ? "" : this.state.version} id="version-input" />
             </div>
           </div>
+
           <div className="form-group row">
-            <label htmlFor="spike-input" className="col-sm-4 col-form-label">Run ID</label>
-            <div className="col-sm-7">
-              <input className="form-control" readOnly type="text" value={this.state.run_id === null ? "" : this.state.run_id} id="spike-input" />
+            <label htmlFor="user_id-input" className="col-sm-4 col-form-label">User ID</label>
+            <div className="col-sm-8">
+              <input className="form-control" type="text" readOnly /*onChange={this.handleChange}*/ value={this.state.user_id === null ? "" : this.state.user_id} id="user_id-input" />
             </div>
           </div>
+          
           <div className="form-group row">
             <label htmlFor="app-version-input" className="col-sm-4 col-form-label">Num of Spike</label>
-            <div className="col-sm-7">
+            <div className="col-sm-8">
               <input className="form-control" readOnly type="text" value={this.state.num_spike === null ? "" : this.state.num_spike} id="app-version-input" />
             </div>
           </div>
           <div className="form-group row">
             <label htmlFor="app-version-input" className="col-sm-4 col-form-label">Num of Steps</label>
-            <div className="col-sm-7">
+            <div className="col-sm-8">
               <input className="form-control" readOnly type="text" value={this.state.steps === null ? "" : this.state.steps} id="app-version-input" />
             </div>
           </div>
-
-
-
           <div className="form-group row">
             <label htmlFor="app_version-input" className="col-sm-4 col-form-label">App Version</label>
-            <div className="col-sm-7">
+            <div className="col-sm-8">
               <input className="form-control" readOnly type="text" /*onChange={this.handleChange}*/ value={this.state.app_version === null ? "" : this.state.app_version} id="app_version-input" />
             </div>
           </div>
           <div className="form-group row">
             <label htmlFor="cause_run_title-input" className="col-sm-4 col-form-label">Cause</label>
-            <div className="col-sm-7">
+            <div className="col-sm-8">
               <input className="form-control" readOnly /*onChange={this.handleChange1} */ type="text" value={this.state.cause_run_title === null ? "" : this.state.cause_run_title} id="cause_run_title-input" />
             </div>
           </div>
           <div className="form-group row">
             <label htmlFor="device_name-input" className="col-sm-4 col-form-label">Device Name</label>
-            <div className="col-sm-7">
+            <div className="col-sm-8">
               <input className="form-control" readOnly type="text" value={this.state.device_name === null ? "" : this.state.device_name} id="device_name-input" />
             </div>
           </div>
           <div className="form-group row">
             <label htmlFor="distance-input" className="col-sm-4 col-form-label">Distance</label>
-            <div className="col-sm-7">
+            <div className="col-sm-8">
               <input className="form-control" readOnly type="text" value={this.state.distance === null ? "" : this.state.distance} id="distance-input" />
             </div>
           </div>
           <div className="form-group row">
             <label htmlFor="run_amount-input" className="col-sm-4 col-form-label">Amount Raised</label>
-            <div className="col-sm-7">
+            <div className="col-sm-8">
               <input className="form-control" readOnly type="text" value={this.state.run_amount === null ? "" : this.state.run_amount} id="run_amount-input" />
             </div>
           </div>
           <div className="form-group row">
             <label htmlFor="run_duration-input" className="col-sm-4 col-form-label">Run Duration</label>
-            <div className="col-sm-7">
+            <div className="col-sm-8">
               <input className="form-control"  type="text" value={this.state.run_duration === null ? "" : this.state.run_duration} id="app-version-input" readOnly/>
             </div>
           </div>
+          <div className="form-group row">
+            <label htmlFor="avg_speed-input" className="col-sm-4 col-form-label">Avg. Speed</label>
+            <div className="col-sm-8">
+              <input className="form-control" readOnly type="text" /*onChange={this.handleChange}*/ value={this.state.avg_speed === null ? "" : this.state.avg_speed} id="avg_speed-input" />
+            </div>
+          </div>
+          <div className="form-group row">
+            <label htmlFor="calories_burnt-input" className="col-sm-4 col-form-label">Calories Burnt</label>
+            <div className="col-sm-8">
+              <input className="form-control" readOnly /*onChange={this.handleChange1} */ type="text" value={this.state.calories_burnt === null ? "" : this.state.calories_burnt} id="calories_burnt-input" />
+            </div>
+          </div>
+          <div className="form-group row">
+            <label htmlFor="device_id-input" className="col-sm-4 col-form-label">Device ID</label>
+            <div className="col-sm-8">
+              <input className="form-control" readOnly type="text" value={this.state.device_id === null ? "" : this.state.device_id} id="device_id-input" />
+            </div>
+          </div>
+          <div className="form-group row">
+            <label htmlFor="cause_id-input" className="col-sm-4 col-form-label">Cause Id</label>
+            <div className="col-sm-8">
+              <input className="form-control" readOnly type="text" value={this.state.cause_id === null ? "" : this.state.cause_id} id="cause_id-input" />
+            </div>
+          </div>
+          <div className="form-group row">
+            <label htmlFor="is_flag-input" className="col-sm-4 col-form-label">Flagged</label>
+            <div className="col-sm-8">
+              <input className="form-control" readOnly type="text" value={this.state.is_flag === null ? "" : this.state.is_flag} id="is_flag-input" />
+            </div>
+          </div>
+          <div className="form-group row">
+            <label htmlFor="is_ios-input" className="col-sm-4 col-form-label">Is IOS</label>
+            <div className="col-sm-8">
+              <input className="form-control"  type="text" value={this.state.is_ios === null ? "" : this.state.is_ios} id="is_ios-input" readOnly/>
+            </div>
+          </div>
+          
+          <div className="form-group row">
+            <label htmlFor="end_location_lat-input" className="col-sm-4 col-form-label">End Location Lat</label>
+            <div className="col-sm-8">
+              <input className="form-control" readOnly type="text" value={this.state.end_location_lat === null ? "" : this.state.end_location_lat} id="end_location_lat-input" />
+            </div>
+          </div>
+          <div className="form-group row">
+            <label htmlFor="end_location_long-input" className="col-sm-4 col-form-label">End Location Long</label>
+            <div className="col-sm-8">
+              <input className="form-control"  type="text" value={this.state.end_location_long === null ? "" : this.state.end_location_long} id="end_location_long-input" readOnly/>
+            </div>
+          </div>
+          <div className="form-group row">
+            <label htmlFor="end_time-input" className="col-sm-4 col-form-label">End Time</label>
+            <div className="col-sm-8">
+              <input className="form-control" readOnly type="text" /*onChange={this.handleChange}*/ value={this.state.end_time === null ? "" : this.state.end_time} id="end_time-input" />
+            </div>
+          </div>
+          <div className="form-group row">
+            <label htmlFor="end_time_epoch-input" className="col-sm-4 col-form-label">End Time Epoch</label>
+            <div className="col-sm-8">
+              <input className="form-control" readOnly /*onChange={this.handleChange1} */ type="text" value={this.state.end_time_epoch === null ? "" : this.state.end_time_epoch} id="end_time_epoch-input" />
+            </div>
+          </div>
+          <div className="form-group row">
+            <label htmlFor="num_updates-input" className="col-sm-4 col-form-label">Num of Updates</label>
+            <div className="col-sm-8">
+              <input className="form-control" readOnly type="text" value={this.state.num_updates === null ? "" : this.state.num_updates} id="num_updates-input" />
+            </div>
+          </div>
+          <div className="form-group row">
+            <label htmlFor="os_version-input" className="col-sm-4 col-form-label">OS Version</label>
+            <div className="col-sm-8">
+              <input className="form-control" readOnly type="text" value={this.state.os_version === null ? "" : this.state.os_version} id="os_version-input" />
+            </div>
+          </div>
+          <div className="form-group row">
+            <label htmlFor="peak_speed-input" className="col-sm-4 col-form-label">Peak Speed</label>
+            <div className="col-sm-8">
+              <input className="form-control" readOnly type="text" value={this.state.peak_speed === null ? "" : this.state.peak_speed} id="peak_speed-input" />
+            </div>
+          </div>
+          <div className="form-group row">
+            <label htmlFor="team_id-input" className="col-sm-4 col-form-label">Team ID</label>
+            <div className="col-sm-8">
+              <input className="form-control"  type="text" value={this.state.team_id === null ? "" : this.state.team_id} id="team_id-input" readOnly/>
+            </div>
+          </div>
+
         </div>
       )
     }
@@ -294,15 +430,15 @@ export default class UserDetail extends Component {
                         </div>
                         <div style={{ display: "flex" }}>
                           <div className="item">
-                            <h4>Total Raised</h4>
+                            <p style={{color: "rgba(0, 0, 0, 0.37)",fontWeight: "bold"}}>Total Raised</p>
                             <p>{dataObject.total_amount.total_amount}</p>
                           </div>
                           <div className="item">
-                            <h4>No. of Runs</h4>
-                            <p>1065</p>
+                            <p style={{color: "rgba(0, 0, 0, 0.37)",fontWeight: "bold"}}>No. of Runs</p>
+                            <p>--</p>
                           </div>
                           <div className="item">
-                            <h4>Distance</h4>
+                            <p style={{color: "rgba(0, 0, 0, 0.37)",fontWeight: "bold"}}>Distance</p>
                             <p>{totalDistance}</p>
                           </div>
                         </div>
@@ -319,9 +455,11 @@ export default class UserDetail extends Component {
                       <table className="table table-striped">
                         <thead>
                           <tr>
-                            <th>Run ID</th>
+                            <th>Start Time</th>
                             <th>Cause</th>
                             <th>Distance</th>
+                            <th>Impact</th>
+                            <th>Calories</th>
                             <th>Duration</th>
                           </tr>
                         </thead>
