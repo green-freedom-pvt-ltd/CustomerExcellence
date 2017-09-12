@@ -154,7 +154,7 @@ export default class UserDetail extends Component {
   }
   handleSelect(eventKey) {
     console.log("Current Page", eventKey)
-    console.log("Page", this.state.userPath)
+ 
     console.log("Prev Page", this.state.prevPage)
     if (this.state.activePage + 1 === eventKey) {
       this.fetchRuns(this.state.nextPage);
