@@ -179,38 +179,38 @@ export default class UserDetail extends Component {
         <div style={{ overflowY: "scroll", overflowX: "hidden", maxHeight: "250px" }}>
           <div className="form-group row">
             <label htmlFor="user_id-input" className="col-sm-4 col-form-label">User ID</label>
-            <div className="col-sm-8">
-              <input className="form-control" type="text" /*onChange={this.handleChange}*/ value={this.state.user_id === null ? "" : this.state.user_id} id="user_id-input" />
+            <div className="col-sm-7">
+              <input className="form-control" type="text" readOnly /*onChange={this.handleChange}*/ value={this.state.user_id === null ? "" : this.state.user_id} id="user_id-input" />
             </div>
           </div>
           <div className="form-group row">
             <label htmlFor="client_id-input" className="col-sm-4 col-form-label">Client Run ID</label>
-            <div className="col-sm-8">
-              <input className="form-control" /*onChange={this.handleChange1} */ type="text" value={this.state.client_run_id === null ? "" : this.state.client_run_id} id="client_id-input" />
+            <div className="col-sm-7">
+              <input className="form-control" readOnly /*onChange={this.handleChange1} */ type="text" value={this.state.client_run_id === null ? "" : this.state.client_run_id} id="client_id-input" />
             </div>
           </div>
           <div className="form-group row">
             <label htmlFor="version-input" className="col-sm-4 col-form-label">Version</label>
-            <div className="col-sm-8">
-              <input className="form-control" type="text" value={this.state.version === null ? "" : this.state.version} id="version-input" />
+            <div className="col-sm-7">
+              <input className="form-control" readOnly type="text" value={this.state.version === null ? "" : this.state.version} id="version-input" />
             </div>
           </div>
           <div className="form-group row">
             <label htmlFor="spike-input" className="col-sm-4 col-form-label">Run ID</label>
-            <div className="col-sm-8">
-              <input className="form-control" type="text" value={this.state.run_id === null ? "" : this.state.run_id} id="spike-input" />
+            <div className="col-sm-7">
+              <input className="form-control" readOnly type="text" value={this.state.run_id === null ? "" : this.state.run_id} id="spike-input" />
             </div>
           </div>
           <div className="form-group row">
             <label htmlFor="app-version-input" className="col-sm-4 col-form-label">Num of Spike</label>
-            <div className="col-sm-8">
-              <input className="form-control" type="text" value={this.state.num_spike === null ? "" : this.state.num_spike} id="app-version-input" />
+            <div className="col-sm-7">
+              <input className="form-control" readOnly type="text" value={this.state.num_spike === null ? "" : this.state.num_spike} id="app-version-input" />
             </div>
           </div>
           <div className="form-group row">
             <label htmlFor="app-version-input" className="col-sm-4 col-form-label">Num of Steps</label>
-            <div className="col-sm-8">
-              <input className="form-control" type="text" value={this.state.steps === null ? "" : this.state.steps} id="app-version-input" />
+            <div className="col-sm-7">
+              <input className="form-control" readOnly type="text" value={this.state.steps === null ? "" : this.state.steps} id="app-version-input" />
             </div>
           </div>
 
@@ -218,38 +218,38 @@ export default class UserDetail extends Component {
 
           <div className="form-group row">
             <label htmlFor="app_version-input" className="col-sm-4 col-form-label">App Version</label>
-            <div className="col-sm-8">
-              <input className="form-control" type="text" /*onChange={this.handleChange}*/ value={this.state.app_version === null ? "" : this.state.app_version} id="app_version-input" />
+            <div className="col-sm-7">
+              <input className="form-control" readOnly type="text" /*onChange={this.handleChange}*/ value={this.state.app_version === null ? "" : this.state.app_version} id="app_version-input" />
             </div>
           </div>
           <div className="form-group row">
             <label htmlFor="cause_run_title-input" className="col-sm-4 col-form-label">Cause</label>
-            <div className="col-sm-8">
-              <input className="form-control" /*onChange={this.handleChange1} */ type="text" value={this.state.cause_run_title === null ? "" : this.state.cause_run_title} id="cause_run_title-input" />
+            <div className="col-sm-7">
+              <input className="form-control" readOnly /*onChange={this.handleChange1} */ type="text" value={this.state.cause_run_title === null ? "" : this.state.cause_run_title} id="cause_run_title-input" />
             </div>
           </div>
           <div className="form-group row">
             <label htmlFor="device_name-input" className="col-sm-4 col-form-label">Device Name</label>
-            <div className="col-sm-8">
-              <input className="form-control" type="text" value={this.state.device_name === null ? "" : this.state.device_name} id="device_name-input" />
+            <div className="col-sm-7">
+              <input className="form-control" readOnly type="text" value={this.state.device_name === null ? "" : this.state.device_name} id="device_name-input" />
             </div>
           </div>
           <div className="form-group row">
             <label htmlFor="distance-input" className="col-sm-4 col-form-label">Distance</label>
-            <div className="col-sm-8">
-              <input className="form-control" type="text" value={this.state.distance === null ? "" : this.state.distance} id="distance-input" />
+            <div className="col-sm-7">
+              <input className="form-control" readOnly type="text" value={this.state.distance === null ? "" : this.state.distance} id="distance-input" />
             </div>
           </div>
           <div className="form-group row">
             <label htmlFor="run_amount-input" className="col-sm-4 col-form-label">Amount Raised</label>
-            <div className="col-sm-8">
-              <input className="form-control" type="text" value={this.state.run_amount === null ? "" : this.state.run_amount} id="run_amount-input" />
+            <div className="col-sm-7">
+              <input className="form-control" readOnly type="text" value={this.state.run_amount === null ? "" : this.state.run_amount} id="run_amount-input" />
             </div>
           </div>
           <div className="form-group row">
             <label htmlFor="run_duration-input" className="col-sm-4 col-form-label">Run Duration</label>
-            <div className="col-sm-8">
-              <input className="form-control" type="text" value={this.state.run_duration === null ? "" : this.state.run_duration} id="app-version-input" />
+            <div className="col-sm-7">
+              <input className="form-control"  type="text" value={this.state.run_duration === null ? "" : this.state.run_duration} id="app-version-input" readOnly/>
             </div>
           </div>
         </div>
