@@ -107,8 +107,15 @@ export default class GoogleMap2 extends Component {
             finalData = _.map(state.location_array, combineBatch);
             var paused_data = [];
             var paused_data_object = {};
+            finalDataObject = {finalData:_.reverse(finalData)};
+            // console.log('paused_data',paused_data);
+            // console.log("Final Data",finalData.length,finalDataObject);
             if (last_location){
-                paused_data = [last_location, _.first(finalData)]
+                if(_.first(finalData)){
+                    paused_data = [last_location, _.first(finalData)]
+                } else {
+                    paused_data = [last_location,last_location]
+                }
                 paused_data_object = {finalData:paused_data};
                 console.log('paused_data',paused_data,paused_data_object);
             } else {
@@ -116,20 +123,22 @@ export default class GoogleMap2 extends Component {
                 paused_data_object = {finalData:paused_data};
             }
             last_location = _.last(finalData);
-            finalDataObject = {finalData:finalData};
-            console.log('paused_data',paused_data);
-            console.log("Final Data",finalData.length,finalDataObject);
             finalDataObject = _.concat(finalDataObject,paused_data_object);
             //  concat paused_data
             return finalDataObject;
 
         }
 
-        if (this.props.location != null && this.props.location != "" && this.props.location.count > 0) {
-            var state = this.props.location.results;
-            console.log("DATA", this.props.location.results);
-            finalData = _.map(state, getLocation);
-            console.log("Final Data",finalData);
+        var state = this.props.location.results;
+        console.log("DATA", this.props.location.results);
+        finalData = _.map(state, getLocation);
+
+        finalData = _.remove(finalData, function(n) {
+              return n[0].finalData.length > 0;
+            });
+
+        console.log("Final Data",finalData);
+        if (this.props.location != null && this.props.location != "" && this.props.location.count > 0 && finalData.length >0) {
             return (
                 <div style={{ height: `100%` }}>
 
