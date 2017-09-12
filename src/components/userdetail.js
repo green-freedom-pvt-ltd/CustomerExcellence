@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+
 import Map from "./map.js";
 import { Pagination } from 'react-bootstrap';
 import Feedback from './feedback';
@@ -89,12 +89,11 @@ export default class UserDetail extends Component {
         var runList = this.state.userRun.results.map((item, index) => {
           var color = (this.state.id === item.run_id) ? 'active-item' : '';
 
-          // console.log('color', color, this.state.id, item.run_id);
 
           return (
 
             // <li key={index}>{item.run_id}</li>
-            <tr className={color} key={index} onClick={() => this.loadLocation(item, item.run_id)}>
+            <tr className={color} style={{cursor:"pointer"}} key={index} onClick={() => this.loadLocation(item, item.run_id)}>
               <td>{item.run_id}</td>
               <td>{item.cause_run_title}</td>
               <td>{item.distance}</td>

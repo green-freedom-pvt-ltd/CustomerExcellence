@@ -2,11 +2,20 @@ body{
   font-family:montserratregular;
   color:rgba(0, 0, 0, 0.64);
 }
+
 h1,h2,h3,h4,h5{
   font-family:montserratsemibold;
   color:#4a4a4a;
 }
-
+.header{
+  position: fixed;
+  left:0;
+  right:0;
+  top:0;
+}
+html body {
+padding-top: 65px;
+}
 .App {
   text-align: center;
 }
@@ -25,6 +34,9 @@ h1,h2,h3,h4,h5{
 
 .App-intro {
   font-size: large;
+}
+.results>tbody>tr{
+  cursor: pointer;
 }
 .item{
   margin-right: 7px;

@@ -49,6 +49,11 @@ export default class SearchItem extends Component {
             if (this.state.prevPage === null) {
                 this.state.pageCount = Math.ceil(this.state.data.count / this.state.data.results.length);
               }
+              if (this.state.data.results.length < 1) {
+                return <tr><td colSpan="4" style={{textAlign:"center"}}>No Record Found..!!</td></tr>
+      
+              }
+           else{
             var runList = this.state.data.results.map((item, index) => {
                 console.log("RUN USER", item);
                 return (
@@ -65,6 +70,7 @@ export default class SearchItem extends Component {
                     </tr>
                 )
             })
+           }
             return runList;
         }
     }
@@ -90,7 +96,7 @@ export default class SearchItem extends Component {
     render() {
         if (this.state.data !== null || this.state.data != '') {
             return (
-                <div className="User">
+                <div className="container">
                     <div className="User-header">
                         <Grid>
                             <Row className="show-grid">
@@ -106,10 +112,10 @@ export default class SearchItem extends Component {
                             </Row>
                         </Grid>
                     </div>
-                    <div className="User-header">
+                    <div className="container">
                         <div className="box-top-left" style={{ width: "100%" }}>
 
-                            <table className="table table-striped">
+                            <Table className="table table-striped">
                                 <thead>
                                     <tr>
                                         <th>User ID</th>
@@ -121,7 +127,7 @@ export default class SearchItem extends Component {
                                 <tbody>
                                     {this.Viewruns()}
                                 </tbody>
-                            </table>
+                            </Table>
                             <div id="pagination">
                                 <Pagination
                                     prev

@@ -6,6 +6,7 @@ import {
   Link
 } from 'react-router-dom'
 
+
 export default class Team extends Component{
   constructor(props) {
     console.log("inside team container", props);
