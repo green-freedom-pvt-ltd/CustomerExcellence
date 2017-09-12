@@ -108,8 +108,8 @@ export default class GoogleMap2 extends Component {
             var paused_data = [];
             var paused_data_object = {};
             finalDataObject = {finalData:_.reverse(finalData)};
-            console.log('paused_data',paused_data);
-            console.log("Final Data",finalData.length,finalDataObject);
+            // console.log('paused_data',paused_data);
+            // console.log("Final Data",finalData.length,finalDataObject);
             if (last_location){
                 paused_data = [last_location, _.first(finalData)]
                 paused_data_object = {finalData:paused_data};
