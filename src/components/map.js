@@ -107,6 +107,9 @@ export default class GoogleMap2 extends Component {
             finalData = _.map(state.location_array, combineBatch);
             var paused_data = [];
             var paused_data_object = {};
+            finalDataObject = {finalData:_.reverse(finalData)};
+            console.log('paused_data',paused_data);
+            console.log("Final Data",finalData.length,finalDataObject);
             if (last_location){
                 paused_data = [last_location, _.first(finalData)]
                 paused_data_object = {finalData:paused_data};
@@ -116,9 +119,6 @@ export default class GoogleMap2 extends Component {
                 paused_data_object = {finalData:paused_data};
             }
             last_location = _.last(finalData);
-            finalDataObject = {finalData:finalData};
-            console.log('paused_data',paused_data);
-            console.log("Final Data",finalData.length,finalDataObject);
             finalDataObject = _.concat(finalDataObject,paused_data_object);
             //  concat paused_data
             return finalDataObject;
