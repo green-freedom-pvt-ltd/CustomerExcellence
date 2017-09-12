@@ -74,7 +74,8 @@ class App extends Component {
                   <Route path="/search_list" render={() => <SearchList />} />
                   <Route path="/feedback" render={() => <Feedback />} />
                   <Route path="/league" render={() => <League />} />
-                  <Route path="/league/teams" render={() => <Team />} />
+                  <Route path="/leagueteams" render={() => <Team />} />
+                  <Route path="/teammembers" render={() => <TeamMembers />} />
                   <Route path="/userdetail" render={() => <UserDetail />} />
                   <Route path="/runs" render={() => <Runs />} />
 
