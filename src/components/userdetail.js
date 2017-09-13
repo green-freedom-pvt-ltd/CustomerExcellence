@@ -37,18 +37,11 @@ export default class UserDetail extends Component {
     })
       .then((Response) => Response.json())
       .then((responseJson) => {
-
         this.setState({
           data: responseJson,
-
         })
-        console.log(this.state.data);
-
-
+        // console.log(this.state.data);
       });
-
-
-
   }
 
 
@@ -63,7 +56,7 @@ export default class UserDetail extends Component {
     })
       .then((Response) => Response.json())
       .then((responseJson) => {
-        console.log("PREV", responseJson)
+        // console.log("PREV", responseJson)
         this.setState({
           userRun: responseJson,
           prevPage: responseJson.previous,
@@ -71,7 +64,7 @@ export default class UserDetail extends Component {
           nextPage: responseJson.next,
 
         })
-        console.log("user run", this.state.userRun);
+        // console.log("user run", this.state.userRun);
 
       });
   }
@@ -409,8 +402,9 @@ export default class UserDetail extends Component {
   }
   render() {
 
-    if (this.state.data != null) {
+    if (this.state.data != null || typeof this.state.data  !=='undefined') {
 
+     if(this.state.data.count>0){
       var dataObject = this.state.data.results[0];
       let totalDistance = parseFloat(dataObject.total_distance.total_distance).toFixed(2);
       return (
@@ -517,8 +511,13 @@ export default class UserDetail extends Component {
         </div>
 
       );
+     }
+     else{
+       return <div>User not Available</div>
+     }
     }
     else {
+      
       return (
         <div>Loading...</div>
       );
