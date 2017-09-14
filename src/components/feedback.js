@@ -106,6 +106,7 @@ export default class Feedback extends Component {
               <td>{feedback.is_chat ? "yes" : "no"}</td>
               <td>{feedback.tag}</td>
               <td>{feedback.sub_tag}</td>
+              <td>{feedback.client_run_id}</td>
               <td>{feedback.feedback_app_version}</td>
               <td>{feedback.is_ios ? "yes" : "no"}</td>
             </tr>)
@@ -133,6 +134,7 @@ export default class Feedback extends Component {
                 <th>Chat</th>
                 <th>Tag</th>
                 <th>Sub Tag</th>
+                <th>Client Run Id</th>
                 <th>App Version</th>
                 <th>Is iOS</th>
               </tr>

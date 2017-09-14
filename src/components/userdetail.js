@@ -1,4 +1,9 @@
 import React, { Component } from 'react';
+import {
+  BrowserRouter as Router,
+  Route,
+  Link
+} from 'react-router-dom'
 
 import Map from "./map.js";
 import { Pagination } from 'react-bootstrap';
@@ -410,7 +415,7 @@ export default class UserDetail extends Component {
   render() {
 
     if (this.state.data != null) {
-
+      console.log('----------------------------------------',dataObject);
       var dataObject = this.state.data.results[0];
       let totalDistance = parseFloat(dataObject.total_distance.total_distance).toFixed(2);
       return (
@@ -448,6 +453,14 @@ export default class UserDetail extends Component {
                           <div className="item">
                             <p style={{ color: "rgba(0, 0, 0, 0.37)", fontWeight: "bold" }}>Distance</p>
                             <p>{totalDistance === "NaN" ? 0 : totalDistance} km</p>
+                          </div>
+                          <div className="item">
+                            <p style={{ color: "rgba(0, 0, 0, 0.37)", fontWeight: "bold" }}>Team Code</p>
+                            <p> 
+                              <Link to={"/teammembers/"+dataObject.team_code +"/"}>
+                                {dataObject.team_code === null ? "Not in League" : dataObject.team_code}
+                              </Link>
+                            </p>
                           </div>
                         </div>
 
