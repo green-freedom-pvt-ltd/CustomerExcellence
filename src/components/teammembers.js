@@ -35,7 +35,6 @@ export default class TeamMembers extends Component{
           return (
               <tr key={index}  >
                   <td>{index +1}</td>
-                  <td>{league.team}</td>
                   <td>
                     <Link to={"/userdetail/"+league.user +"/"}>
                       {league.user}
@@ -57,9 +56,9 @@ export default class TeamMembers extends Component{
                   <thead>
                     <tr>
                       <th>#</th>
-                      <th>League</th>
-                      <th>Team Name</th>
-                      <th>Team Captain</th>
+                      <th>User</th>
+                      <th>City</th>
+                      <th>Department</th>
                     </tr>
                   </thead>
                   <tbody>
