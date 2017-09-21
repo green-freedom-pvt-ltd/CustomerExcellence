@@ -94,11 +94,13 @@ export default class UserDetail extends Component {
             var color = (this.state.id === item.run_id) ? 'active-item' : '';
             let startTime = this.getTime(item.start_time)
             let totalDistance = parseFloat(item.distance).toFixed(2);
+            let startEpochTime = new Date(item.start_time);
+            let startDateTime = startEpochTime.getDate() + "/" + (startEpochTime.getMonth() + 1) + "/" +startEpochTime.getFullYear() + "  " + startTime
             return (
 
               // <li key={index}>{item.run_id}</li>
               <tr className={color} style={{ cursor: "pointer" }} key={index} onClick={() => this.loadLocation(item, item.run_id)}>
-                <td>{startTime}</td>
+                <td>{startDateTime}</td>
                 <td>{item.cause_run_title}</td>
                 <td>{totalDistance}km</td>
                 <td>&#8377; {item.run_amount}</td>
