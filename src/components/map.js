@@ -13,6 +13,7 @@ const GettingStartedGoogleMap = withGoogleMap(props => (
         defaultCenter={props.markers[0][0].finalData[0].position}
         onClick={props.onMapClick}
         center={props.markers[0][0].finalData[0].position}
+        scaleControl={true}
     >
 
         {/* {props.markers.map((marker, index) => 
