@@ -7,7 +7,7 @@ import {
 
 export default class Feedback extends Component {
   constructor(props) {
-    console.log("inside feedback container", props);
+    // console.log("inside feedback container", props);
     super(props);
     this.state = {
       data: null,
@@ -21,14 +21,14 @@ export default class Feedback extends Component {
     this.handleSelect = this.handleSelect.bind(this);
     if (props.user_id) {
       this.state.fetchUrl += '?user_id=' + props.user_id
-      console.log("inside feedback fetchUrl", this.state.fetchUrl);
+      // console.log("inside feedback fetchUrl", this.state.fetchUrl);
     }
   }
 
   handleSelect(eventKey) {
-    console.log("Current Page", eventKey)
-    console.log("Page", this.state.userPath)
-    console.log("Prev Page", this.state.prevPage)
+    // console.log("Current Page", eventKey)
+    // console.log("Page", this.state.userPath)
+    // console.log("Prev Page", this.state.prevPage)
     if (this.state.activePage < eventKey) {
       this.fetchResults(this.state.nextPage);
     }
@@ -67,16 +67,16 @@ export default class Feedback extends Component {
           nextPage: responseJson.next,
 
         });
-        console.log('inside componentWillMount feedback', this.state.data);
+        // console.log('inside componentWillMount feedback', this.state.data);
       })
       .catch((error) => {
-        console.error(error);
+        // console.error(error);
       });
   }
 
   render() {
     var feedback_data = this.state.data;
-    console.log("------111--------", feedback_data);
+    // console.log("------111--------", feedback_data);
     if (feedback_data) {
       if (this.state.prevPage === null) {
         this.state.pageCount = Math.ceil(feedback_data.count / feedback_data.results.length);

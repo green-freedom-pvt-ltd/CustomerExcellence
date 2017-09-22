@@ -13,6 +13,7 @@ const GettingStartedGoogleMap = withGoogleMap(props => (
         defaultCenter={props.markers[0][0].finalData[0].position}
         onClick={props.onMapClick}
         center={props.markers[0][0].finalData[0].position}
+        scaleControl={true}
     >
 
         {/* {props.markers.map((marker, index) => 
@@ -29,7 +30,19 @@ const GettingStartedGoogleMap = withGoogleMap(props => (
 
             (
                 <Marker
-                    position={index === 0 || index === marker[0].finalData.length - 1 ? marker[0].finalData[0].position : null}
+                    position={index === 0 ? marker[0].finalData[0].position : null}
+                    key={index}
+                    onRightClick={() => props.onMarkerRightClick(index)}
+                />
+            )
+        )
+        }
+
+        {props.markers.map((marker, index) =>
+
+            (
+                <Marker
+                    position={index === props.markers.length - 1 ? marker[0].finalData[(marker[0].finalData.length - 1)].position : null}
                     key={index}
                     onRightClick={() => props.onMarkerRightClick(index)}
                 />
@@ -130,13 +143,12 @@ export default class GoogleMap2 extends Component {
         }
 
         var state = this.props.location.results;
-        console.log("DATA", this.props.location.results);
+        console.log("DATA", this.props);
         finalData = _.map(state, getLocation);
 
         finalData = _.remove(finalData, function(n) {
               return n[0].finalData.length > 0;
             });
-
         console.log("Final Data",finalData);
         if (this.props.location != null && this.props.location != "" && this.props.location.count > 0 && finalData.length >0) {
             return (
