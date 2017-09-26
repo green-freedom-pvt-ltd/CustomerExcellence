@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import { Pagination, Grid,Row, Col,Table } from 'react-bootstrap';
-import NameForm from './runform';
+import SearchForm from './searchform';
 
 class User extends Component {
     
@@ -137,7 +137,7 @@ class User extends Component {
                 <Row className="show-grid">
     
                   <Col md={8}>
-                    <NameForm />
+                    <SearchForm />
                   </Col>
     
     

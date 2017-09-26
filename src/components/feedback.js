@@ -91,6 +91,7 @@ export default class Feedback extends Component {
           var epoch_timestamp = feedback.client_time_stamp
           var feedback_date_time = new Date(epoch_timestamp)
           return (
+            
             <tr key={index} className={feedback.is_replied ? "success" : "default"}>
               <td>{index + 1}</td>
               <td>
@@ -114,6 +115,7 @@ export default class Feedback extends Component {
               <td>{feedback.client_run_id}</td>
               <td>{feedback.feedback_app_version}</td>
               <td>{feedback.is_ios ? "yes" : "no"}</td>
+              
             </tr>)
         });
 

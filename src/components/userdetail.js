@@ -1,14 +1,9 @@
 import React, { Component } from 'react';
-import {
-  BrowserRouter as Router,
-  Route,
-  Link
-} from 'react-router-dom'
-
+import UserComponent from './usercomponent';
 import Map from "./map.js";
-import { Pagination } from 'react-bootstrap';
 import Feedback from './feedback';
 
+var totalRuns;
 export default class UserDetail extends Component {
   constructor(props) {
     super(props);
@@ -81,12 +76,13 @@ export default class UserDetail extends Component {
     }
     else {
       if (this.state.prevPage === null) {
+        totalRuns= this.state.userRun.count;
         this.state.pageCount = Math.ceil(this.state.userRun.count / this.state.userRun.results.length);
       }
       if (this.state.userRun != null) {
 
         if (this.state.userRun.results.length < 1) {
-          return <tr><td colSpan="6" style={{textAlign:"center"}}>No Record Found..!!</td></tr>
+          return <tr><td colSpan="6" style={{ textAlign: "center" }}>No Record Found..!!</td></tr>
 
         }
         else {
@@ -95,7 +91,7 @@ export default class UserDetail extends Component {
             let startTime = this.getTime(item.start_time)
             let totalDistance = parseFloat(item.distance).toFixed(2);
             let startEpochTime = new Date(item.start_time);
-            let startDateTime = startEpochTime.getDate() + "/" + (startEpochTime.getMonth() + 1) + "/" +startEpochTime.getFullYear() + "  " + startTime
+            let startDateTime = startEpochTime.getDate() + "/" + (startEpochTime.getMonth() + 1) + "/" + startEpochTime.getFullYear() + "  " + startTime
             return (
 
               // <li key={index}>{item.run_id}</li>
@@ -208,200 +204,57 @@ export default class UserDetail extends Component {
   }
 
   viewDataonClick() {
+    var renderRuns = [
+      { "id": "run-input", "text": "Run ID", "state": this.state.run_id },
+      { "id": "start_time-input", "text": "Start Time", "state": this.state.start_time },
+      { "id": "start_time_epoch-input", "text": "Start Time Epoch", "state": this.state.start_time_epoch },
+      { "id": "end_time-input", "text": "End Time", "state": this.state.end_time },
+      { "id": "end_time_epoch-input", "text": "End Time Epoch", "state": this.state.end_time_epoch },
+      { "id": "steps-input", "text": "Num of Steps", "state": this.state.steps },
+      { "id": "spike-input", "text": "Num of Spike", "state": this.state.num_spike },
+      { "id": "run_duration-input", "text": "Run Duration", "state": this.state.run_duration },
+      { "id": "avg_speed-input", "text": "Avg. Speed", "state": this.state.avg_speed },
+      { "id": "calories_burnt-input", "text": "Calories Burnt", "state": this.state.calories_burnt },
+      { "id": "device_name-input", "text": "Device Name", "state": this.state.device_name },
+      { "id": "distance-input", "text": "Distance", "state": this.state.distance },
+      { "id": "run_amount-input", "text": "Amount Raised", "state": this.state.run_amount },
+      { "id": "client_id-input", "text": "Client Run ID", "state": this.state.client_run_id },
+      { "id": "version-input", "text": "Version", "state": this.state.version },
+      { "id": "user_id-input", "text": "User ID", "state": this.state.user_id },
+      { "id": "app_version-input", "text": "App Version", "state": this.state.app_version },
+      { "id": "cause_run_title-input", "text": "Cause", "state": this.state.cause_run_title },
+      { "id": "device_id-input", "text": "Device ID", "state": this.state.device_id },
+      { "id": "cause_id-input", "text": "Cause Id", "state": this.state.cause_id },
+      { "id": "is_flag-input", "text": "Flagged", "state": this.state.is_flag },
+      { "id": "is_ios-input", "text": "Is IOS", "state": this.state.is_ios },
+      { "id": "num_updates-input", "text": "Num of Updates", "state": this.state.num_updates },
+      { "id": "os_version-input", "text": "OS Version", "state": this.state.os_version },
+      { "id": "peak_speed-input", "text": "Peak Speed", "state": this.state.peak_speed },
+      { "id": "team_id-input", "text": "Team ID", "state": this.state.team_id },
+      { "id": "start_location_lat-input", "text": "Start Location Lat", "state": this.state.start_location_lat },
+      { "id": "start_location_long-input", "text": "Start Location Long", "state": this.state.start_location_long },
+      { "id": "end_location_lat-input", "text": "End Location Lat", "state": this.state.end_location_lat },
+      { "id": "end_location_long-input", "text": "End Location Long", "state": this.state.end_location_long }
+
+    ]
+
     if (this.state.runInform !== null) {
+      var runInformation = renderRuns.map((item, index) => {
+        return (
+          <div key={index} className="form-group row">
+            <label htmlFor={item.id} className="col-sm-4 col-form-label">{item.text}</label>
+            <div className="col-sm-8">
+              <input className="form-control" readOnly type="text" value={item.state === null ? "" : item.state} id={item.id} />
+            </div>
+          </div>
+        )
+      })
       return (
         <div className="run-detail" style={{ overflowY: "scroll", overflowX: "hidden", maxHeight: "250px" }}>
-          <div className="form-group row">
-            <label htmlFor="spike-input" className="col-sm-4 col-form-label">Run ID</label>
-            <div className="col-sm-8">
-              <input className="form-control" readOnly type="text" value={this.state.run_id === null ? "" : this.state.run_id} id="spike-input" />
-            </div>
-          </div>
-          <div className="form-group row">
-            <label htmlFor="start_time-input" className="col-sm-4 col-form-label">Start Time</label>
-            <div className="col-sm-8">
-              <input className="form-control" readOnly type="text" value={this.state.start_time === null ? "" : this.state.start_time} id="start_time-input" />
-            </div>
-          </div>
-          <div className="form-group row">
-            <label htmlFor="start_time_epoch-input" className="col-sm-4 col-form-label">Start Time Epoch</label>
-            <div className="col-sm-8">
-              <input className="form-control" readOnly type="text" value={this.state.start_time_epoch === null ? "" : this.state.start_time_epoch} id="start_time_epoch-input" />
-            </div>
-          </div>
-          <div className="form-group row">
-            <label htmlFor="end_time-input" className="col-sm-4 col-form-label">End Time</label>
-            <div className="col-sm-8">
-              <input className="form-control" readOnly type="text" /*onChange={this.handleChange}*/ value={this.state.end_time === null ? "" : this.state.end_time} id="end_time-input" />
-            </div>
-          </div>
-          <div className="form-group row">
-            <label htmlFor="end_time_epoch-input" className="col-sm-4 col-form-label">End Time Epoch</label>
-            <div className="col-sm-8">
-              <input className="form-control" readOnly /*onChange={this.handleChange1} */ type="text" value={this.state.end_time_epoch === null ? "" : this.state.end_time_epoch} id="end_time_epoch-input" />
-            </div>
-          </div>
-          <div className="form-group row">
-            <label htmlFor="app-version-input" className="col-sm-4 col-form-label">Num of Steps</label>
-            <div className="col-sm-8">
-              <input className="form-control" readOnly type="text" value={this.state.steps === null ? "" : this.state.steps} id="app-version-input" />
-            </div>
-          </div>
-           <div className="form-group row">
-            <label htmlFor="app-version-input" className="col-sm-4 col-form-label">Num of Spike</label>
-            <div className="col-sm-8">
-              <input className="form-control" readOnly type="text" value={this.state.num_spike === null ? "" : this.state.num_spike} id="app-version-input" />
-            </div>
-          </div>
-          <div className="form-group row">
-            <label htmlFor="run_duration-input" className="col-sm-4 col-form-label">Run Duration</label>
-            <div className="col-sm-8">
-              <input className="form-control" type="text" value={this.state.run_duration === null ? "" : this.state.run_duration} id="app-version-input" readOnly />
-            </div>
-          </div>
-          <div className="form-group row">
-            <label htmlFor="avg_speed-input" className="col-sm-4 col-form-label">Avg. Speed</label>
-            <div className="col-sm-8">
-              <input className="form-control" readOnly type="text" /*onChange={this.handleChange}*/ value={this.state.avg_speed === null ? "" : this.state.avg_speed} id="avg_speed-input" />
-            </div>
-          </div>
-          <div className="form-group row">
-            <label htmlFor="calories_burnt-input" className="col-sm-4 col-form-label">Calories Burnt</label>
-            <div className="col-sm-8">
-              <input className="form-control" readOnly /*onChange={this.handleChange1} */ type="text" value={this.state.calories_burnt === null ? "" : this.state.calories_burnt} id="calories_burnt-input" />
-            </div>
-          </div>
-          <div className="form-group row">
-            <label htmlFor="device_name-input" className="col-sm-4 col-form-label">Device Name</label>
-            <div className="col-sm-8">
-              <input className="form-control" readOnly type="text" value={this.state.device_name === null ? "" : this.state.device_name} id="device_name-input" />
-            </div>
-          </div>
-          <div className="form-group row">
-            <label htmlFor="distance-input" className="col-sm-4 col-form-label">Distance</label>
-            <div className="col-sm-8">
-              <input className="form-control" readOnly type="text" value={this.state.distance === null ? "" : this.state.distance} id="distance-input" />
-            </div>
-          </div>
-          <div className="form-group row">
-            <label htmlFor="run_amount-input" className="col-sm-4 col-form-label">Amount Raised</label>
-            <div className="col-sm-8">
-              <input className="form-control" readOnly type="text" value={this.state.run_amount === null ? "" : this.state.run_amount} id="run_amount-input" />
-            </div>
-          </div>
-          
-          <div className="form-group row">
-            <label htmlFor="client_id-input" className="col-sm-4 col-form-label">Client Run ID</label>
-            <div className="col-sm-8">
-              <input className="form-control" readOnly /*onChange={this.handleChange1} */ type="text" value={this.state.client_run_id === null ? "" : this.state.client_run_id} id="client_id-input" />
-            </div>
-          </div>
-          <div className="form-group row">
-            <label htmlFor="version-input" className="col-sm-4 col-form-label">Version</label>
-            <div className="col-sm-8">
-              <input className="form-control" readOnly type="text" value={this.state.version === null ? "" : this.state.version} id="version-input" />
-            </div>
-          </div>
-
-          <div className="form-group row">
-            <label htmlFor="user_id-input" className="col-sm-4 col-form-label">User ID</label>
-            <div className="col-sm-8">
-              <input className="form-control" type="text" readOnly /*onChange={this.handleChange}*/ value={this.state.user_id === null ? "" : this.state.user_id} id="user_id-input" />
-            </div>
-          </div>
-
-         
-          <div className="form-group row">
-            <label htmlFor="app_version-input" className="col-sm-4 col-form-label">App Version</label>
-            <div className="col-sm-8">
-              <input className="form-control" readOnly type="text" /*onChange={this.handleChange}*/ value={this.state.app_version === null ? "" : this.state.app_version} id="app_version-input" />
-            </div>
-          </div>
-          <div className="form-group row">
-            <label htmlFor="cause_run_title-input" className="col-sm-4 col-form-label">Cause</label>
-            <div className="col-sm-8">
-              <input className="form-control" readOnly /*onChange={this.handleChange1} */ type="text" value={this.state.cause_run_title === null ? "" : this.state.cause_run_title} id="cause_run_title-input" />
-            </div>
-          </div>
-          
-         
-          <div className="form-group row">
-            <label htmlFor="device_id-input" className="col-sm-4 col-form-label">Device ID</label>
-            <div className="col-sm-8">
-              <input className="form-control" readOnly type="text" value={this.state.device_id === null ? "" : this.state.device_id} id="device_id-input" />
-            </div>
-          </div>
-          <div className="form-group row">
-            <label htmlFor="cause_id-input" className="col-sm-4 col-form-label">Cause Id</label>
-            <div className="col-sm-8">
-              <input className="form-control" readOnly type="text" value={this.state.cause_id === null ? "" : this.state.cause_id} id="cause_id-input" />
-            </div>
-          </div>
-          <div className="form-group row">
-            <label htmlFor="is_flag-input" className="col-sm-4 col-form-label">Flagged</label>
-            <div className="col-sm-8">
-              <input className="form-control" readOnly type="text" value={this.state.is_flag === null ? "" : this.state.is_flag} id="is_flag-input" />
-            </div>
-          </div>
-          <div className="form-group row">
-            <label htmlFor="is_ios-input" className="col-sm-4 col-form-label">Is IOS</label>
-            <div className="col-sm-8">
-              <input className="form-control" type="text" value={this.state.is_ios === null ? "" : this.state.is_ios} id="is_ios-input" readOnly />
-            </div>
-          </div>
-
-          
-          
-          <div className="form-group row">
-            <label htmlFor="num_updates-input" className="col-sm-4 col-form-label">Num of Updates</label>
-            <div className="col-sm-8">
-              <input className="form-control" readOnly type="text" value={this.state.num_updates === null ? "" : this.state.num_updates} id="num_updates-input" />
-            </div>
-          </div>
-          <div className="form-group row">
-            <label htmlFor="os_version-input" className="col-sm-4 col-form-label">OS Version</label>
-            <div className="col-sm-8">
-              <input className="form-control" readOnly type="text" value={this.state.os_version === null ? "" : this.state.os_version} id="os_version-input" />
-            </div>
-          </div>
-          <div className="form-group row">
-            <label htmlFor="peak_speed-input" className="col-sm-4 col-form-label">Peak Speed</label>
-            <div className="col-sm-8">
-              <input className="form-control" readOnly type="text" value={this.state.peak_speed === null ? "" : this.state.peak_speed} id="peak_speed-input" />
-            </div>
-          </div>
-          <div className="form-group row">
-            <label htmlFor="team_id-input" className="col-sm-4 col-form-label">Team ID</label>
-            <div className="col-sm-8">
-              <input className="form-control" type="text" value={this.state.team_id === null ? "" : this.state.team_id} id="team_id-input" readOnly />
-            </div>
-          </div>
-          <div className="form-group row">
-            <label htmlFor="start_location_lat-input" className="col-sm-4 col-form-label">Start Location Lat</label>
-            <div className="col-sm-8">
-              <input className="form-control" readOnly type="text" /*onChange={this.handleChange}*/ value={this.state.start_location_lat === null ? "" : this.state.start_location_lat} id="start_location_lat-input" />
-            </div>
-          </div>
-          <div className="form-group row">
-            <label htmlFor="start_location_long-input" className="col-sm-4 col-form-label">Start Location Long</label>
-            <div className="col-sm-8">
-              <input className="form-control" readOnly /*onChange={this.handleChange1} */ type="text" value={this.state.start_location_long === null ? "" : this.state.start_location_long} id="start_location_long-input" />
-            </div>
-          </div>
-          <div className="form-group row">
-            <label htmlFor="end_location_lat-input" className="col-sm-4 col-form-label">End Location Lat</label>
-            <div className="col-sm-8">
-              <input className="form-control" readOnly type="text" value={this.state.end_location_lat === null ? "" : this.state.end_location_lat} id="end_location_lat-input" />
-            </div>
-          </div>
-          <div className="form-group row">
-            <label htmlFor="end_location_long-input" className="col-sm-4 col-form-label">End Location Long</label>
-            <div className="col-sm-8">
-              <input className="form-control" type="text" value={this.state.end_location_long === null ? "" : this.state.end_location_long} id="end_location_long-input" readOnly />
-            </div>
-          </div>
+          {runInformation}
         </div>
       )
+
     }
     else {
       return;
@@ -411,133 +264,61 @@ export default class UserDetail extends Component {
   loadMap() {
     return <Map location={this.state.runLocation} />
   }
+
   render() {
+    if (this.state.data != null || typeof this.state.data !== 'undefined') {
 
+      if (this.state.data.count > 0) {
+        var dataObject = this.state.data.results[0];
 
-    if (this.state.data != null || typeof this.state.data  !=='undefined') {
-
-     if(this.state.data.count>0){
-      var dataObject = this.state.data.results[0];
-      let totalDistance = parseFloat(dataObject.total_distance.total_distance).toFixed(2);
-      return (
-        <div className="User">
-          <div className="User-header">
-            <div className="container">
-              <section>
-                <div className="row">
-                  <div className="col-sm-7" >
-                    <div className="box-top-left" >
-
-                      <div className="col-sm-8">
-                        <div style={{ display: "flex", padding: "10px 0px" }}>
-                          <div style={{ marginRight: "10px" }}>
-                            <img src={dataObject.social_thumb} alt={"social-thumb-" + dataObject.first_name} style={{ width: "80px" }} className="img-circle" />
+        return (
+          <div className="User">
+            <div className="User-header">
+              <div className="container">
+                <section>
+                  <div className="row">
+                    <UserComponent
+                      handleselect={this.handleSelect}
+                      dataobject={dataObject}
+                      activepage={this.state.activePage}
+                      runview={this.Viewruns()}
+                      pagecount={this.state.pageCount}
+                      runcount={totalRuns}
+                    />
+                    <div className="row">
+                      <div className="col-sm-5">
+                        <div className="box-top-left" style={{ minHeight: "400px", width: "100%" }}>
+                          <div style={{ width: "100%", height: "274px", marginBottom: "15px", backgroundColor: "rgba(173, 186, 216, 0.45)", border: "6px solid rgba(51, 122, 183, 0.61)" }}>
+                            {this.loadMap()}
                           </div>
                           <div>
-                            <h4 style={{ margin: "auto" }}>{dataObject.user_id + ' ' + dataObject.first_name + ' ' + dataObject.last_name}</h4>
-                            <ul style={{ listStyle: "none", padding: "0px" }}>
-                              <li>Email : <a href={"mailto:" + dataObject.email}>{dataObject.email}</a></li>
-                              <li>Gender : {dataObject.gender_user}</li>
-                              <li>Weight : {dataObject.body_weight}</li>
-                            </ul>
+                            {this.viewDataonClick()}
                           </div>
                         </div>
-                        <div style={{ display: "flex" }}>
-                          <div className="item">
-                            <p style={{ color: "rgba(0, 0, 0, 0.37)", fontWeight: "bold" }}>Total Raised</p>
-                            <p>&#8377; {dataObject.total_amount.total_amount === null ? 0 : dataObject.total_amount.total_amount}</p>
-                          </div>
-                          <div className="item">
-                            <p style={{ color: "rgba(0, 0, 0, 0.37)", fontWeight: "bold" }}>No. of Runs</p>
-                            <p>--</p>
-                          </div>
-                          <div className="item">
-                            <p style={{ color: "rgba(0, 0, 0, 0.37)", fontWeight: "bold" }}>Distance</p>
-                            <p>{totalDistance === "NaN" ? 0 : totalDistance} km</p>
-                          </div>
-                          <div className="item">
-                            <p style={{ color: "rgba(0, 0, 0, 0.37)", fontWeight: "bold" }}>Team Code</p>
-                            <p> 
-                              <Link to={"/teammembers/"+dataObject.team_code +"/"}>
-                                {dataObject.team_code === null ? "Not in League" : dataObject.team_code}
-                              </Link>
-                            </p>
-                          </div>
-                        </div>
-
-
-                      </div>
-                      <div className="col-sm-4">
-
                       </div>
 
                     </div>
-                    <div className="box-top-left" style={{ width: "100%" }}>
+                    <div className="row">
+                      <div className="col-sm-5">
+                        <Feedback user_id={dataObject.user_id} />
+                      </div>
+                    </div>
 
-                      <table className="table table-striped">
-                        <thead>
-                          <tr>
-                            <th>Start Time</th>
-                            <th>Cause</th>
-                            <th>Distance</th>
-                            <th>Impact</th>
-                            <th>Calories</th>
-                            <th>Duration</th>
-                          </tr>
-                        </thead>
-                        <tbody style={{ color: "rgba(0, 0, 0, 0.37)", fontWeight: "bold", fontSize: "12px" }}>
-                          {this.Viewruns()}
-                        </tbody>
-                      </table>
-                    <div style={{display:this.state.pageCount>1?"block":"none"}} id="pagination">
-                    <Pagination
-                        prev
-                        next
-                        first
-                        last
-                        ellipsis
-                        boundaryLinks
-                        items={this.state.pageCount}
-                        maxButtons={3}
-                        activePage={this.state.activePage}
-                        onSelect={this.handleSelect} />
-                    </div>
-                      
-                    </div>
                   </div>
-                  <div className="col-sm-5">
-                    <div className="box-top-left" style={{ minHeight: "400px", width: "100%" }}>
-                      <div style={{ width: "100%", height: "274px", marginBottom: "15px", backgroundColor: "rgba(173, 186, 216, 0.45)", border: "6px solid rgba(51, 122, 183, 0.61)" }}>
-                        {this.loadMap()}
-                      </div>
-                      <div>
-                        {this.viewDataonClick()}
-                      </div>
-                    </div>
-                  </div>
+                </section>
+              </div>
 
-                </div>
-                <div className="row">
-                  <div className="col-sm-5">
-                    <Feedback user_id={dataObject.user_id} />
-                  </div>
-                </div>
-
-
-              </section>
             </div>
-
           </div>
-        </div>
 
-      );
-     }
-     else{
-       return <div>User not Available</div>
-     }
+        );
+      }
+      else {
+        return <div>User not Available</div>
+      }
     }
     else {
-      
+
       return (
         <div>Loading...</div>
       );

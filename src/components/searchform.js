@@ -4,7 +4,7 @@ import { Button, ButtonToolbar, ToggleButtonGroup,
 } from 'react-bootstrap';
 
 
-class NameForm extends Component {
+class SearchForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -172,4 +172,4 @@ class NameForm extends Component {
   }
 }
 
-export default NameForm;
+export default SearchForm;

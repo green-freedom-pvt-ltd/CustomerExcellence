@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Pagination, Grid, Row, Col, Table } from 'react-bootstrap';
-import NameForm from './runform';
-
+import SearchForm from './searchform';
+import userSection from './usercomponent';
 
 export default class SearchItem extends Component {
     constructor(props) {
@@ -103,12 +103,10 @@ export default class SearchItem extends Component {
                                 <Col xs={12} md={8}> <h2>User</h2> </Col>
                             </Row>
                             <Row className="show-grid">
-
                                 <Col md={8}>
-                                    <NameForm />
+                                    <SearchForm />
+                                    <userSection/>
                                 </Col>
-
-
                             </Row>
                         </Grid>
                     </div>
