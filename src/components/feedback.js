@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Pagination, Table } from 'react-bootstrap';
+import { Pagination, Table,Checkbox } from 'react-bootstrap';
 import {
   Link
 } from 'react-router-dom';
@@ -91,7 +91,7 @@ export default class Feedback extends Component {
           var epoch_timestamp = feedback.client_time_stamp
           var feedback_date_time = new Date(epoch_timestamp)
           return (
-            <tr key={index}>
+            <tr key={index} className={feedback.is_replied ? "success" : "default"}>
               <td>{index + 1}</td>
               <td>
                 <Link to={"/userdetail/" + feedback.user_id}>
@@ -101,6 +101,11 @@ export default class Feedback extends Component {
               <td><a href={"mailto:" + feedback.email}>{feedback.email}</a></td>
               <td>{feedback_date_time.toUTCString()}</td>
               <td>{feedback.feedback ? feedback.feedback : "-"}</td>
+              <td><Checkbox checked={feedback.is_replied} onChange={feedback.is_replied=false} >
+                      {feedback.is_replied}
+                  </Checkbox>
+              </td>
+              <td>{feedback.resolution ? feedback.resolution : "-"}</td>
               <td>{feedback.run_id}</td>
               <td>{feedback.phone_number}</td>
               <td>{feedback.is_chat ? "yes" : "no"}</td>
@@ -129,6 +134,8 @@ export default class Feedback extends Component {
                 <th>Email</th>
                 <th>Date</th>
                 <th>Feedback</th>
+                <th>Is replied</th>
+                <th>Resolution</th>
                 <th>Run Id</th>
                 <th>Phone Number</th>
                 <th>Chat</th>
