@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Pagination, Table,Checkbox } from 'react-bootstrap';
+import { Pagination, Table,Checkbox , Button} from 'react-bootstrap';
 import {
   Link
 } from 'react-router-dom';
+import FeedbackModal from "./feedbackModal"
 
 
 export default class Feedback extends Component {
@@ -15,6 +16,7 @@ export default class Feedback extends Component {
       activePage: 1,
       nextPage: '',
       prevPage: '',
+      childVisible: false,
 
       fetchUrl: 'http://dev.impactrun.com/api/ced/userFeedback/'
     }
@@ -23,6 +25,13 @@ export default class Feedback extends Component {
       this.state.fetchUrl += '?user_id=' + props.user_id
       // console.log("inside feedback fetchUrl", this.state.fetchUrl);
     }
+  }
+
+
+ 
+
+  handleReply(event) {
+    console.log("inside handle reply ",event);
   }
 
   handleSelect(eventKey) {
@@ -74,6 +83,18 @@ export default class Feedback extends Component {
       });
   }
 
+   handleCheckbox(event) {
+      console.log("inside handleCheckbox",event, this);
+      if (this) {
+      this.setState({childVisible: !this.state.childVisible});
+      } 
+    }
+
+    onClickReply(feedback_id) {
+      // this.setState({childVisible: !this.state.childVisible});
+      console.log("feedback_id----------",feedback_id);
+    }
+
   render() {
     var feedback_data = this.state.data;
     // console.log("------111--------", feedback_data);
@@ -87,6 +108,51 @@ export default class Feedback extends Component {
 
       }
       else{
+      var resolutionFields = (feedback,index) => {
+          return (
+              <tr key={index} className={feedback.is_replied ? "success" : "default"}>
+                <td>
+                  <Checkbox onChange={this.handleCheckbox} >
+                      {feedback.is_replied}
+                  </Checkbox>
+                </td>
+                <td>
+                  <input type="text" name="my-input-field" onChange={this.handleCheckbox} readOnly={feedback.is_replied} />
+                </td>
+                <td>
+                  <Button onClick={() => {this.onClickReply(feedback.id)}}>
+                      Save
+                  </Button>
+                </td>
+              </tr>
+              )
+      }
+
+      var replyFeedback = (feedback,index) => {
+          var epoch_timestamp = feedback.client_time_stamp
+          var feedback_date_time = new Date(epoch_timestamp)
+          if(feedback.is_replied){
+            return (
+              <tr key={index} className={feedback.is_replied ? "success" : "default"}>
+                <td>
+                   <td>{feedback.resolution ? feedback.resolution : "-"}</td>
+                </td>
+              </tr>
+          )
+          } else {
+            return (
+              <tr key={index} className={feedback.is_replied ? "success" : "default"}>
+                <td>
+                  <FeedbackModal feedback_id={feedback.id}/>
+                </td>
+
+                {this.state.childVisible ? resolutionFields(feedback,index) : null }
+
+              </tr>
+          )
+          }
+        };
+
         var feedbackList = feedback_data.results.map((feedback, index) => {
           var epoch_timestamp = feedback.client_time_stamp
           var feedback_date_time = new Date(epoch_timestamp)
@@ -101,11 +167,9 @@ export default class Feedback extends Component {
               <td><a href={"mailto:" + feedback.email}>{feedback.email}</a></td>
               <td>{feedback_date_time.toUTCString()}</td>
               <td>{feedback.feedback ? feedback.feedback : "-"}</td>
-              <td><Checkbox checked={feedback.is_replied} onChange={feedback.is_replied=false} >
-                      {feedback.is_replied}
-                  </Checkbox>
-              </td>
-              <td>{feedback.resolution ? feedback.resolution : "-"}</td>
+              
+              {replyFeedback(feedback,index)}
+              
               <td>{feedback.run_id}</td>
               <td>{feedback.phone_number}</td>
               <td>{feedback.is_chat ? "yes" : "no"}</td>
@@ -134,7 +198,6 @@ export default class Feedback extends Component {
                 <th>Email</th>
                 <th>Date</th>
                 <th>Feedback</th>
-                <th>Is replied</th>
                 <th>Resolution</th>
                 <th>Run Id</th>
                 <th>Phone Number</th>
