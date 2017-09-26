@@ -13,14 +13,41 @@ export default class FeedbackModal extends Component{
         this.state = {
         showModal: false,
         feedback_id:0,
+        resolution: '',
       }
+    this.handleChange = this.handleChange.bind(this);
+      
      if (props.feedback_id) {
           this.state.feedback_id = props.feedback_id;
-          console.log("inside feedback fetchUrl", props.feedback_id);
+          // console.log("inside feedback fetchUrl", props.feedback_id);
         }
     }
     
+  handleChange(event) {
+    this.setState({resolution: event.target.value});
+  }
 
+
+  putFeedbackReply(feedback_id) {
+    var path = "http://dev.impactrun.com/api/userFeedback/" + feedback_id+'/'
+    const formData = new FormData();
+    formData.append('resolution', this.state.resolution);
+    formData.append('is_replied', true);
+    console.log('inside put top feedback', formData);
+    // return console.log("return put saved for ", this.state.resolution)
+    return fetch(path, {
+      method: 'PUT',
+      body: formData,
+     
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log('inside put feedback', responseJson);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
 
       // close() {
       //   this.setState({ showModal: false });
@@ -48,15 +75,10 @@ export default class FeedbackModal extends Component{
               <Modal.Body>
                <tr key={this.state.feedback_id} >
                 <td>
-                  <Checkbox>
-                      
-                  </Checkbox>
+                  <input type="text" value={this.state.resolution} onChange={this.handleChange} name="my-input-field"/>
                 </td>
                 <td>
-                  <input type="text" name="my-input-field"/>
-                </td>
-                <td>
-                  <Button onClick={() => {}}>
+                  <Button onClick={() => this.putFeedbackReply(this.state.feedback_id)}>
                       Save
                   </Button>
                 </td>
