@@ -6,8 +6,8 @@ import Feedback from './components/feedback';
 import League from './components/league';
 import Team from './components/team';
 import TeamMembers from './components/teammembers';
-import SearchList from './components/searchitems'
-
+import SearchList from './components/searchitems';
+import Dashboard from './dashboards/dashboard';
 import User from './components/user';
 import UserDetail from './components/userdetail';
 import {
@@ -59,6 +59,7 @@ class App extends Component {
                     {/* <li ><Link to="/runs">Runs</Link></li> */}
                     <li ><Link to="/feedback">Feedback</Link></li>
                     <li ><Link to="/league">Leagues</Link></li>
+                    <li ><Link to="/dashboards">Dashboard</Link></li>
                   </ul>
                 </div>
                 {/* <!-- /.navbar-collapse --> */}
@@ -78,6 +79,7 @@ class App extends Component {
                   <Route path="/teammembers" render={() => <TeamMembers />} />
                   <Route path="/userdetail" render={() => <UserDetail />} />
                   <Route path="/runs" render={() => <Runs />} />
+                  <Route path="/dashboards" render={() => <Dashboard />} />
                   
                   {/* <Route path={path} render={routeProps => <LeaguePage {...routeProps} path={path} />} history={history} />
                       <Route path="/description" render={routeProps => <Example {...routeProps} />} history={history} /> */}
