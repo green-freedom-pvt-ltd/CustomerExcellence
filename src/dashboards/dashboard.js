@@ -71,7 +71,7 @@ export default class Dashboard extends Component{
       	<div className="row">
       		<div className="col-sm-6">
 	      		<h1> total_distance </h1>
-	        	<BarChart width={900} height={500} data={this.state.data}
+	        	<BarChart width={400} height={200} data={this.state.data}
 		            margin={{top: 5, right: 30, left: 20, bottom: 5}}>
 			       <XAxis dataKey="event_date"/>
 			       <YAxis/>
@@ -83,26 +83,26 @@ export default class Dashboard extends Component{
 	      	</div>
 	      	<div className="col-sm-6">
 	      		<h1> total_duration </h1>
-	        	<BarChart width={900} height={500} data={this.state.data}
+	        	<BarChart width={400} height={200} data={this.state.data}
 		            margin={{top: 5, right: 30, left: 20, bottom: 5}}>
 			       <XAxis dataKey="event_date"/>
 			       <YAxis/>
 			       <CartesianGrid strokeDasharray="3 3"/>
 			       <Tooltip/>
 			       <Legend />
-			       <Bar dataKey="total_duration" fill="#82ca9d" />
+			       <Bar dataKey="total_duration" fill="#FF5733" />
 	      		</BarChart>
 	      	</div>
 	      	<div className="col-sm-6">
 	      		<h1> total_steps </h1>
-	        	<BarChart width={900} height={500} data={this.state.data}
+	        	<BarChart width={400} height={200} data={this.state.data}
 		            margin={{top: 5, right: 30, left: 20, bottom: 5}}>
 			       <XAxis dataKey="event_date"/>
 			       <YAxis/>
 			       <CartesianGrid strokeDasharray="3 3"/>
 			       <Tooltip/>
 			       <Legend />
-			       <Bar dataKey="total_steps" fill="#82ca9d" />
+			       <Bar dataKey="total_steps" fill="#3D55FF" />
 	      		</BarChart>
 	      	</div>
       	</div>
