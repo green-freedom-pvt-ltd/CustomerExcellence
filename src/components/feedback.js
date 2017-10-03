@@ -166,7 +166,7 @@ export default class Feedback extends Component {
                 </Link>
               </td>
               <td><a href={"mailto:" + feedback.email}>{feedback.email}</a></td>
-              <td>{feedback_date_time.toUTCString()}</td>
+              <td>{feedback_date_time.toLocaleString()}</td>
               <td>{feedback.feedback ? feedback.feedback : "-"}</td>
               
               {replyFeedback(feedback,index)}
