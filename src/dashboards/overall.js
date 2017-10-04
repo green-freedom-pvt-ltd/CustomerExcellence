@@ -4,7 +4,7 @@ import {BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Le
 import './info.css';
 import _ from "lodash";
 import {defaultRanges, Calendar, DateRange } from 'react-date-range';
-
+import moment from 'moment';
 
 const leaguecausedata = require('./leaguecausedata.js');
 
@@ -13,24 +13,111 @@ const leaguecausedata = require('./leaguecausedata.js');
 export default class Overall extends Component{
 	
 	constructor(props) {
-    console.log("inside runsinfo container", props);
+    // console.log("inside runsinfo container", props);
     super(props);
       this.state = {
-      loading:false,
+      loading:true,
       data: null,
       overall: null,
       leagues: null,
       causes: null,
       y_axis:'total_distance',
+      date:null,
       // fetchUrl:'http://dev.impactrun.com/api/statistics/?start_date=2017-09-01+21:00:59&end_date=2017-09-28+21:00:59&cause_id=5&team_id=122',
       fetchUrl:'http://dev.impactrun.com/api/statistics/?start_date=2017-09-21T05:30:00&end_date=2017-09-28T05:30:00',
+      fetchShortUrl:'http://dev.impactrun.com/api/statistics/',
     }
+    this.handleSelect = this.handleSelect.bind(this);
+    this.fetchNewData = this.fetchNewData.bind(this);
+    this.reloadData = this.reloadData.bind(this);
   }
 
-	  handleSelect(date){
-	        console.log(date); // Momentjs object 
-	    }
+  	handleSelect(date){
+        // this.fetchNewData(date);
+        this.setState({
+          date: date
+        });
+    	console.log(date);
 
+        // return console.log('inside date change',this.fetchNewData(date));
+
+    }
+
+    reloadData(){
+    	console.log('reload---------------------');
+    	this.fetchNewData();
+    }
+
+    fetchNewData(){
+    	var date = this.state.date;
+    	var startTime = moment(date.startDate);
+        var endTime = moment(date.endDate);
+
+        var start_date_query = startTime.year() + "-" + (startTime.month() + 1) + "-" + startTime.date()
+        var end_date_query = endTime.year() + "-" + (endTime.month() + 1) + "-" + endTime.date()
+    	var url_date = '?start_date='+ start_date_query +'T05:30:00'+ '&end_date=' + end_date_query +'T05:30:00';
+        console.log('inside fetchNewData', date, url_date ); // Momentjs object 
+
+	    return fetch(this.state.fetchShortUrl + url_date, {
+	      method: 'GET',
+	      headers: {
+	        'Accept': 'application/json',
+	        'Content-Type': 'application/json',
+	        'Authorization': 'Basic bmlra2k6Z3JlZW5mcmVlZG9tIQ=='
+	      }
+	    })
+	      .then((response) => response.json())
+	      .then((responseJson) => {
+	      	var data_results = responseJson.results;
+	      	var final_data = [];
+	        var days = this.state.date.endDate.diff(this.state.date.startDate,'days') + 1;
+    		var state_date  = this.state.date;
+    		let startTime = moment(state_date.startDate);
+
+	      	console.log('data_results-------------------------',data_results);
+	        
+	        for (var i = 0; i < days; i++) {
+
+	      		var event_date ;
+	      		var event_date_query = startTime
+	      		if (i>0){
+	      		event_date_query = startTime.add(1,'days');
+	      		}
+				// var start_date_query = event_date_query.year() + "-" + (event_date_query.month() + 1) + "-" + event_date_query.date()
+				event_date = event_date_query.format("YYYY-MM-DD") + 'T05:30:00';
+		        console.log('inside fetch ',i ,startTime.format("YYYY-MM-DD"), event_date);
+	      		var data_set = _.filter(data_results,function(num){ return num.event_date == event_date});
+	      		// console.log('data_set --------------------------------',data_set);
+	      		var total_distance = _.reduce(data_set, function(memo, num){ return memo + parseFloat(num.total_distance); }, 0);
+	      		var total_duration = _.reduce(data_set, function(memo, num){ return memo + parseFloat(num.total_duration); }, 0);
+		        var total_steps = _.reduce(data_set, function(memo, num){ return memo + parseFloat(num.total_steps); }, 0);
+		        var total_amount = _.reduce(data_set, function(memo, num){ return memo + parseFloat(num.total_amount); }, 0);
+		        var run_count = _.reduce(data_set, function(memo, num){ return memo + parseFloat(num.run_count); }, 0);
+		        var total_spikes = _.reduce(data_set, function(memo, num){ return memo + parseFloat(num.total_spikes); }, 0);
+	      		var user_count = _.reduce(data_set, function(memo, num){ return memo + parseFloat(num.user_count); }, 0);
+	      		
+	      		final_data.push(
+	            {event_date:event_date,
+	              total_distance:total_distance,
+	              total_duration:total_duration,
+	              total_steps:total_steps,
+	              total_amount:total_amount,
+	              run_count:run_count,
+	              total_spikes:total_spikes,
+	              user_count:user_count,
+	               })
+	      	}
+	      	console.log('final_data-------------------------',final_data);
+	        this.setState({
+	          data: final_data,
+	          loading:true
+	        });
+
+	      })
+	      .catch((error) => {
+	        console.error(error);
+	      });
+    }
 
     componentWillMount(){
     return fetch(this.state.fetchUrl, {
@@ -44,30 +131,41 @@ export default class Overall extends Component{
       .then((response) => response.json())
       .then((responseJson) => {
       	var data_results = responseJson.results;
-      	console.log('data_results-----------------',leaguecausedata);
-      	// console.log(_.filter(data_results,{event_date:'2017-09-01T05:30:00'}));
-      	// console.log("2017-09-01T05:30:00" ,_.filter(data_results,function(num){ return num.event_date == '2017-09-01T05:30:00'}));
-      	// console.log("2017-09-02T05:30:00" ,_.filter(data_results,function(num){ return num.event_date == '2017-09-02T05:30:00'}));
-      	// var unique_dates = _uniq(data_results, (num) => {return })
+      	// console.log('data_results-----------------',leaguecausedata);
       	var final_data = [];
-      	
+		var aggregate_data = {
+			total_distance: 0,
+			total_duration: 0,
+			total_steps: 0,
+			total_amount: 0,
+			run_count: 0,
+			total_spikes: 0,
+			user_count: 0,
+		}
       	for (var i = 7; i >= 1; i--) {
-      		var event_date 
-      			event_date = '2017-09-2' + i+ 'T05:30:00';
-      		// if(i<10){
-      		// 	event_date = '2017-09-0' + i+ 'T05:30:00';
-      		// } else {
-      		// 	event_date = '2017-09-' + i+ 'T05:30:00';
-      		// }
-      		// var end_date = '2017-09-' + i+ 'T05:30:00';
+      		var event_date ;
+      		event_date = '2017-09-2' + i+ 'T05:30:00';
+
       		var data_set = _.filter(data_results,function(num){ return num.event_date == event_date});
-      		// console.log('data_set------------',event_date, data_set);
+
+    //   		var total_all = _.reduce(data_set, function(memo, num){ 
+	  	// 		var total_distance = memo.total_distance + parseFloat(num.total_distance)
+	  	// 		var total_duration = memo.total_duration + parseFloat(num.total_duration);
+				// var total_steps = memo.total_steps + parseFloat(num.total_steps);
+				// var total_amount = memo.total_amount + parseFloat(num.total_amount);
+				// var run_count = memo.run_count + parseFloat(num.run_count);
+				// var total_spikes = memo.total_spikes + parseFloat(num.total_spikes);
+				// var user_count = memo.user_count + parseFloat(num.user_count);
+    //   			return memo; 
+    //   		});
+    //   		console.log('total_all -----------',total_all);
+
       		var total_distance = _.reduce(data_set, function(memo, num){ return memo + parseFloat(num.total_distance); }, 0);
       		var total_duration = _.reduce(data_set, function(memo, num){ return memo + parseFloat(num.total_duration); }, 0);
-	          var total_steps = _.reduce(data_set, function(memo, num){ return memo + parseFloat(num.total_steps); }, 0);
-	          var total_amount = _.reduce(data_set, function(memo, num){ return memo + parseFloat(num.total_amount); }, 0);
-	          var run_count = _.reduce(data_set, function(memo, num){ return memo + parseFloat(num.run_count); }, 0);
-	          var total_spikes = _.reduce(data_set, function(memo, num){ return memo + parseFloat(num.total_spikes); }, 0);
+	        var total_steps = _.reduce(data_set, function(memo, num){ return memo + parseFloat(num.total_steps); }, 0);
+	        var total_amount = _.reduce(data_set, function(memo, num){ return memo + parseFloat(num.total_amount); }, 0);
+	        var run_count = _.reduce(data_set, function(memo, num){ return memo + parseFloat(num.run_count); }, 0);
+	        var total_spikes = _.reduce(data_set, function(memo, num){ return memo + parseFloat(num.total_spikes); }, 0);
       		var user_count = _.reduce(data_set, function(memo, num){ return memo + parseFloat(num.user_count); }, 0);
       		final_data.push(
             {event_date:event_date,
@@ -80,13 +178,10 @@ export default class Overall extends Component{
               user_count:user_count,
                })
       	}
-      	console.log('data_set------------',final_data);
         this.setState({
           data: final_data,
           loading:true
-
         });
-        console.log('inside componentWillMount runsinfo',this.state.data);
       })
       .catch((error) => {
         console.error(error);
@@ -94,68 +189,78 @@ export default class Overall extends Component{
   }
 
   render() {
+  	var wellStyles = {maxWidth: 500, margin: '0 auto 10px'};
   	if (this.state.data){
       return (
       	<div className="row">
+      		
       		<div className="row">
-      		</div>
-      		<div className="row">
-		     	<h1> Range filter </h1>
-		     	<div>
-                <DateRange
-		            linkedCalendars={ true }
-		            ranges={ defaultRanges }
-		            onInit={ this.handleSelect }
-		            onChange={ this.handleSelect }
-		            theme={{
-		              DateRange      : {
-		                background   : '#ffffff'
-		              },
-		              Calendar       : {
-		                background   : 'transparent',
-		                color        : '#95a5a6',
-		              },
-		              MonthAndYear   : {
-		                background   : '#A9A9A9',
-		                color        : '#2F4F4F'
-		              },
-		              MonthButton    : {
-		                background   : '#c0392b'
-		              },
-		              MonthArrowPrev : {
-		                borderRightColor : '#d96659',
-		              },
-		              MonthArrowNext : {
-		                borderLeftColor : '#d96659',
-		              },
-		              Weekday        : {
-		                background   : '#A9A9A9',
-		                color        : '#2F4F4F'
-		              },
-		              Day            : {
-		                transition   : 'transform .1s ease, box-shadow .1s ease, background .1s ease'
-		              },
-		              DaySelected    : {
-		                background   : '#8e44ad'
-		              },
-		              DayActive    : {
-		                background   : '#8e44ad',
-		                boxShadow    : 'none'
-		              },
-		              DayInRange     : {
-		                background   : '#9b59b6',
-		                color        : '#fff'
-		              },
-		              DayHover       : {
-		                background   : '#ffffff',
-		                color        : '#7f8c8d',
-		                transform    : 'scale(1.1) translateY(-10%)',
-		                boxShadow    : '0 2px 4px rgba(0, 0, 0, 0.4)'
-		              }
-		            }}
-         		 />
+	      		<div className="col-sm-8">
+
+			     	<h1> Range filter </h1>
+			     	<div>
+	                <DateRange
+			            linkedCalendars={ true }
+			            ranges={ defaultRanges }
+			            onInit={ this.handleSelect }
+			            onChange={ this.handleSelect }
+			            theme={{
+			              DateRange      : {
+			                background   : '#ffffff'
+			              },
+			              Calendar       : {
+			                background   : 'transparent',
+			                color        : '#95a5a6',
+			              },
+			              MonthAndYear   : {
+			                background   : '#A9A9A9',
+			                color        : '#2F4F4F'
+			              },
+			              MonthButton    : {
+			                background   : '#c0392b'
+			              },
+			              MonthArrowPrev : {
+			                borderRightColor : '#d96659',
+			              },
+			              MonthArrowNext : {
+			                borderLeftColor : '#d96659',
+			              },
+			              Weekday        : {
+			                background   : '#A9A9A9',
+			                color        : '#2F4F4F'
+			              },
+			              Day            : {
+			                transition   : 'transform .1s ease, box-shadow .1s ease, background .1s ease'
+			              },
+			              DaySelected    : {
+			                background   : '#8e44ad'
+			              },
+			              DayActive    : {
+			                background   : '#8e44ad',
+			                boxShadow    : 'none'
+			              },
+			              DayInRange     : {
+			                background   : '#9b59b6',
+			                color        : '#fff'
+			              },
+			              DayHover       : {
+			                background   : '#ffffff',
+			                color        : '#7f8c8d',
+			                transform    : 'scale(1.1) translateY(-10%)',
+			                boxShadow    : '0 2px 4px rgba(0, 0, 0, 0.4)'
+			              }
+			            }}
+	         		 />
+            		</div>
             	</div>
+	      		<div className="col-sm-4" >
+					<Button onClick={() => this.reloadData()} bsSize="large" block>
+	                      Reload
+	                </Button>
+
+      			</div>
       		</div>
+      		
       		<div className="row">
 	      		<div className="col-sm-8">
 		      		<h1> Overall </h1>
