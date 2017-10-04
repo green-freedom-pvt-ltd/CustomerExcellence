@@ -13,7 +13,7 @@ const leaguecausedata = require('./leaguecausedata.js');
 export default class Overall extends Component{
 	
 	constructor(props) {
-    // console.log("inside runsinfo container", props);
+    // // console.log("inside runsinfo container", props);
     super(props);
       this.state = {
       loading:true,
@@ -37,14 +37,14 @@ export default class Overall extends Component{
         this.setState({
           date: date
         });
-    	console.log(date);
+    	// console.log(date);
 
-        // return console.log('inside date change',this.fetchNewData(date));
+        // // return console.log('inside date change',this.fetchNewData(date));
 
     }
 
     reloadData(){
-    	console.log('reload---------------------');
+    	// console.log('reload---------------------');
     	this.fetchNewData();
     }
 
@@ -56,7 +56,7 @@ export default class Overall extends Component{
         var start_date_query = startTime.year() + "-" + (startTime.month() + 1) + "-" + startTime.date()
         var end_date_query = endTime.year() + "-" + (endTime.month() + 1) + "-" + endTime.date()
     	var url_date = '?start_date='+ start_date_query +'T05:30:00'+ '&end_date=' + end_date_query +'T05:30:00';
-        console.log('inside fetchNewData', date, url_date ); // Momentjs object 
+        // console.log('inside fetchNewData', date, url_date ); // Momentjs object 
 
 	    return fetch(this.state.fetchShortUrl + url_date, {
 	      method: 'GET',
@@ -74,7 +74,7 @@ export default class Overall extends Component{
     		var state_date  = this.state.date;
     		let startTime = moment(state_date.startDate);
 
-	      	console.log('data_results-------------------------',data_results);
+	      	// console.log('data_results-------------------------',data_results);
 	        
 	        for (var i = 0; i < days; i++) {
 
@@ -85,9 +85,9 @@ export default class Overall extends Component{
 	      		}
 				// var start_date_query = event_date_query.year() + "-" + (event_date_query.month() + 1) + "-" + event_date_query.date()
 				event_date = event_date_query.format("YYYY-MM-DD") + 'T05:30:00';
-		        console.log('inside fetch ',i ,startTime.format("YYYY-MM-DD"), event_date);
+		        // console.log('inside fetch ',i ,startTime.format("YYYY-MM-DD"), event_date);
 	      		var data_set = _.filter(data_results,function(num){ return num.event_date == event_date});
-	      		// console.log('data_set --------------------------------',data_set);
+	      		// // console.log('data_set --------------------------------',data_set);
 	      		var total_distance = _.reduce(data_set, function(memo, num){ return memo + parseFloat(num.total_distance); }, 0);
 	      		var total_duration = _.reduce(data_set, function(memo, num){ return memo + parseFloat(num.total_duration); }, 0);
 		        var total_steps = _.reduce(data_set, function(memo, num){ return memo + parseFloat(num.total_steps); }, 0);
@@ -107,7 +107,7 @@ export default class Overall extends Component{
 	              user_count:user_count,
 	               })
 	      	}
-	      	console.log('final_data-------------------------',final_data);
+	      	// console.log('final_data-------------------------',final_data);
 	        this.setState({
 	          data: final_data,
 	          loading:true
@@ -115,7 +115,7 @@ export default class Overall extends Component{
 
 	      })
 	      .catch((error) => {
-	        console.error(error);
+	        // console.error(error);
 	      });
     }
 
@@ -131,7 +131,7 @@ export default class Overall extends Component{
       .then((response) => response.json())
       .then((responseJson) => {
       	var data_results = responseJson.results;
-      	// console.log('data_results-----------------',leaguecausedata);
+      	// // console.log('data_results-----------------',leaguecausedata);
       	var final_data = [];
 		var aggregate_data = {
 			total_distance: 0,
@@ -158,7 +158,7 @@ export default class Overall extends Component{
 				// var user_count = memo.user_count + parseFloat(num.user_count);
     //   			return memo; 
     //   		});
-    //   		console.log('total_all -----------',total_all);
+    // //   		console.log('total_all -----------',total_all);
 
       		var total_distance = _.reduce(data_set, function(memo, num){ return memo + parseFloat(num.total_distance); }, 0);
       		var total_duration = _.reduce(data_set, function(memo, num){ return memo + parseFloat(num.total_duration); }, 0);
@@ -184,7 +184,7 @@ export default class Overall extends Component{
         });
       })
       .catch((error) => {
-        console.error(error);
+        // console.error(error);
       });
   }
 
@@ -254,9 +254,7 @@ export default class Overall extends Component{
             		</div>
             	</div>
 	      		<div className="col-sm-4" >
-					<Button onClick={() => this.reloadData()} bsSize="large" block>
-	                      Reload
-	                </Button>
+					
 
       			</div>
       		</div>
@@ -275,27 +273,36 @@ export default class Overall extends Component{
 		      		</BarChart>
 		      	</div>
 		      	<div className="col-sm-4">
-		      		<Button onClick={() => this.setState({y_axis:'total_distance'})}>
-	                      Distance
-	                  </Button>
-	                  <Button onClick={() => this.setState({y_axis:'total_steps'})}>
-	                      Steps
-	                  </Button>
-	                  <Button onClick={() => this.setState({y_axis:'total_duration'})}>
-	                      Duration
-	                  </Button>
-	                  <Button onClick={() => this.setState({y_axis:'total_amount'})}>
-	                      Total Amount
-	                  </Button>
-	                  <Button onClick={() => this.setState({y_axis:'run_count'})}>
-	                      Run Count
-	                  </Button>
-	                  <Button onClick={() => this.setState({y_axis:'total_spikes'})}>
-	                      Total Spikes
-	                  </Button>
-	                  <Button onClick={() => this.setState({y_axis:'user_count'})}>
-	                      User Count
-	                  </Button>
+      				<div className="row">
+      					<div className="col-sm-12">
+							<Button onClick={() => this.reloadData()} bsSize="large" block>
+			                      Reload
+			                </Button>
+		      			</div>
+						<div className="col-sm-12">
+				      		<Button onClick={() => this.setState({y_axis:'total_distance'})}>
+			                      Distance
+			                  </Button>
+			                  <Button onClick={() => this.setState({y_axis:'total_steps'})}>
+			                      Steps
+			                  </Button>
+			                  <Button onClick={() => this.setState({y_axis:'total_duration'})}>
+			                      Duration
+			                  </Button>
+			                  <Button onClick={() => this.setState({y_axis:'total_amount'})}>
+			                      Total Amount
+			                  </Button>
+			                  <Button onClick={() => this.setState({y_axis:'run_count'})}>
+			                      Run Count
+			                  </Button>
+			                  <Button onClick={() => this.setState({y_axis:'total_spikes'})}>
+			                      Total Spikes
+			                  </Button>
+			                  <Button onClick={() => this.setState({y_axis:'user_count'})}>
+			                      User Count
+			                  </Button>
+		      			</div>
+		      		</div>
 		      	</div>
 		     </div>
       	</div>
