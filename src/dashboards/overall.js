@@ -26,6 +26,7 @@ export default class Overall extends Component{
       // fetchUrl:'http://dev.impactrun.com/api/statistics/?start_date=2017-09-01+21:00:59&end_date=2017-09-28+21:00:59&cause_id=5&team_id=122',
       fetchUrl:'http://dev.impactrun.com/api/statistics/?start_date=2017-09-21T05:30:00&end_date=2017-09-28T05:30:00',
       fetchShortUrl:'http://dev.impactrun.com/api/statistics/',
+      overall_data:[],
     }
     this.handleSelect = this.handleSelect.bind(this);
     this.fetchNewData = this.fetchNewData.bind(this);
@@ -48,10 +49,10 @@ export default class Overall extends Component{
     	 this.setState({
          loading:true
         });
-    	this.fetchNewData();
+    	this.fetchNewData([]);
     }
 
-    fetchNewData(){
+    fetchNewData(final_data,next_url){
     	var date = this.state.date;
     	var startTime = moment(date.startDate);
         var endTime = moment(date.endDate);
@@ -60,8 +61,13 @@ export default class Overall extends Component{
         var end_date_query = endTime.year() + "-" + (endTime.month() + 1) + "-" + endTime.date()
     	var url_date = '?start_date='+ start_date_query +'T05:30:00'+ '&end_date=' + end_date_query +'T05:30:00';
         // console.log('inside fetchNewData', date, url_date ); // Momentjs object 
+        var final_fetch_url = this.state.fetchShortUrl + url_date
+        if(next_url){
+        	final_fetch_url = next_url;
+        }
+	    console.log('final_fetch_url-------------------------',final_fetch_url);
 
-	    return fetch(this.state.fetchShortUrl + url_date, {
+	    return fetch(final_fetch_url, {
 	      method: 'GET',
 	      headers: {
 	        'Accept': 'application/json',
@@ -71,13 +77,20 @@ export default class Overall extends Component{
 	    })
 	      .then((response) => response.json())
 	      .then((responseJson) => {
+	      	if(responseJson.next){
+	      		next_url=responseJson.next;
+	      	} else {
+	      		if (responseJson.previous){
+	      			next_url=null;
+	      		}
+	      	}
 	      	var data_results = responseJson.results;
 	      	var final_data = [];
 	        var days = this.state.date.endDate.diff(this.state.date.startDate,'days') + 1;
     		var state_date  = this.state.date;
     		let startTime = moment(state_date.startDate);
 
-	      	// console.log('data_results-------------------------',data_results);
+	      	console.log('next_url-------------------------',next_url);
 	        
 	        for (var i = 0; i < days; i++) {
 
@@ -108,13 +121,19 @@ export default class Overall extends Component{
 	              run_count:run_count,
 	              total_spikes:total_spikes,
 	              user_count:user_count,
-	               })
+	               });
 	      	}
-	      	// console.log('final_data-------------------------',final_data);
+      		// var overall_data = this.state.overall_data;
+      		// overall_data=overall_data.push(final_data);
+	      	// console.log('overall_data-------------------------',overall_data);
 	        this.setState({
 	          data: final_data,
-	          loading:false
+	          loading:false,
+	          // overall_data:overall_data
 	        });
+	        if(next_url){
+		        this.fetchNewData(final_data,next_url);
+	        }
 
 	      })
 	      .catch((error) => {
