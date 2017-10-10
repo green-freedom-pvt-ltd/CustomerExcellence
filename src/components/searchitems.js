@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { Pagination, Grid, Row, Col, Table } from 'react-bootstrap';
 import SearchForm from './searchform';
 import userSection from './usercomponent';
+import {RingLoader, CircleLoader} from 'react-spinners';
+
 
 export default class SearchItem extends Component {
     constructor(props) {
@@ -15,6 +17,7 @@ export default class SearchItem extends Component {
             nextPage: '',
             prevPage: '',
             activePage: 1,
+            loading: true,
         }
         this.fetchResults("http://dev.impactrun.com/api/ced/users/" + searchQuery);
         this.handleSelect = this.handleSelect.bind(this);
@@ -36,6 +39,7 @@ export default class SearchItem extends Component {
                     prevPage: responseJson.previous,
                     userPath: this.state.nextPage,
                     nextPage: responseJson.next,
+                    loading: false,
                 })
                 console.log("Data",this.state.data);
             });
@@ -112,7 +116,15 @@ export default class SearchItem extends Component {
                     </div>
                     <div className="container">
                         <div className="box-top-left" style={{ width: "100%" }}>
-
+                            <div className='row'>
+                              <div className='col-sm-offset-6 col-sm-6 col-centered'>
+                                <CircleLoader
+                                        color={'#123abc'} 
+                                        size={100}
+                                        loading={this.state.loading} 
+                                      />
+                              </div>
+                            </div>
                             <Table className="table table-striped">
                                 <thead>
                                     <tr>
