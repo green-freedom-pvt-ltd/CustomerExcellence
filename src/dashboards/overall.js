@@ -5,7 +5,7 @@ import './info.css';
 import _ from "lodash";
 import {defaultRanges, Calendar, DateRange } from 'react-date-range';
 import moment from 'moment';
-
+import {RingLoader, ClimbingBoxLoader} from 'react-spinners';
 const leaguecausedata = require('./leaguecausedata.js');
 
 
@@ -45,6 +45,9 @@ export default class Overall extends Component{
 
     reloadData(){
     	// console.log('reload---------------------');
+    	 this.setState({
+         loading:true
+        });
     	this.fetchNewData();
     }
 
@@ -110,7 +113,7 @@ export default class Overall extends Component{
 	      	// console.log('final_data-------------------------',final_data);
 	        this.setState({
 	          data: final_data,
-	          loading:true
+	          loading:false
 	        });
 
 	      })
@@ -148,18 +151,6 @@ export default class Overall extends Component{
 
       		var data_set = _.filter(data_results,function(num){ return num.event_date == event_date});
 
-    //   		var total_all = _.reduce(data_set, function(memo, num){ 
-	  	// 		var total_distance = memo.total_distance + parseFloat(num.total_distance)
-	  	// 		var total_duration = memo.total_duration + parseFloat(num.total_duration);
-				// var total_steps = memo.total_steps + parseFloat(num.total_steps);
-				// var total_amount = memo.total_amount + parseFloat(num.total_amount);
-				// var run_count = memo.run_count + parseFloat(num.run_count);
-				// var total_spikes = memo.total_spikes + parseFloat(num.total_spikes);
-				// var user_count = memo.user_count + parseFloat(num.user_count);
-    //   			return memo; 
-    //   		});
-    // //   		console.log('total_all -----------',total_all);
-
       		var total_distance = _.reduce(data_set, function(memo, num){ return memo + parseFloat(num.total_distance); }, 0);
       		var total_duration = _.reduce(data_set, function(memo, num){ return memo + parseFloat(num.total_duration); }, 0);
 	        var total_steps = _.reduce(data_set, function(memo, num){ return memo + parseFloat(num.total_steps); }, 0);
@@ -180,7 +171,7 @@ export default class Overall extends Component{
       	}
         this.setState({
           data: final_data,
-          loading:true
+          loading:false
         });
       })
       .catch((error) => {
@@ -190,10 +181,9 @@ export default class Overall extends Component{
 
   render() {
   	var wellStyles = {maxWidth: 500, margin: '0 auto 10px'};
-  	if (this.state.data){
+  	if (true){
       return (
       	<div className="row">
-      		
       		<div className="row">
 	      		<div className="col-sm-8">
 
@@ -254,8 +244,11 @@ export default class Overall extends Component{
             		</div>
             	</div>
 	      		<div className="col-sm-4" >
-					
-
+					 <ClimbingBoxLoader
+				          color={'#123abc'} 
+				          size={20}
+				          loading={this.state.loading} 
+				        />
       			</div>
       		</div>
       		
@@ -310,7 +303,13 @@ export default class Overall extends Component{
  	 } else {
  	 	  return (
       	<div>
-      		<h1> Graph POC </h1>
+      		<h1> Loding Data </h1>
+      		 <div className="row">
+		        <RingLoader
+		          color={'#123abc'} 
+		          loading={this.state.loading} 
+		        />
+		    </div>  
       	</div>
       	);
   	}
