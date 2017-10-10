@@ -4,6 +4,7 @@ import {
   Link
 } from 'react-router-dom';
 import FeedbackModal from "./feedbackModal"
+import {RingLoader, PropagateLoader} from 'react-spinners';
 
 
 export default class Feedback extends Component {
@@ -12,7 +13,7 @@ export default class Feedback extends Component {
     super(props);
     this.state = {
       data: null,
-      loading: false,
+      loading: true,
       activePage: 1,
       nextPage: '',
       prevPage: '',
@@ -70,7 +71,7 @@ export default class Feedback extends Component {
       .then((responseJson) => {
         this.setState({
           data: responseJson,
-          loading: true,
+          loading: false,
           prevPage: responseJson.previous,
           userPath: this.state.nextPage,
           nextPage: responseJson.next,
@@ -190,45 +191,58 @@ export default class Feedback extends Component {
 
     return (
       <div>
-        <h1> Feedback list </h1>
-        <div>
-          <Table striped bordered condensed hover>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>User Id</th>
-                <th>Email</th>
-                <th>Date</th>
-                <th>Feedback</th>
-                <th>Resolution</th>
-                <th>Run Id</th>
-                <th>Phone Number</th>
-                <th>Chat</th>
-                <th>Tag</th>
-                <th>Sub Tag</th>
-                <th>Client Run Id</th>
-                <th>App Version</th>
-                <th>Is iOS</th>
-              </tr>
-            </thead>
-            <tbody>
-              {feedbackList}
-            </tbody>
-          </Table>
-          <div style={{display:this.state.pageCount>1?"block":"none"}} id="pagination">
-            <Pagination
-              prev
-              next
-              first
-              last
-              ellipsis
-              boundaryLinks
-              items={this.state.pageCount}
-              maxButtons={3}
-              activePage={this.state.activePage}
-              onSelect={this.handleSelect} />
+        <div className='row'>
+          <div className='col-sm-offset-6 col-sm-6 col-centered'>
+            <PropagateLoader
+                    color={'#123abc'} 
+                    size={20}
+                    loading={this.state.loading} 
+                  />
           </div>
+          <div className='col-sm-12'>
+              <h1> Feedback list </h1>
+          </div>
+          
         </div>
+
+          <div className='row'>
+            <Table striped bordered condensed hover>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>User Id</th>
+                  <th>Email</th>
+                  <th>Date</th>
+                  <th>Feedback</th>
+                  <th>Resolution</th>
+                  <th>Run Id</th>
+                  <th>Phone Number</th>
+                  <th>Chat</th>
+                  <th>Tag</th>
+                  <th>Sub Tag</th>
+                  <th>Client Run Id</th>
+                  <th>App Version</th>
+                  <th>Is iOS</th>
+                </tr>
+              </thead>
+              <tbody>
+                {feedbackList}
+              </tbody>
+            </Table>
+            <div style={{display:this.state.pageCount>1?"block":"none"}} id="pagination">
+              <Pagination
+                prev
+                next
+                first
+                last
+                ellipsis
+                boundaryLinks
+                items={this.state.pageCount}
+                maxButtons={3}
+                activePage={this.state.activePage}
+                onSelect={this.handleSelect} />
+            </div>
+          </div>
       </div>
     );
   }
