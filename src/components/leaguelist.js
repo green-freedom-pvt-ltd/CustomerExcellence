@@ -5,6 +5,9 @@ import {
   Route,
   Link
 } from 'react-router-dom'
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
 
 
 export default class LeagueList extends Component{
@@ -21,6 +24,8 @@ export default class LeagueList extends Component{
   render() {
     var  league_data = this.state.data;
     console.log("------league data--------",league_data);
+    console.log("cookie--------------------",cookies.get('authorization'));
+
     if(league_data){
     var leagueList = league_data.results.map((league, index) => {
           return (
@@ -66,12 +71,12 @@ export default class LeagueList extends Component{
   }
 
   componentWillMount(){
-    return fetch('http://dev.impactrun.com/api/ced/impactleague/', {
+    return fetch('http://localhost:8000/api/ced/impactleague/', {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': 'Basic bmlra2k6Z3JlZW5mcmVlZG9tIQ=='
+        'Authorization': cookies.get('authorization')
       }
     })
       .then((response) => response.json())
