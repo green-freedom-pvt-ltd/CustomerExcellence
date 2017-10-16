@@ -103,25 +103,27 @@ export default class Overall extends Component{
 				event_date = event_date_query.format("YYYY-MM-DD") + 'T05:30:00';
 		        // console.log('inside fetch ',i ,startTime.format("YYYY-MM-DD"), event_date);
 	      		var data_set = _.filter(data_results,function(num){ return num.event_date == event_date});
-	      		// // console.log('data_set --------------------------------',data_set);
-	      		var total_distance = _.reduce(data_set, function(memo, num){ return memo + parseFloat(num.total_distance); }, 0);
-	      		var total_duration = _.reduce(data_set, function(memo, num){ return memo + parseFloat(num.total_duration); }, 0);
-		        var total_steps = _.reduce(data_set, function(memo, num){ return memo + parseFloat(num.total_steps); }, 0);
-		        var total_amount = _.reduce(data_set, function(memo, num){ return memo + parseFloat(num.total_amount); }, 0);
-		        var run_count = _.reduce(data_set, function(memo, num){ return memo + parseFloat(num.run_count); }, 0);
-		        var total_spikes = _.reduce(data_set, function(memo, num){ return memo + parseFloat(num.total_spikes); }, 0);
-	      		var user_count = _.reduce(data_set, function(memo, num){ return memo + parseFloat(num.user_count); }, 0);
-	      		
-	      		final_data.push(
-	            {event_date:event_date,
-	              total_distance:total_distance,
-	              total_duration:total_duration,
-	              total_steps:total_steps,
-	              total_amount:total_amount,
-	              run_count:run_count,
-	              total_spikes:total_spikes,
-	              user_count:user_count,
-	               });
+	      		// if(data_set.length >0){
+	      			// console.log('data_set --------------------------------',data_set);
+		      		var total_distance = _.reduce(data_set, function(memo, num){ return memo + parseFloat(num.total_distance); }, 0);
+		      		var total_duration = _.reduce(data_set, function(memo, num){ return memo + parseFloat(num.total_duration); }, 0);
+			        var total_steps = _.reduce(data_set, function(memo, num){ return memo + parseFloat(num.total_steps); }, 0);
+			        var total_amount = _.reduce(data_set, function(memo, num){ return memo + parseFloat(num.total_amount); }, 0);
+			        var run_count = _.reduce(data_set, function(memo, num){ return memo + parseFloat(num.run_count); }, 0);
+			        var total_spikes = _.reduce(data_set, function(memo, num){ return memo + parseFloat(num.total_spikes); }, 0);
+		      		var user_count = _.reduce(data_set, function(memo, num){ return memo + parseFloat(num.user_count); }, 0);
+		      		
+		      		final_data.push(
+		            {event_date:event_date,
+		              total_distance:total_distance,
+		              total_duration:total_duration,
+		              total_steps:total_steps,
+		              total_amount:total_amount,
+		              run_count:run_count,
+		              total_spikes:total_spikes,
+		              user_count:user_count,
+		               });
+	      		// }
 	      	}
       		// var overall_data = this.state.overall_data;
       		// overall_data=overall_data.push(final_data);
@@ -132,6 +134,9 @@ export default class Overall extends Component{
 	          // overall_data:overall_data
 	        });
 	        if(next_url){
+	        	this.setState({
+		         loading:true
+		        });
 		        this.fetchNewData(final_data,next_url);
 	        }
 
@@ -262,13 +267,7 @@ export default class Overall extends Component{
 	         		 />
             		</div>
             	</div>
-	      		<div className="col-sm-4" >
-					 <ClimbingBoxLoader
-				          color={'#123abc'} 
-				          size={20}
-				          loading={this.state.loading} 
-				        />
-      			</div>
+	      		
       		</div>
       		
       		<div className="row">
@@ -313,6 +312,13 @@ export default class Overall extends Component{
 			                  <Button onClick={() => this.setState({y_axis:'user_count'})}>
 			                      User Count
 			                  </Button>
+		      			</div>
+		      			<div className="col-sm-6" >
+							 <ClimbingBoxLoader
+						          color={'#123abc'} 
+						          size={20}
+						          loading={this.state.loading} 
+						        />
 		      			</div>
 		      		</div>
 		      	</div>
