@@ -24,10 +24,10 @@ export default class UserDetail extends Component {
     // searchedItem = window.location.search;       
   }
   componentWillMount() {
-    this.fetchRuns('http://dev.impactrun.com/api/ced/runs/?user_id=' + this.state.user_id);
+    this.fetchRuns('http://localhost:8000/api/ced/runs/?user_id=' + this.state.user_id);
   }
   componentDidMount() {
-    fetch('http://dev.impactrun.com/api/ced/users/' + this.state.user_id + '/', {
+    fetch('http://localhost:8000/api/ced/users/' + this.state.user_id + '/', {
       method: 'GET',
       headers: {
         'Accept': 'application/json',

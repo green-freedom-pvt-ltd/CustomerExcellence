@@ -2,6 +2,10 @@ import React, {Component} from 'react';
 import { Button, Grid, Row, Col, Table, FormControl,Form, FormGroup,ControlLabel } from 'react-bootstrap';
 import LeagueList from './leaguelist';
 import Team from './team';
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
+
 
 export default class League extends Component{
   constructor(props) {

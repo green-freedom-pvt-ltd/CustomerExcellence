@@ -2,6 +2,10 @@ import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import { Pagination, Grid,Row, Col,Table } from 'react-bootstrap';
 import SearchForm from './searchform';
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
+
 
 class User extends Component {
     
@@ -10,7 +14,7 @@ class User extends Component {
         this.state = {
           data: null,
           loading: false,
-          userPath: 'http://dev.impactrun.com/api/ced/users/',
+          userPath: 'http://localhost:8000/api/ced/users/',
           nextPage: '',
           prevPage: '',
           activePage: 1,
@@ -31,7 +35,7 @@ class User extends Component {
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': 'Basic bmlra2k6Z3JlZW5mcmVlZG9tIQ=='
+            'Authorization': cookies.get('authorization')
           }
         })
           .then((Response) => Response.json())
@@ -47,6 +51,10 @@ class User extends Component {
             })
             console.log("Data", this.state.data);
     
+          })
+          .catch((error) => {
+            console.error(error);
+            window.location = "/logout";
           });
       }
       // handleNext() {
