@@ -21,8 +21,6 @@ export default class Login extends Component{
     this.handleLNameChange = this.handleLNameChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.requestLogin = this.requestLogin.bind(this);
-
-
   }
 
   handleChange(event) {

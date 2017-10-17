@@ -10,6 +10,7 @@ import SearchList from './components/searchitems';
 import Dashboard from './dashboards/dashboard';
 import User from './components/user';
 import Login from './login';
+import Logout from './logout';
 import UserDetail from './components/userdetail';
 import {
   BrowserRouter as Router,
@@ -61,6 +62,7 @@ class App extends Component {
                     <li ><Link to="/feedback">Feedback</Link></li>
                     <li ><Link to="/league">Leagues</Link></li>
                     <li ><Link to="/dashboards">Dashboard</Link></li>
+                    <li ><Link to="/logout">Logout</Link></li>
                   </ul>
                 </div>
                 {/* <!-- /.navbar-collapse --> */}
@@ -82,6 +84,7 @@ class App extends Component {
                   <Route path="/runs" render={() => <Runs />} />
                   <Route path="/dashboards" render={() => <Dashboard />} />
                   <Route path="/login" render={() => <Login />} />
+                  <Route path="/logout" render={() => <Logout />} />
                   
                   {/* <Route path={path} render={routeProps => <LeaguePage {...routeProps} path={path} />} history={history} />
                       <Route path="/description" render={routeProps => <Example {...routeProps} />} history={history} /> */}

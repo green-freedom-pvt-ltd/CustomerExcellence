@@ -43,31 +43,37 @@ export default class LeagueList extends Component{
             });
     }
 
-
-    return (
-       <div>
-          <div className="row">
-            <div className="col-sm-10">
-             <div>
-                <Table striped bordered condensed hover>
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>League  Name</th>
-                      <th>Is active</th>
-                      <th>Duration</th>
-                      <th>Team Size</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {leagueList}
-                  </tbody>
-                </Table>
+    if (this.state.data){
+      return (
+         <div>
+            <div className="row">
+              <div className="col-sm-10">
+               <div>
+                  <Table striped bordered condensed hover>
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>League  Name</th>
+                        <th>Is active</th>
+                        <th>Duration</th>
+                        <th>Team Size</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {leagueList}
+                    </tbody>
+                  </Table>
+                </div>
               </div>
             </div>
-          </div>
-      </div>   
-    );
+        </div>   
+      );
+    } else {
+      return (
+         <div>
+        </div>   
+      );
+    }
   }
 
   componentWillMount(){
@@ -89,6 +95,8 @@ export default class LeagueList extends Component{
       })
       .catch((error) => {
         console.error(error);
+        window.location = "/logout";
+
       });
   }
 }
