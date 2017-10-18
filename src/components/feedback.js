@@ -22,7 +22,7 @@ export default class Feedback extends Component {
       prevPage: '',
       childVisible: false,
 
-      fetchUrl: 'http://localhost:8000/api/ced/userFeedback/'
+      fetchUrl: 'http://dev.impactrun.com/api/ced/userFeedback/'
     }
     this.handleSelect = this.handleSelect.bind(this);
     if (props.user_id) {
@@ -83,7 +83,7 @@ export default class Feedback extends Component {
         // console.log('inside componentWillMount feedback', this.state.data);
       })
       .catch((error) => {
-       console.error(error);
+       // console.error(error);
         window.location = "/logout";
       });
   }

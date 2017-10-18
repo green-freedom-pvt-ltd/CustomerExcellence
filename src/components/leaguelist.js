@@ -77,7 +77,7 @@ export default class LeagueList extends Component{
   }
 
   componentWillMount(){
-    return fetch('http://localhost:8000/api/ced/impactleague/', {
+    return fetch('http://dev.impactrun.com/api/ced/impactleague/', {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -94,7 +94,7 @@ export default class LeagueList extends Component{
         });
       })
       .catch((error) => {
-        console.error(error);
+        // console.error(error);
         window.location = "/logout";
 
       });

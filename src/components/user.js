@@ -14,7 +14,7 @@ class User extends Component {
         this.state = {
           data: null,
           loading: false,
-          userPath: 'http://localhost:8000/api/ced/users/',
+          userPath: 'http://dev.impactrun.com/api/ced/users/',
           nextPage: '',
           prevPage: '',
           activePage: 1,
@@ -53,7 +53,7 @@ class User extends Component {
     
           })
           .catch((error) => {
-            console.error(error);
+            // console.error(error);
             window.location = "/logout";
           });
       }
