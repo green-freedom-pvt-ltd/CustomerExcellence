@@ -4,6 +4,9 @@ import { Pagination, Grid, Row, Col, Table } from 'react-bootstrap';
 import SearchForm from './searchform';
 import userSection from './usercomponent';
 import {RingLoader, CircleLoader} from 'react-spinners';
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
 
 
 export default class SearchItem extends Component {
@@ -29,7 +32,7 @@ export default class SearchItem extends Component {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': 'Basic bmlra2k6Z3JlZW5mcmVlZG9tIQ=='
+                'Authorization': cookies.get('authorization')
             }
         })
             .then((Response) => Response.json())
