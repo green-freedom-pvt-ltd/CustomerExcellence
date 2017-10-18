@@ -9,6 +9,8 @@ import TeamMembers from './components/teammembers';
 import SearchList from './components/searchitems';
 import Dashboard from './dashboards/dashboard';
 import User from './components/user';
+import Login from './login';
+import Logout from './logout';
 import UserDetail from './components/userdetail';
 import {
   BrowserRouter as Router,
@@ -36,7 +38,7 @@ class App extends Component {
                     <span className="icon-bar"></span>
                     <span className="icon-bar"></span>
                   </button>
-                  <a className="navbar-brand" href="/" style={{ padding: "10px" }}>
+                  <a className="navbar-brand" href="/login" style={{ padding: "10px" }}>
                     <img src={logo} style={{ width: "150px" }} alt="site-logo" />
                   </a>
                 </div>
@@ -55,11 +57,12 @@ class App extends Component {
                 <li className="page-scroll">
                     <a href="#contact">Contact</a>
                 </li> */}
-                    <li ><Link to="/">User</Link></li>
+                    <li ><Link to="/user">User</Link></li>
                     {/* <li ><Link to="/runs">Runs</Link></li> */}
                     <li ><Link to="/feedback">Feedback</Link></li>
                     <li ><Link to="/league">Leagues</Link></li>
                     <li ><Link to="/dashboards">Dashboard</Link></li>
+                    <li ><Link to="/logout">Logout</Link></li>
                   </ul>
                 </div>
                 {/* <!-- /.navbar-collapse --> */}
@@ -71,7 +74,7 @@ class App extends Component {
             <div className="container">
               <div className="content-wrapper">
                 <div style={{ flex: 1, padding: '10px' }}>
-                  <Route path="/" component={User} exact />
+                  <Route path="/user" component={User} exact />
                   <Route path="/search_list" render={() => <SearchList />} />
                   <Route path="/feedback" render={() => <Feedback />} />
                   <Route path="/league" render={() => <League />} />
@@ -80,6 +83,8 @@ class App extends Component {
                   <Route path="/userdetail" render={() => <UserDetail />} />
                   <Route path="/runs" render={() => <Runs />} />
                   <Route path="/dashboards" render={() => <Dashboard />} />
+                  <Route path="/login" render={() => <Login />} />
+                  <Route path="/logout" render={() => <Logout />} />
                   
                   {/* <Route path={path} render={routeProps => <LeaguePage {...routeProps} path={path} />} history={history} />
                       <Route path="/description" render={routeProps => <Example {...routeProps} />} history={history} /> */}
@@ -87,6 +92,7 @@ class App extends Component {
               </div>
             </div>
           </section>
+
         </div>
       </Router>
     )

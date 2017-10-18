@@ -5,6 +5,9 @@ import {
 } from 'react-router-dom';
 import FeedbackModal from "./feedbackModal"
 import {RingLoader, PropagateLoader} from 'react-spinners';
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
 
 
 export default class Feedback extends Component {
@@ -64,7 +67,7 @@ export default class Feedback extends Component {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': 'Basic bmlra2k6Z3JlZW5mcmVlZG9tIQ=='
+        'Authorization': cookies.get('authorization')
       }
     })
       .then((response) => response.json())
@@ -80,7 +83,8 @@ export default class Feedback extends Component {
         // console.log('inside componentWillMount feedback', this.state.data);
       })
       .catch((error) => {
-        // console.error(error);
+       // console.error(error);
+        window.location = "/logout";
       });
   }
 
