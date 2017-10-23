@@ -4,6 +4,7 @@ import {
   Link
 } from 'react-router-dom';
 import FeedbackModal from "./feedbackModal"
+import FeedbackFilter from "./reusable/feedbackFilter"
 import {RingLoader, PropagateLoader} from 'react-spinners';
 import Cookies from 'universal-cookie';
 
@@ -21,8 +22,8 @@ export default class Feedback extends Component {
       nextPage: '',
       prevPage: '',
       childVisible: false,
-
-      fetchUrl: 'http://dev.impactrun.com/api/ced/userFeedback/'
+      count: 0,
+      fetchUrl: 'http://localhost:8000/api/ced/userFeedback/'
     }
     this.handleSelect = this.handleSelect.bind(this);
     if (props.user_id) {
@@ -102,12 +103,12 @@ export default class Feedback extends Component {
 
   render() {
     var feedback_data = this.state.data;
-    // console.log("------111--------", feedback_data);
     if (feedback_data) {
+    console.log("------111--------", feedback_data.count);
       if (this.state.prevPage === null) {
         this.state.pageCount = Math.ceil(feedback_data.count / feedback_data.results.length);
       }
-
+      this.state.count = feedback_data.count;
       if (this.state.data.results.length < 1) {
         return <tr><td colSpan="12" style={{textAlign:"center"}}>No Record Found..!!</td></tr>
 
@@ -203,8 +204,14 @@ export default class Feedback extends Component {
                     loading={this.state.loading} 
                   />
           </div>
-          <div className='col-sm-12'>
+          <div className='col-sm-6'>
               <h1> Feedback list </h1>
+          </div>
+          <div className='col-sm-6'>
+              <h1> Total Count {this.state.count} </h1>
+          </div>
+          <div className='col-sm-12'>
+              <FeedbackFilter/>
           </div>
           
         </div>
@@ -242,7 +249,7 @@ export default class Feedback extends Component {
                 ellipsis
                 boundaryLinks
                 items={this.state.pageCount}
-                maxButtons={3}
+                maxButtons={5}
                 activePage={this.state.activePage}
                 onSelect={this.handleSelect} />
             </div>
