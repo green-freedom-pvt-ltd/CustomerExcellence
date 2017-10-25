@@ -26,6 +26,7 @@ export default class Feedback extends Component {
       fetchUrl: 'http://localhost:8000/api/ced/userFeedback/'
     }
     this.handleSelect = this.handleSelect.bind(this);
+    this.myCallback = this.myCallback.bind(this);
     if (props.user_id) {
       this.state.fetchUrl += '?user_id=' + props.user_id
       // console.log("inside feedback fetchUrl", this.state.fetchUrl);
@@ -99,6 +100,18 @@ export default class Feedback extends Component {
     onClickReply(feedback_id) {
       // this.setState({childVisible: !this.state.childVisible});
       console.log("feedback_id----------",feedback_id);
+    }
+
+    myCallback (dataFromChild) {
+        this.setState({
+          data: dataFromChild,
+          loading: false,
+          prevPage: dataFromChild.previous,
+          userPath: this.state.nextPage,
+          nextPage: dataFromChild.next,
+
+        });
+        console.log('----------listDataFromChild', this.state.listDataFromChild);
     }
 
   render() {
@@ -211,7 +224,7 @@ export default class Feedback extends Component {
               <h1> Total Count {this.state.count} </h1>
           </div>
           <div className='col-sm-12'>
-              <FeedbackFilter/>
+              <FeedbackFilter callbackFromParent={this.myCallback} />
           </div>
           
         </div>

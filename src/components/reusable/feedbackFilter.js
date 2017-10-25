@@ -23,20 +23,68 @@ export default class FeedbackFilter extends Component {
     this.logSubTag = this.logSubTag.bind(this);
     this.logIsChat = this.logIsChat.bind(this);
     this.logIsResolved = this.logIsResolved.bind(this);
+    this.onClickReply = this.onClickReply.bind(this);
 
 
   }
+
+  onClickReply() {
+    
+
+    var path = "http://localhost:8000/api/ced/userFeedback/" + '?'
+    const formData = new FormData();
+    console.log('inside search feedback filter', path);
+    if(this.state.tag){
+      path+='tag='+this.state.tag.value + '&'
+    }
+    if(this.state.sub_tag){
+      path+='sub_tag='+this.state.sub_tag.value + '&'
+    }
+    if(this.state.is_chat){
+      path+='is_chat='+this.state.is_chat.value + '&'
+    }
+    if(this.state.is_resolved){
+      path+='is_resolved='+this.state.is_resolved.value + '&'
+    }
+    console.log('inside search feedback filter', path);
+    return fetch(path, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': cookies.get('authorization')
+      }
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        this.setState({
+          data: responseJson,
+          loading: false,
+          prevPage: responseJson.previous,
+          userPath: this.state.nextPage,
+          nextPage: responseJson.next,
+
+        });
+        this.props.callbackFromParent(responseJson);
+        console.log('inside componentWillMount feedback', this.state.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+
   logIsResolved(val) {
     console.log("Selected: " + JSON.stringify(val));
     this.setState({
-      resolved: val
+      is_resolved: val
     });
   }
 
   logIsChat(val) {
     console.log("Selected: " + JSON.stringify(val));
     this.setState({
-      chat: val
+      is_chat: val
     });
   }
 
@@ -56,12 +104,12 @@ export default class FeedbackFilter extends Component {
  
   render() {
     var tag_options = [
-      { value: 'pastworkout', label: 'pastworkout' },
-      { value: 'question', label: 'question' },
-      { value: 'feedback', label: 'feedback' },
-      { value: 'else', label: 'else' },
-      { value: 'flag', label: 'flag' },
-      { value: 'sad', label: 'sad' },
+      { label: 'Past Workout', value: 'pastworkout' },
+      { label: 'Question', value: 'question' },
+      { label: 'Feedback', value: 'feedback' },
+      { label: 'Else', value: 'else' },
+      { label: 'Flag', value: 'flag' },
+      { label: 'Sad', value: 'sad' },
     ];
 
     var boolean_options = [
@@ -121,31 +169,40 @@ export default class FeedbackFilter extends Component {
         </div>
         <div className='col-sm-2'>
           <div className = 'row'>
-            <div className='col-sm-3'>
-              <h5>Chat</h5>
-            </div>
-            <div className='col-sm-9'>
-             <Select
-                name="form-field-name"
-                value={this.state.chat}
-                options={boolean_options}
-                onChange={this.logIsChat}
-              />
-            </div>
-          </div>
-        </div>
-      <div className='col-sm-2'>
-          <div className = 'row'>
             <div className='col-sm-5'>
               <h5>Resolved</h5>
             </div>
             <div className='col-sm-7'>
              <Select
                 name="form-field-name"
-                value={this.state.resolved}
+                value={this.state.is_resolved}
                 options={boolean_options}
                 onChange={this.logIsResolved}
               />
+            </div>
+          </div>
+        </div>
+        <div className='col-sm-2'>
+          <div className = 'row'>
+            <div className='col-sm-3'>
+              <h5>Chat</h5>
+            </div>
+            <div className='col-sm-9'>
+             <Select
+                name="form-field-name"
+                value={this.state.is_chat}
+                options={boolean_options}
+                onChange={this.logIsChat}
+              />
+            </div>
+          </div>
+        </div>
+        <div className='col-sm-2'>
+          <div className = 'row'>
+            <div className='col-sm-7'>
+              <Button onClick={() => {this.onClickReply()}}>
+                  Search
+              </Button>
             </div>
           </div>
         </div>
