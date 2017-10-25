@@ -17,7 +17,7 @@ export default class FeedbackFilter extends Component {
     super(props);
     this.state = {
       data: null,
-      fetchUrl: 'http://localhost:8000/api/ced/userFeedback/'
+      fetchUrl: 'http://dev.impactrun.com/api/ced/userFeedback/'
     }
     this.logTag = this.logTag.bind(this);
     this.logSubTag = this.logSubTag.bind(this);
@@ -31,7 +31,7 @@ export default class FeedbackFilter extends Component {
   onClickReply() {
     
 
-    var path = "http://localhost:8000/api/ced/userFeedback/" + '?'
+    var path = "http://dev.impactrun.com/api/ced/userFeedback/" + '?'
     const formData = new FormData();
     console.log('inside search feedback filter', path);
     if(this.state.tag){
