@@ -24,7 +24,7 @@ export default class Feedback extends Component {
       prevPage: '',
       childVisible: false,
       count: 0,
-      fetchUrl: 'http://dev.impactrun.com/api/ced/userFeedback/'
+      fetchUrl: 'http://localhost:8000/api/ced/userFeedback/'
     }
     this.handleSelect = this.handleSelect.bind(this);
     this.myCallback = this.myCallback.bind(this);
@@ -123,11 +123,11 @@ export default class Feedback extends Component {
         this.state.pageCount = Math.ceil(feedback_data.count / feedback_data.results.length);
       }
       this.state.count = feedback_data.count;
-      if (this.state.data.results.length < 1) {
-        return <tr><td colSpan="12" style={{textAlign:"center"}}>No Record Found..!!</td></tr>
+      // if (this.state.data.results.length < 1) {
+      //   return <tr><td colSpan="12" style={{textAlign:"center"}}>No Record Found..!!</td></tr>
 
-      }
-      else{
+      // }
+      // else{
       var resolutionFields = (feedback,index) => {
           return (
               <tr key={index} className={feedback.is_replied ? "success" : "default"}>
@@ -224,7 +224,7 @@ export default class Feedback extends Component {
           var email_body_content ="Hi ,%0A%0AThis is regarding your feedback .%0A%0A%0AWe value your feedback, let us know if this answered your question.%0A%0AHappy Impacting. Get Fit Do Good.%0A%0AAbhijeet,%0ATeam Impact.%0A%0AIf everyone is moving forward together, success takes care of itself.";
           if (email_body){
           var email_body_content =email_body.label;
-          console.log('email_body_content------------',email_body_content);
+          // console.log('email_body_content------------',email_body_content);
           }
           return (
             
@@ -252,7 +252,7 @@ export default class Feedback extends Component {
 
       }
      
-    }
+    // }
 
 
     return (
