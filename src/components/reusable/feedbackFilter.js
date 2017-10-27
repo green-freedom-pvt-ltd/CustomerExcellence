@@ -17,7 +17,7 @@ export default class FeedbackFilter extends Component {
     super(props);
     this.state = {
       data: null,
-      fetchUrl: 'http://localhost:8000/api/ced/userFeedback/'
+      fetchUrl: 'http://dev.impactrun.com/api/ced/userFeedback/'
     }
     this.logTag = this.logTag.bind(this);
     this.logSubTag = this.logSubTag.bind(this);
@@ -25,13 +25,12 @@ export default class FeedbackFilter extends Component {
     this.logIsResolved = this.logIsResolved.bind(this);
     this.onClickReply = this.onClickReply.bind(this);
 
-
   }
 
   onClickReply() {
     
 
-    var path = "http://localhost:8000/api/ced/userFeedback/" + '?'
+    var path = "http://dev.impactrun.com/api/ced/userFeedback/" + '?'
     const formData = new FormData();
     console.log('inside search feedback filter', path);
     if(this.state.tag){
@@ -43,8 +42,8 @@ export default class FeedbackFilter extends Component {
     if(this.state.is_chat){
       path+='is_chat='+this.state.is_chat.value + '&'
     }
-    if(this.state.is_resolved){
-      path+='is_resolved='+this.state.is_resolved.value + '&'
+    if(this.state.is_replied){
+      path+='is_replied='+this.state.is_replied.value + '&'
     }
     console.log('inside search feedback filter', path);
     return fetch(path, {
@@ -77,7 +76,7 @@ export default class FeedbackFilter extends Component {
   logIsResolved(val) {
     console.log("Selected: " + JSON.stringify(val));
     this.setState({
-      is_resolved: val
+      is_replied: val
     });
   }
 
@@ -175,7 +174,7 @@ export default class FeedbackFilter extends Component {
             <div className='col-sm-7'>
              <Select
                 name="form-field-name"
-                value={this.state.is_resolved}
+                value={this.state.is_replied}
                 options={boolean_options}
                 onChange={this.logIsResolved}
               />
