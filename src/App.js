@@ -58,7 +58,7 @@ class App extends Component {
                     <a href="#contact">Contact</a>
                 </li> */}
                     <li ><Link to="/user">User</Link></li>
-                    {/* <li ><Link to="/runs">Runs</Link></li> */}
+                    <li ><Link to="/runs">Runs</Link></li>
                     <li ><Link to="/feedback">Feedback</Link></li>
                     <li ><Link to="/league">Leagues</Link></li>
                     <li ><Link to="/dashboards">Dashboard</Link></li>
