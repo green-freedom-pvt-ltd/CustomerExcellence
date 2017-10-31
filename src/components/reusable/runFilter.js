@@ -5,9 +5,10 @@ import {
 } from 'react-router-dom';
 import {RingLoader, PropagateLoader} from 'react-spinners';
 import Cookies from 'universal-cookie';
-import Select from 'react-select';
 import _ from "lodash";
-
+import Select from 'react-select';
+import {defaultRanges, Calendar, DateRange } from 'react-date-range';
+import moment from 'moment';
 
 const cookies = new Cookies();
 
@@ -22,20 +23,34 @@ export default class RunFilter extends Component {
       user_id:"",
       run_id:"",
       client_run_id:"",
-      filterOptions:"more",
+      filterOptions:"less",
     }
     this.logUserId = this.logUserId.bind(this);
     this.logRunId = this.logRunId.bind(this);
     this.logClientRunId = this.logClientRunId.bind(this);
     this.fetchLeagueNames = this.fetchLeagueNames.bind(this);
-    this.onClickReply = this.onClickReply.bind(this);
+    this.onClickSearch = this.onClickSearch.bind(this);
     this.logIsFlag = this.logIsFlag.bind(this);
     this.logLeague = this.logLeague.bind(this);
     this.logCause = this.logCause.bind(this);
     this.logIsIOs = this.logIsIOs.bind(this);
+    this.logMinDistance = this.logMinDistance.bind(this);
+    this.logMaxDistance = this.logMaxDistance.bind(this);
+    this.logMinSteps = this.logMinSteps.bind(this);
+    this.logMaxSteps = this.logMaxSteps.bind(this);
+    this.logMinDuration = this.logMinDuration.bind(this);
+    this.logMaxDuration = this.logMaxDuration.bind(this);
+    this.handleSelect = this.handleSelect.bind(this);
 
 
   }
+
+    handleSelect(date){
+      // this.fetchNewData(date);
+      this.setState({
+        date: date
+      });
+    }
 
   componentWillMount(){
     this.fetchLeagueNames();
@@ -67,7 +82,7 @@ export default class RunFilter extends Component {
   }
 
 
-  onClickReply() {
+  onClickSearch() {
     
     var path = "http://localhost:8000/api/ced/runs/?"
     const formData = new FormData();
@@ -97,6 +112,86 @@ export default class RunFilter extends Component {
     if(this.state.is_iOS){
       path+='is_ios='+this.state.is_iOS.value + '&'
     }
+
+    if(this.state.distance_less){
+      path+='distance_less='+this.state.distance_less + '&'
+    }
+
+    if(this.state.distance_more){
+      path+='distance_more='+this.state.distance_more + '&'
+    }   
+
+    if(this.state.steps_less){
+      path+='steps_less='+this.state.steps_less + '&'
+    }
+
+    if(this.state.steps_more){
+      path+='steps_more='+this.state.steps_more + '&'
+    } 
+
+    if(this.state.duration_less){
+      path+='duration_less='+this.state.duration_less*60 + '&'
+    }
+
+    if(this.state.duration_more){
+      path+='duration_more='+this.state.duration_more*60 + '&'
+    }  
+
+    if(this.state.date){
+      var date = this.state.date;
+      var startTime = moment(date.startDate);
+      var endTime = moment(date.endDate);
+      var start_date_query = startTime.year() + "-" + (startTime.month() + 1) + "-" + startTime.date()
+      var end_date_query = endTime.year() + "-" + (endTime.month() + 1) + "-" + endTime.date()
+      if(start_date_query){
+        path+='start_date='+start_date_query + '&'
+      }
+
+      if(end_date_query){
+        path+='end_date='+end_date_query + '&'
+      }  
+    }
+
+    console.log('inside end_date_query --------------', start_date_query,end_date_query);
+
+
+    return fetch(path, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': cookies.get('authorization')
+      }
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        this.setState({
+          data: responseJson,
+          loading: false,
+          prevPage: responseJson.previous,
+          userPath: this.state.nextPage,
+          nextPage: responseJson.next,
+
+        });
+        this.props.callbackFromParent(responseJson);
+        console.log('inside componentWillMount feedback', this.state);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+onClickClear() {
+    
+    var path = "http://localhost:8000/api/ced/runs/?"
+    this.state = {
+      data: null,
+      fetchUrl: 'http://dev.impactrun.com/api/ced/userFeedback/',
+      user_id:"",
+      run_id:"",
+      client_run_id:"",
+      filterOptions:"more",
+    }
     console.log('inside search path', path);
     return fetch(path, {
       method: 'GET',
@@ -124,6 +219,9 @@ export default class RunFilter extends Component {
       });
   }
 
+
+
+
   logUserId(event) {
     this.setState({user_id: event.target.value});
   }
@@ -137,6 +235,9 @@ export default class RunFilter extends Component {
     this.setState({client_run_id: event.target.value});
   }
 
+  handleChange() {
+    console.log('Change');
+  }
 
   logIsFlag(val) {
     console.log("Selected: " + JSON.stringify(val));
@@ -160,6 +261,34 @@ export default class RunFilter extends Component {
     console.log("Selected: " + JSON.stringify(val));
     this.setState({is_iOS: val});
   }
+
+  logMinDistance(event) {
+    this.setState({distance_less: event.target.value});
+  }
+
+  logMaxDistance(event) {
+    this.setState({distance_more: event.target.value});
+  }
+
+  logMinSteps(event) {
+    this.setState({steps_less: event.target.value});
+  }
+
+  logMaxSteps(event) {
+    this.setState({steps_more: event.target.value});
+  }
+
+
+  logMinDuration(event) {
+    this.setState({duration_less: event.target.value});
+  }
+
+  logMaxDuration(event) {
+    this.setState({duration_more: event.target.value});
+  }
+
+
+
   render() {
     // if (this.props.causeNames){
     //   this.setState({
@@ -245,6 +374,134 @@ export default class RunFilter extends Component {
                         </div>
 
                   </div>
+                  <div className='col-sm-4'>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <div className='col-sm-12'>
+                          <div className = 'row'>
+                            <div className='col-sm-3'>
+                              <h5>Distance </h5>
+                            </div>
+                            <div className='col-sm-2'>
+                              <input type="text" size="6" value={this.state.distance_less} onChange={this.logMinDistance}/>
+                            </div>
+                            <div className='col-sm-1 col-centered'>
+                                to
+                            </div>
+                             <div className='col-sm-2'>
+                              <input type="text" size="6" value={this.state.distance_more} onChange={this.logMaxDistance}/>
+                            </div>
+                            <div className='col-sm-3'>
+                              <h7>meters </h7>
+                            </div>
+                         </div>
+                        </div>
+
+                         <br/>
+                         <br/>
+                         <br/>
+
+                         <div className='col-sm-12'>
+                          <div className = 'row'>
+                            <div className='col-sm-3'>
+                              <h5>Steps</h5>
+                            </div>
+                            <div className='col-sm-2'>
+                              <input type="text" size="6" value={this.state.steps_less} onChange={this.logMinSteps}/>
+                            </div>
+                            <div className='col-sm-1 col-centered'>
+                                to
+                            </div>
+                             <div className='col-sm-2'>
+                              <input type="text" size="6" value={this.state.steps_more} onChange={this.logMaxSteps}/>
+                            </div>
+                            <div className='col-sm-3'>
+                              <h7> count </h7>
+                            </div>
+                         </div>
+                        </div>
+
+                         <br/>
+                         <br/>
+                         <br/>
+
+                         <div className='col-sm-12'>
+                          <div className = 'row'>
+                            <div className='col-sm-3'>
+                              <h5>Duration</h5>
+                            </div>
+                            <div className='col-sm-2'>
+                              <input type="text" size="6" value={this.state.duration_less} onChange={this.logMinDuration}/>
+                            </div>
+                            <div className='col-sm-1 col-centered'>
+                                to
+                            </div>
+                             <div className='col-sm-2'>
+                              <input type="text" size="6" value={this.state.duration_more} onChange={this.logMaxDuration}/>
+                            </div>
+                            <div className='col-sm-3'>
+                              <h7> minutes </h7>
+                            </div>
+                         </div>
+                        </div>
+
+                  </div>
+
+                  <div className='col-sm-8'>
+                  <br/>
+                    <DateRange
+                      linkedCalendars={ true }
+                      ranges={ defaultRanges }
+                      onChange={ this.handleSelect }
+                      theme={{
+                        DateRange      : {
+                          background   : '#ffffff'
+                        },
+                        Calendar       : {
+                          background   : 'transparent',
+                          color        : '#95a5a6',
+                        },
+                        MonthAndYear   : {
+                          background   : '#A9A9A9',
+                          color        : '#2F4F4F'
+                        },
+                        MonthButton    : {
+                          background   : '#c0392b'
+                        },
+                        MonthArrowPrev : {
+                          borderRightColor : '#d96659',
+                        },
+                        MonthArrowNext : {
+                          borderLeftColor : '#d96659',
+                        },
+                        Weekday        : {
+                          background   : '#A9A9A9',
+                          color        : '#2F4F4F'
+                        },
+                        Day            : {
+                          transition   : 'transform .1s ease, box-shadow .1s ease, background .1s ease'
+                        },
+                        DaySelected    : {
+                          background   : '#8e44ad'
+                        },
+                        DayActive    : {
+                          background   : '#8e44ad',
+                          boxShadow    : 'none'
+                        },
+                        DayInRange     : {
+                          background   : '#9b59b6',
+                          color        : '#fff'
+                        },
+                        DayHover       : {
+                          background   : '#ffffff',
+                          color        : '#7f8c8d',
+                          transform    : 'scale(1.1) translateY(-10%)',
+                          boxShadow    : '0 2px 4px rgba(0, 0, 0, 0.4)'
+                        }
+                      }}
+                   />
+                  </div>
                 </div>
 			        </div>
           )
@@ -311,12 +568,14 @@ export default class RunFilter extends Component {
           <br/>
           <br/>
             <div className='col-sm-12'>
-              <Button onClick={() => {this.onClickReply()}}>
+              <Button onClick={() => {this.onClickSearch()}}>
                   Search
               </Button>
             </div>
           </div>
         </div>
+
+
       </div>
 
         <div className = 'row'>
