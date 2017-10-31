@@ -74,22 +74,19 @@ export default class Run extends Component {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-
-
-        // var data_results = responseJson.results;
-        
-        // var data_set = _.map(data_results,function(leg){ return {value: leg.impactleague_name.split(" ").join("%20"), label: leg.impactleague_name}});
-        // console.log('data_set-------------------',data_set);
-
+        var data_results = responseJson.results;
+        var data_set = _.uniqBy(data_results, 'cause_run_title');
+        var final_data_set = _.map(data_set,function(leg){ return {value: leg.cause_run_title.split(" ").join("%20"), label: leg.cause_run_title}});
         this.setState({
           data: responseJson,
           loading: false,
           prevPage: responseJson.previous,
           userPath: this.state.nextPage,
           nextPage: responseJson.next,
+          causeNames: final_data_set
 
         });
-        // console.log('inside componentWillMount feedback', this.state.data);
+        // console.log('inside componentWillMount feedback', this.state.causeNames);
       })
       .catch((error) => {
        console.error(error);
@@ -113,13 +110,13 @@ export default class Run extends Component {
           nextPage: dataFromChild.next,
 
         });
-        console.log('----------listDataFromChild', this.state.listDataFromChild);
+        // console.log('----------listDataFromChild', this.state.listDataFromChild);
     }
 
   render() {
     var feedback_data = this.state.data;
     if (feedback_data) {
-    console.log("------111--------", feedback_data.count);
+    // console.log("------111--------", feedback_data.count);
       if (this.state.prevPage === null) {
         this.state.pageCount = Math.ceil(feedback_data.count / feedback_data.results.length);
       }
@@ -128,7 +125,7 @@ export default class Run extends Component {
         var email_subject = "Impact Feedback"
 
         var feedbackList = feedback_data.results.map((run, index) => {
-        console.log('Run--------------------------',Run);
+        // console.log('Run--------------------------',Run);
           return (
             
             <tr key={index} className={run.is_replied ? "success" : "default"}>
@@ -168,7 +165,7 @@ export default class Run extends Component {
               <h1> Total Count {this.state.count} </h1>
           </div>
           <div className='col-sm-12'>
-              <RunFilter callbackFromParent={this.myCallback} />
+              <RunFilter callbackFromParent={this.myCallback} causeNames={this.state.causeNames}/>
           </div>
         </div>
 

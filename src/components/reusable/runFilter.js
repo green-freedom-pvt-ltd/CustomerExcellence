@@ -14,7 +14,7 @@ const cookies = new Cookies();
 
 export default class RunFilter extends Component {
   constructor(props) {
-    // console.log("inside feedback container", props);
+    console.log("inside runssssssssss container", props);
     super(props);
     this.state = {
       data: null,
@@ -31,6 +31,7 @@ export default class RunFilter extends Component {
     this.onClickReply = this.onClickReply.bind(this);
     this.logIsFlag = this.logIsFlag.bind(this);
     this.logLeague = this.logLeague.bind(this);
+    this.logCause = this.logCause.bind(this);
 
 
   }
@@ -51,13 +52,8 @@ export default class RunFilter extends Component {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-
         var data_results = responseJson.results;
-        
         var data_set = _.map(data_results,function(leg){ return {value: leg.impactleague_name.split(" ").join("%20"), label: leg.impactleague_name}});
-        console.log('data_set-------------------',data_set);
-
-
         this.setState({
           league_names: data_set,
         });
@@ -92,6 +88,10 @@ export default class RunFilter extends Component {
     if(this.state.league){
       path+='league='+this.state.league.value + '&'
     }
+
+    if(this.state.cause){
+      path+='cause='+this.state.cause.value + '&'
+    }
     console.log('inside search path', path);
     return fetch(path, {
       method: 'GET',
@@ -112,7 +112,7 @@ export default class RunFilter extends Component {
 
         });
         this.props.callbackFromParent(responseJson);
-        console.log('inside componentWillMount feedback', this.state.data);
+        console.log('inside componentWillMount feedback', this.state);
       })
       .catch((error) => {
         console.error(error);
@@ -153,7 +153,19 @@ export default class RunFilter extends Component {
     this.setState({league: val});
   }
 
+  logCause(val) {
+    console.log("Selected: " + JSON.stringify(val));
+    this.setState({cause: val});
+  }
+
   render() {
+    // if (this.props.causeNames){
+    //   this.setState({
+    //   causeNames: this.props.causeNames
+    // });
+    // }
+
+
     var boolean_options = [
       { value: 'True', label: 'Yes' },
       { value: 'False', label: 'No' },
@@ -161,6 +173,7 @@ export default class RunFilter extends Component {
 
     var replyFeedback = () => {
           if(this.state.filterOptions === "less"){
+
           	console.log("------------------", this.state.filterOptions);
             return (
               <div className='col-sm-offset-8 col-sm-4'>
@@ -179,6 +192,8 @@ export default class RunFilter extends Component {
                 </div>
                 <div className = 'row'>
     			         <div className='col-sm-12'>
+
+
     		               <div className='col-sm-4'>
     		                  <div className = 'row'>
                             <div className='col-sm-2'>
@@ -194,6 +209,23 @@ export default class RunFilter extends Component {
                             </div>
                           </div>
     		 			        	</div>
+
+                        <div className='col-sm-4'>
+                          <div className = 'row'>
+                            <div className='col-sm-2'>
+                              <h5>Cause</h5>
+                            </div>
+                            <div className='col-sm-9'>
+                             <Select
+                                name="form-field-name"
+                                value={this.state.cause}
+                                options={this.props.causeNames}
+                                onChange={this.logCause}
+                              />
+                            </div>
+                          </div>
+                        </div>
+
                   </div>
                 </div>
 			        </div>
