@@ -32,6 +32,7 @@ export default class RunFilter extends Component {
     this.logIsFlag = this.logIsFlag.bind(this);
     this.logLeague = this.logLeague.bind(this);
     this.logCause = this.logCause.bind(this);
+    this.logIsIOs = this.logIsIOs.bind(this);
 
 
   }
@@ -92,6 +93,10 @@ export default class RunFilter extends Component {
     if(this.state.cause){
       path+='cause='+this.state.cause.value + '&'
     }
+
+    if(this.state.is_iOS){
+      path+='is_ios='+this.state.is_iOS.value + '&'
+    }
     console.log('inside search path', path);
     return fetch(path, {
       method: 'GET',
@@ -131,14 +136,7 @@ export default class RunFilter extends Component {
  logClientRunId(event) {
     this.setState({client_run_id: event.target.value});
   }
- 
 
-  // logUserId(val) {
-  //   console.log("Selected: user_id " + JSON.stringify(val));
-  //   this.setState({
-  //     user_id: val
-  //   });
-  // }
 
   logIsFlag(val) {
     console.log("Selected: " + JSON.stringify(val));
@@ -158,6 +156,10 @@ export default class RunFilter extends Component {
     this.setState({cause: val});
   }
 
+  logIsIOs(val) {
+    console.log("Selected: " + JSON.stringify(val));
+    this.setState({is_iOS: val});
+  }
   render() {
     // if (this.props.causeNames){
     //   this.setState({
@@ -176,7 +178,7 @@ export default class RunFilter extends Component {
 
           	console.log("------------------", this.state.filterOptions);
             return (
-              <div className='col-sm-offset-8 col-sm-4'>
+              <div className='col-sm-offset-9 col-sm-3'>
               		<a onClick={() => {this.setState({filterOptions:"more"})}} > more options</a>
  			        </div>
           )
@@ -185,7 +187,7 @@ export default class RunFilter extends Component {
               <div className = 'row'>
                 <div className = 'row'>
                  <div className='col-sm-12 col-centered'>
-                     <div className='col-sm-offset-8 col-sm-4'>
+                     <div className='col-sm-offset-9 col-sm-3'>
                         <a onClick={() =>  {this.setState({filterOptions:"less"})}} > less options</a>
                      </div>
                   </div>
@@ -194,12 +196,12 @@ export default class RunFilter extends Component {
     			         <div className='col-sm-12'>
 
 
-    		               <div className='col-sm-4'>
+    		               <div className='col-sm-3'>
     		                  <div className = 'row'>
-                            <div className='col-sm-2'>
+                            <div className='col-sm-3'>
                               <h5>League</h5>
                             </div>
-                            <div className='col-sm-9'>
+                            <div className='col-sm-8'>
                              <Select
                                 name="form-field-name"
                                 value={this.state.league}
@@ -210,7 +212,7 @@ export default class RunFilter extends Component {
                           </div>
     		 			        	</div>
 
-                        <div className='col-sm-4'>
+                        <div className='col-sm-3'>
                           <div className = 'row'>
                             <div className='col-sm-2'>
                               <h5>Cause</h5>
@@ -222,6 +224,22 @@ export default class RunFilter extends Component {
                                 options={this.props.causeNames}
                                 onChange={this.logCause}
                               />
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className='col-sm-3'>
+                          <div className = 'row'>
+                            <div className='col-sm-2'>
+                              <h5>iOS</h5>
+                            </div>
+                            <div className='col-sm-9'>
+                             <Select
+                              name="form-field-name"
+                              value={this.state.is_iOS}
+                              options={boolean_options}
+                              onChange={this.logIsIOs}
+                            />
                             </div>
                           </div>
                         </div>
