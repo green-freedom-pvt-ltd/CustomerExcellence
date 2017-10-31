@@ -6,6 +6,7 @@ import {
 import {RingLoader, PropagateLoader} from 'react-spinners';
 import Cookies from 'universal-cookie';
 import Select from 'react-select';
+import _ from "lodash";
 
 
 const cookies = new Cookies();
@@ -21,19 +22,56 @@ export default class RunFilter extends Component {
       user_id:"",
       run_id:"",
       client_run_id:"",
-      filterOptions:"less",
+      filterOptions:"more",
     }
     this.logUserId = this.logUserId.bind(this);
     this.logRunId = this.logRunId.bind(this);
     this.logClientRunId = this.logClientRunId.bind(this);
-    this.logIsChat = this.logIsChat.bind(this);
+    this.fetchLeagueNames = this.fetchLeagueNames.bind(this);
     this.onClickReply = this.onClickReply.bind(this);
+    this.logIsFlag = this.logIsFlag.bind(this);
+    this.logLeague = this.logLeague.bind(this);
+
 
   }
 
+  componentWillMount(){
+    this.fetchLeagueNames();
+  }
+
+
+  fetchLeagueNames  (){
+    return fetch('http://dev.impactrun.com/api/ced/impactleague/', {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': cookies.get('authorization')
+      }
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+
+        var data_results = responseJson.results;
+        
+        var data_set = _.map(data_results,function(leg){ return {value: leg.impactleague_name.split(" ").join("%20"), label: leg.impactleague_name}});
+        console.log('data_set-------------------',data_set);
+
+
+        this.setState({
+          league_names: data_set,
+        });
+      })
+      .catch((error) => {
+        // console.error(error);
+        window.location = "/logout";
+
+      });
+  }
+
+
   onClickReply() {
     
-
     var path = "http://localhost:8000/api/ced/runs/?"
     const formData = new FormData();
     console.log('inside search run filter', this.state);
@@ -47,11 +85,14 @@ export default class RunFilter extends Component {
       path+='client_run_id='+this.state.client_run_id + '&'
     }
     
-    
-    if(this.state.is_replied){
-      path+='is_replied='+this.state.is_replied.value + '&'
+    if(this.state.is_flag){
+      path+='is_flag='+this.state.is_flag.value + '&'
     }
-    console.log('inside search feedback filter', path);
+
+    if(this.state.league){
+      path+='league='+this.state.league.value + '&'
+    }
+    console.log('inside search path', path);
     return fetch(path, {
       method: 'GET',
       headers: {
@@ -99,39 +140,23 @@ export default class RunFilter extends Component {
   //   });
   // }
 
-  logIsChat(val) {
+  logIsFlag(val) {
     console.log("Selected: " + JSON.stringify(val));
     this.setState({
-      is_chat: val
+      is_flag: val
     });
   }
 
-  render() {
-    var tag_options = [
-      { label: 'Past Workout', value: 'pastworkout' },
-      { label: 'Question', value: 'question' },
-      { label: 'Feedback', value: 'feedback' },
-      { label: 'Else', value: 'else' },
-      { label: 'Flag', value: 'flag' },
-      { label: 'Sad', value: 'sad' },
-    ];
 
+  logLeague(val) {
+    console.log("Selected: " + JSON.stringify(val));
+    this.setState({league: val});
+  }
+
+  render() {
     var boolean_options = [
       { value: 'True', label: 'Yes' },
       { value: 'False', label: 'No' },
-    ];
-
-    var sub_tag_options = [
-      { value: 'less', label: 'Less distance recorded' },
-      { value: 'more', label: 'More distance recorded' },
-      { value: 'scratched', label: 'Why is it scratched off' },
-      { value: 'notvehicle', label: 'I was not in a vehicle' },
-      { value: 'leaderboardadd', label: 'Impact missing in Leaderboard' },
-      { value: 'stillelse', label: 'Something else' },
-      { value: 'notaccurate', label: 'Distance not accurate' },
-      { value: 'workoutmissing', label: 'Workout missing from history' },
-      { value: 'gpsissue', label: 'Issue with GPS' },
-      { value: 'zerodistance', label: 'Zero distance recorded' },
     ];
 
     var replyFeedback = () => {
@@ -140,22 +165,38 @@ export default class RunFilter extends Component {
             return (
               <div className='col-sm-offset-8 col-sm-4'>
               		<a onClick={() => {this.setState({filterOptions:"more"})}} > more options</a>
- 			</div>
+ 			        </div>
           )
           } else {
             return (
-            	<div className = 'row'>
-			        <div className='col-sm-12 col-centered'>
-		               <div className='col-sm-offset-8 col-sm-4'>
-		              		<a onClick={() =>  {this.setState({filterOptions:"less"})}} > less options</a>
-		 				</div>
+              <div className = 'row'>
+                <div className = 'row'>
+                 <div className='col-sm-12 col-centered'>
+                     <div className='col-sm-offset-8 col-sm-4'>
+                        <a onClick={() =>  {this.setState({filterOptions:"less"})}} > less options</a>
+                     </div>
+                  </div>
+                </div>
+                <div className = 'row'>
+    			         <div className='col-sm-12'>
+    		               <div className='col-sm-4'>
+    		                  <div className = 'row'>
+                            <div className='col-sm-2'>
+                              <h5>League</h5>
+                            </div>
+                            <div className='col-sm-9'>
+                             <Select
+                                name="form-field-name"
+                                value={this.state.league}
+                                options={this.state.league_names}
+                                onChange={this.logLeague}
+                              />
+                            </div>
+                          </div>
+    		 			        	</div>
+                  </div>
+                </div>
 			        </div>
-			        <div className='col-sm-12 col-centered'>
-		               <div className='col-sm-offset-8 col-sm-4'>
-		               filter one
-		 				</div>
-			        </div>
-			    </div>
           )
           }
         };
@@ -207,9 +248,9 @@ export default class RunFilter extends Component {
             <div className='col-sm-12'>
              <Select
                 name="form-field-name"
-                value={this.state.is_chat}
+                value={this.state.is_flag}
                 options={boolean_options}
-                onChange={this.logIsChat}
+                onChange={this.logIsFlag}
               />
             </div>
           </div>

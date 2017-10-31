@@ -1,14 +1,3 @@
-// import React, {Component} from 'react';
-
-// export default class Run extends Component{
-// render(){
-//     return (
-//         <div>This is Run page</div>
-//     );
-// }
-// }
-
-
 import React, { Component } from 'react';
 import { Pagination, Table,Checkbox , Button} from 'react-bootstrap';
 import {
@@ -85,6 +74,13 @@ export default class Run extends Component {
     })
       .then((response) => response.json())
       .then((responseJson) => {
+
+
+        // var data_results = responseJson.results;
+        
+        // var data_set = _.map(data_results,function(leg){ return {value: leg.impactleague_name.split(" ").join("%20"), label: leg.impactleague_name}});
+        // console.log('data_set-------------------',data_set);
+
         this.setState({
           data: responseJson,
           loading: false,
@@ -147,6 +143,7 @@ export default class Run extends Component {
               <td>{run.run_duration}</td>
               <td>{run.distance}</td>
               <td>{run.run_amount}</td>
+              <td>{run.is_flag ? "Yes" : "No"}</td>
             </tr>)
         });
 
@@ -188,6 +185,7 @@ export default class Run extends Component {
                   <th>Time</th>
                   <th>Distance</th>
                   <th>Amount</th>
+                  <th>Flag</th>
                 </tr>
               </thead>
               <tbody>
