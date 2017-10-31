@@ -393,7 +393,7 @@ onClickClear() {
                               <input type="text" size="6" value={this.state.distance_more} onChange={this.logMaxDistance}/>
                             </div>
                             <div className='col-sm-3'>
-                              <h7>meters </h7>
+                              <h7>km </h7>
                             </div>
                          </div>
                         </div>

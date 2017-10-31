@@ -4,6 +4,7 @@ import {
   Link
 } from 'react-router-dom';
 import RunFilter from "./reusable/runFilter"
+import RunModal from "./reusable/runModal"
 import {RingLoader, PropagateLoader} from 'react-spinners';
 import Cookies from 'universal-cookie';
 import _ from "lodash";
@@ -128,7 +129,7 @@ export default class Run extends Component {
         // console.log('Run--------------------------',Run);
           return (
             
-            <tr key={index} className={run.is_replied ? "success" : "default"}>
+            <tr key={index} className={run.is_flag ? "danger" : "default"}>
               <td>{index + 1}</td>
               <td>
                 <Link to={"/userdetail/" + run.user_id}>
@@ -141,6 +142,7 @@ export default class Run extends Component {
               <td>{run.distance}</td>
               <td>{run.run_amount}</td>
               <td>{run.is_flag ? "Yes" : "No"}</td>
+                <RunModal data={run}/>
             </tr>)
         });
 
