@@ -302,7 +302,7 @@ onClickClear() {
       { value: 'False', label: 'No' },
     ];
 
-    var replyFeedback = () => {
+    var moreFilterOptions = () => {
           if(this.state.filterOptions === "less"){
 
           	console.log("------------------", this.state.filterOptions);
@@ -313,7 +313,7 @@ onClickClear() {
           )
           } else {
             return (
-              <div className = 'row'>
+              <div className = 'box-top-left'>
                 <div className = 'row'>
                  <div className='col-sm-12 col-centered'>
                      <div className='col-sm-offset-9 col-sm-3'>
@@ -580,7 +580,7 @@ onClickClear() {
 
         <div className = 'row'>
           <br/>
-              {replyFeedback()}
+              {moreFilterOptions()}
  		</div>
      </div>
     );

@@ -144,8 +144,8 @@ export default class GoogleMap2 extends Component {
 
         }
 
-        var state = this.props.location.results;
         console.log("DATA", this.props);
+        var state = this.props.location.results;
         finalData = _.map(state, getLocation);
 
         finalData = _.remove(finalData, function (n) {

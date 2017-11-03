@@ -50,7 +50,7 @@ export default class RunModal extends Component{
       .then((responseJson) => {
         console.log('inside put run', responseJson);
         // window.location = "/feedback";
-        window.location.reload();
+        // window.location.reload();
 
       })
       .catch((error) => {

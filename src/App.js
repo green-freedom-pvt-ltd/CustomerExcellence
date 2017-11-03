@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import logo from './images/logo_large.png';
 import './App.css';
 import Runs from './components/runs';
+import RunsDetail from './components/rundetail';
 import Feedback from './components/feedback';
 import League from './components/league';
 import Team from './components/team';
@@ -71,7 +72,7 @@ class App extends Component {
             </nav>
           </header>
           <section>
-            <div className="container">
+            <div className="">
               <div className="content-wrapper">
                 <div style={{ flex: 1, padding: '10px' }}>
                   <Route path="/user" component={User} exact />
@@ -82,6 +83,7 @@ class App extends Component {
                   <Route path="/teammembers" render={() => <TeamMembers />} />
                   <Route path="/userdetail" render={() => <UserDetail />} />
                   <Route path="/runs" render={() => <Runs />} />
+                  <Route path="/rundetail" render={() => <RunsDetail />} />
                   <Route path="/dashboards" render={() => <Dashboard />} />
                   <Route path="/login" render={() => <Login />} />
                   <Route path="/logout" render={() => <Logout />} />

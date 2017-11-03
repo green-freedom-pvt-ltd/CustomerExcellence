@@ -115,17 +115,17 @@ export default class Run extends Component {
     }
 
   render() {
-    var feedback_data = this.state.data;
-    if (feedback_data) {
-    // console.log("------111--------", feedback_data.count);
+    var run_data = this.state.data;
+    if (run_data) {
+    // console.log("------111--------", run_data.count);
       if (this.state.prevPage === null) {
-        this.state.pageCount = Math.ceil(feedback_data.count / feedback_data.results.length);
+        this.state.pageCount = Math.ceil(run_data.count / run_data.results.length);
       }
-      this.state.count = feedback_data.count;
+      this.state.count = run_data.count;
 
         var email_subject = "Impact Feedback"
 
-        var feedbackList = feedback_data.results.map((run, index) => {
+        var feedbackList = run_data.results.map((run, index) => {
         // console.log('Run--------------------------',Run);
           return (
             
@@ -136,7 +136,11 @@ export default class Run extends Component {
                   {run.user_id}
                 </Link>
               </td>
-              <td>{run.run_id}</td>
+              <td>
+                <Link to={"/rundetail/" + run.run_id}>
+                  {run.run_id}
+                </Link>
+              </td>
               <td>{run.start_time}</td>
               <td>{run.run_duration}</td>
               <td>{run.distance}</td>
@@ -164,7 +168,7 @@ export default class Run extends Component {
               <h1> Runs list </h1>
           </div>
           <div className='col-sm-6'>
-              <h1> Total Count {this.state.count} </h1>
+              <h1> Run Count {this.state.count} </h1>
           </div>
           <div className='col-sm-12'>
               <RunFilter callbackFromParent={this.myCallback} causeNames={this.state.causeNames}/>
