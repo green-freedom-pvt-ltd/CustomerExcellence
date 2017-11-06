@@ -125,7 +125,7 @@ export default class Run extends Component {
 
         var email_subject = "Impact Feedback"
 
-        var feedbackList = run_data.results.map((run, index) => {
+        var runsList = run_data.results.map((run, index) => {
         // console.log('Run--------------------------',Run);
           return (
             
@@ -192,7 +192,7 @@ export default class Run extends Component {
                 </tr>
               </thead>
               <tbody>
-                {feedbackList}
+                {runsList}
               </tbody>
             </Table>
             <div style={{display:this.state.pageCount>1?"block":"none"}} id="pagination">

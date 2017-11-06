@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Pagination, Table,Checkbox , Button} from 'react-bootstrap';
+import { Pagination, Table,Checkbox , Button, Modal} from 'react-bootstrap';
 import {
   Link
 } from 'react-router-dom';
@@ -21,14 +21,12 @@ export default class RunDetail extends Component {
     super(props);
     this.state = {
       data: null,
+      showDistanceModal: false,
+      showFlagModal: false,
       loading: true,
-      activePage: 1,
-      nextPage: '',
-      prevPage: '',
-      childVisible: false,
-      count: 0,
       fetchUrl: 'http://localhost:8000/api/ced/runs/',
-      fetchLocationUrl: 'http://dev.impactrun.com/api/ced/runLocations/'
+      fetchLocationUrl: 'http://dev.impactrun.com/api/ced/runLocations/',
+      fetchPositionUrl: 'https://maps.googleapis.com/maps/api/geocode/json?latlng=19.21193940000,72.97623070000&sensor=true'
     }
     if (path[2]) {
        this.state.fetchUrl+= '?run_id=' + path[2]
@@ -42,7 +40,28 @@ export default class RunDetail extends Component {
   componentWillMount() {
     this.fetchRunDetails(this.state.fetchUrl);
     this.fetchRunLocation(this.state.fetchLocationUrl);
+    // this.fetchMapLocation(this.state.fetchPositionUrl);
   }
+
+  fetchMapLocation(path) {
+    console.log('this.state.data.runDetails.results[0].start_location_lat----',this.state.data);
+    fetch(path, {
+      method: 'GET'
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        this.setState({
+          position: responseJson,
+
+        });
+        console.log('inside run location detail ', this.state.position);
+      })
+      .catch((error) => {
+       console.error(error);
+        // window.location = "/logout";
+      });
+    }
+
 
   fetchRunDetails(path) {
     fetch(path, {
@@ -59,13 +78,31 @@ export default class RunDetail extends Component {
           data: responseJson,
 
         });
-        console.log('inside run detail ', this.state.data);
+        var location_path = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+this.state.data.results[0].start_location_lat+','+this.state.data.results[0].start_location_long+'&sensor=true'
+        fetch(location_path, {
+          method: 'GET'
+        })
+          .then((response) => response.json())
+          .then((responseJson) => {
+            this.setState({
+              position: responseJson,
+
+            });
+            console.log('inside run location detail ', this.state.position);
+          })
+          .catch((error) => {
+           console.error(error);
+            // window.location = "/logout";
+          });
+
+
+        // console.log('inside run detail ', this.state.data);
       })
       .catch((error) => {
        console.error(error);
         // window.location = "/logout";
       });
-  		}
+  	}
 
 
   fetchRunLocation(path) {
@@ -83,62 +120,361 @@ export default class RunDetail extends Component {
           runLocation: responseJson,
 
         });
-        console.log('inside run location detail ', this.state.runLocation);
+        // console.log('inside run location detail ', this.state.runLocation);
       })
       .catch((error) => {
        console.error(error);
         // window.location = "/logout";
       });
-      }      
+    }      
 
  loadMap() {
   if(this.state.runLocation){
-        return <Map location={this.state.runLocation} />
+        return (<Map location={this.state.runLocation} />);
         } else {
+        return (
           <div className='col-xs-12'>
               No location data
-          </div>
+          </div>);
         }
   }
 
+  flagRun() {
+    var path = "http://localhost:8000/api/ced/runupdate/" + this.props.data.run_id+'/'
+    const formData = new FormData();
+    
+    console.log("return put saved for ",this.props.data)
+    formData.append('user_id', this.props.data.user_id);
+    formData.append('start_time', this.props.data.start_time);
+    formData.append('run_amount', this.props.data.run_amount);
+    formData.append('run_duration', this.props.data.run_duration);
+    formData.append('avg_speed', this.props.data.avg_speed);
+    formData.append('distance', this.props.data.distance);
+    formData.append('is_flag', !this.props.data.is_flag);
+    console.log('inside put top run',formData);
+    this.setState({ showModal: false })
+    return fetch(path, {
+      method: 'PUT',
+      body: formData,
+     
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log('inside put run', responseJson);
+        // window.location = "/feedback";
+        // window.location.reload();
+
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+
+
   render() {
+        var runDetails = this.state.data;
+        // if(runDetails){
+        // console.log("runDetails-----------------------",runDetails.results[0]);
+        // }
 
-  	var mapSection = () =>{
-      if(this.state.runLocation){
-        return (
-            <div className='col-xs-12'>
-              <Map location={this.state.runLocation} />
-            </div>
-          )
-        } else {
-          <div className='col-xs-12'>
-              No location data
-          </div>
-        }
-  	};
+        var detailSection = () =>{
+          if(runDetails){
+            // console.log("runDetails-----------------------",runDetails.results[0]);
+            return (
+              <div className='row box-top-left'>
+                <div className='col-xs-12'>
+                  <div className='row'>
+                    <Table striped bordered hover>
+                      <thead>
+                        <tr>
+                          <th>User Id</th>
+                          <th>Start Time</th>
+                          <th>Distance</th>
+                          <th>Duration</th>
+                          <th>Cause</th>
+                          <th>Steps</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>{runDetails.results[0].user_id}</td>
+                          <td>{runDetails.results[0].start_time}</td>
+                          <td>{Math.round(runDetails.results[0].distance*100) / 100} km</td>
+                          <td>{runDetails.results[0].run_duration}</td>
+                          <td>{runDetails.results[0].cause_run_title}</td>
+                          <td>{runDetails.results[0].no_of_steps}</td>
+                        </tr>
+                      </tbody>
+                    </Table>            
+                  </div>
+                  <div className='row'>
+                    <Table striped bordered hover>
+                      <thead>
+                        <tr>
+                          <th>Location</th>
+                          <th>Device</th>
+                          <th>Speed</th>
+                          <th>Raised</th>
 
-  	var detailSection = () =>{
-  		return (
-  			<div className='col-xs-12'>
-	        	Run detail for {this.state.data}
-	        </div>
-  			)
-  	};
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>{ this.state.position ? this.state.position.results[0].formatted_address :"No data"}</td>
+                          <td>{runDetails.results[0].is_ios ? "iOS" : "android"}</td>
+                          <td>{Math.round(runDetails.results[0].avg_speed*100) / 100} km/s</td>
+                          <td>{runDetails.results[0].run_amount}</td>
+
+                        </tr>
+                      </tbody>
+                    </Table>            
+                  </div>
+                  <div className='row'>
+                    <Table striped bordered hover>
+                      <thead>
+                        <tr>
+                          <th>Run Id</th>
+                          <th>Client Run Id</th>
+                          <th>End Time</th>
+                          <th>Spikes</th>
+                          <th>Calories</th>
+                          <th>Team Id</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>{runDetails.results[0].run_id}</td>
+                          <td>{runDetails.results[0].client_run_id}</td>
+                          <td>{runDetails.results[0].end_time}</td>
+                          <td>{runDetails.results[0].num_spikes}</td>
+                          <td>{Math.round(runDetails.results[0].calories_burnt)}</td>
+                          <td>{runDetails.results[0].team_id}</td>
+                        </tr>
+                      </tbody>
+                    </Table>            
+                  </div>
+                </div>
+                
+              </div>
+              )
+          } else {
+            return (
+              <div>
+                No data
+              </div>
+
+              )
+          }
+        };
+
+
+    // TODO: logic for calculating the distance between all lat long and adding individial distances
+    
+
+    //     var finalData = [];
+    //     var finalDataObject = {};
+    //     var last_location = null;
+
+    //     function getLocation(state) {
+
+    //         function combineBatch(n) {
+    //             var location = {
+    //                 position: {
+    //                     lat: n.lat,
+    //                     lng: n.lon
+    //                 }
+
+    //             }
+    //             return location;
+    //         }
+    //         // finalData = _.concat(finalData,_.map(state.location_array, combineBatch));
+    //         finalData = _.map(state.location_array, combineBatch);
+    //         var paused_data = [];
+    //         var paused_data_object = {};
+    //         finalDataObject = { finalData: _.reverse(finalData) };
+    //         // console.log('paused_data',paused_data);
+    //         // console.log("Final Data",finalData.length,finalDataObject);
+    //         if (last_location) {
+    //             if (_.first(finalData)) {
+    //                 paused_data = [last_location, _.first(finalData)]
+    //             } else {
+    //                 paused_data = [last_location, last_location]
+    //             }
+    //             paused_data_object = { finalData: paused_data };
+    //             console.log('paused_data', paused_data, paused_data_object);
+    //         } else {
+    //             paused_data = [_.first(finalData), _.first(finalData)]
+    //             paused_data_object = { finalData: paused_data };
+    //         }
+    //         last_location = _.last(finalData);
+    //         finalDataObject = _.concat(finalDataObject, paused_data_object);
+    //         //  concat paused_data
+    //         return finalDataObject;
+
+    //     }
+    //     if (this.state.runLocation){
+    //       console.log("DATA", this.state.runLocation);
+    //       var state = this.state.runLocation.results;
+    //       finalData = _.map(state, getLocation);
+    //       finalData = _.remove(finalData, function (n) {
+    //           return n[0].finalData.length > 0;
+    //       });
+    //       console.log("Final Dataaaaaaaaaaaa", finalData[0][0]);
+          
+
+    //       var totalLength = _.map(finalData[0][0].finalData, addDistance);
+
+    //     }
+
+    //   function addDistance(location) {
+
+    //       var distance = calculateDistance(location.position)
+          
+    //         return dist
+    //     }
+
+
+    //   function calculateDistance(lat1, lon1, lat2, lon2, unit) {
+
+    //         var radlat1 = Math.PI * lat1/180
+    //         var radlat2 = Math.PI * lat2/180
+    //         var radlon1 = Math.PI * lon1/180
+    //         var radlon2 = Math.PI * lon2/180
+    //         var theta = lon1-lon2
+    //         var radtheta = Math.PI * theta/180
+    //         var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+    //         dist = Math.acos(dist)
+    //         dist = dist * 180/Math.PI
+    //         dist = dist * 60 * 1.1515
+    //         if (unit=="K") { dist = dist * 1.609344 }
+    //         if (unit=="N") { dist = dist * 0.8684 }
+    //         return dist
+    //     }
+
+
+
+    // function getLocation(state) {
+
+    //         function combineBatch(n) {
+    //             var location = {
+    //                 position: {
+    //                     lat: n.lat,
+    //                     lng: n.lon
+    //                 }
+
+    //             }
+    //             return location;
+    //         }
+    //         // finalData = _.concat(finalData,_.map(state.location_array, combineBatch));
+    //         finalData = _.map(state.location_array, combineBatch);
+    //         var paused_data = [];
+    //         var paused_data_object = {};
+    //         finalDataObject = { finalData: _.reverse(finalData) };
+    //         // console.log('paused_data',paused_data);
+    //         // console.log("Final Data",finalData.length,finalDataObject);
+    //         if (last_location) {
+    //             if (_.first(finalData)) {
+    //                 paused_data = [last_location, _.first(finalData)]
+    //             } else {
+    //                 paused_data = [last_location, last_location]
+    //             }
+    //             paused_data_object = { finalData: paused_data };
+    //             console.log('paused_data', paused_data, paused_data_object);
+    //         } else {
+    //             paused_data = [_.first(finalData), _.first(finalData)]
+    //             paused_data_object = { finalData: paused_data };
+    //         }
+    //         last_location = _.last(finalData);
+    //         finalDataObject = _.concat(finalDataObject, paused_data_object);
+    //         //  concat paused_data
+    //         return finalDataObject;
+
+    //     }
+
+  	// var mapSection = () =>{
+   //    if(this.state.runLocation){
+   //      return (
+   //          <div className='col-xs-12'>
+   //            <Map location={this.state.runLocation} />
+   //          </div>
+   //        )
+   //      } else {
+   //        <div className='col-xs-12'>
+   //            No location data
+   //        </div>
+   //      }
+  	// };
 
 
     return (
       <div>
         <div className='row'>
+        <div className='col-sm-offset-4 col-xs-2'>
+           <Button
+            bsStyle="default"
+            bsSize="large"
+            onClick={() => this.setState({ showDistanceModal: true })}>
+            Update Distance
+          </Button>
+          <Modal show={this.state.showDistanceModal} onHide={() => this.setState({ showDistanceModal: false })}>
+              <Modal.Header closeButton>
+                <Modal.Title> Flagging Run</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+               <tr >
+                <td>
+                  by how many kilometers do you want to increase the run distance
+                </td>
+              </tr>
+
+              </Modal.Body>
+              <Modal.Footer>
+                <Button onClick={() => this.updateRun()}>Update</Button>
+                <Button onClick={() => this.setState({ showDistanceModal: false })}>Cancle</Button>
+              </Modal.Footer>
+            </Modal>
+        </div>
+        <div className='col-xs-2'>
+           <Button
+            bsStyle="default"
+            bsSize="large"
+            onClick={() => this.setState({ showFlagModal: true })}>
+            Flag Run
+          </Button>
+          <Modal show={this.state.showFlagModal} onHide={() => this.setState({ showFlagModal: false })}>
+              <Modal.Header closeButton>
+                <Modal.Title> Flagging Run</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+               <tr >
+                <td>
+                Are you sure you want to {this.props.data ? "unflag" : "flag" } this run ?
+                </td>
+              </tr>
+
+              </Modal.Body>
+              <Modal.Footer>
+                <Button onClick={() => this.flagRun()}>Yes</Button>
+                <Button onClick={() => this.setState({ showFlagModal: false })}>No</Button>
+              </Modal.Footer>
+            </Modal>
+          </div>
         	<div className="col-sm-12">
-            <div style={{  width: "100%" }}>
-              <div style={{ width: "100%", height: "300px"}}>
+            <div style={{  width: "100%",marginTop: "10px" }}>
+              <div style={{ width: "100%", height: "350px"}}>
                 {this.loadMap()}
               </div>
             </div>
           </div>
         </div>
         <div className='row'>
-            {detailSection()}
+          <div className="col-sm-12">
+            <br/>
+            <div style={{  marginLeft: "10px", width: "100%", height: "100%"}}>
+              {detailSection()}
+            </div>
+          </div>
         </div>
       </div>
     );
