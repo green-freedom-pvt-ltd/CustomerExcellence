@@ -42,6 +42,7 @@ export default class FeedbackModal extends Component{
     })
       .then((response) => response.json())
       .then((responseJson) => {
+        this.setState({ showModal: false })
         console.log('inside put feedback', responseJson);
         // window.location = "/feedback";
         // window.location.reload();

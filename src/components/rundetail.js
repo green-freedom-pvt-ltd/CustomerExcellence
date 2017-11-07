@@ -24,6 +24,7 @@ export default class RunDetail extends Component {
       showDistanceModal: false,
       showFlagModal: false,
       loading: true,
+      is_flag: false,
       fetchUrl: 'http://localhost:8000/api/ced/runs/',
       fetchLocationUrl: 'http://dev.impactrun.com/api/ced/runLocations/',
       fetchPositionUrl: 'https://maps.googleapis.com/maps/api/geocode/json?latlng=19.21193940000,72.97623070000&sensor=true'
@@ -33,9 +34,14 @@ export default class RunDetail extends Component {
        this.state.fetchLocationUrl+= path[2] +'/'
       // console.log("inside feedback fetchUrl", this.state.fetchUrl);
     }
+    this.handleChange = this.handleChange.bind(this);
+
   }
 
 
+  handleChange(event) {
+    this.setState({added_distance: event.target.value});
+  }
 
   componentWillMount() {
     this.fetchRunDetails(this.state.fetchUrl);
@@ -43,24 +49,24 @@ export default class RunDetail extends Component {
     // this.fetchMapLocation(this.state.fetchPositionUrl);
   }
 
-  fetchMapLocation(path) {
-    console.log('this.state.data.runDetails.results[0].start_location_lat----',this.state.data);
-    fetch(path, {
-      method: 'GET'
-    })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        this.setState({
-          position: responseJson,
+  // fetchMapLocation(path) {
+  //   console.log('this.state.data.runDetails.results[0].start_location_lat----',this.state.data);
+  //   fetch(path, {
+  //     method: 'GET'
+  //   })
+  //     .then((response) => response.json())
+  //     .then((responseJson) => {
+  //       this.setState({
+  //         position: responseJson,
 
-        });
-        console.log('inside run location detail ', this.state.position);
-      })
-      .catch((error) => {
-       console.error(error);
-        // window.location = "/logout";
-      });
-    }
+  //       });
+  //       console.log('inside run location detail ', this.state.position);
+  //     })
+  //     .catch((error) => {
+  //      console.error(error);
+  //       // window.location = "/logout";
+  //     });
+  //   }
 
 
   fetchRunDetails(path) {
@@ -76,6 +82,9 @@ export default class RunDetail extends Component {
       .then((responseJson) => {
         this.setState({
           data: responseJson,
+          is_flag: responseJson.results[0].is_flag,
+          current_distance: responseJson.results[0].distance,
+          current_amount: responseJson.results[0].run_amount,
 
         });
         var location_path = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+this.state.data.results[0].start_location_lat+','+this.state.data.results[0].start_location_long+'&sensor=true'
@@ -88,7 +97,7 @@ export default class RunDetail extends Component {
               position: responseJson,
 
             });
-            console.log('inside run location detail ', this.state.position);
+            // console.log('inside run location detail ', this.state.is_flag);
           })
           .catch((error) => {
            console.error(error);
@@ -139,18 +148,21 @@ export default class RunDetail extends Component {
         }
   }
 
-  flagRun() {
-    var path = "http://localhost:8000/api/ced/runupdate/" + this.props.data.run_id+'/'
-    const formData = new FormData();
+  updateRun() {
     
-    console.log("return put saved for ",this.props.data)
-    formData.append('user_id', this.props.data.user_id);
-    formData.append('start_time', this.props.data.start_time);
-    formData.append('run_amount', this.props.data.run_amount);
-    formData.append('run_duration', this.props.data.run_duration);
-    formData.append('avg_speed', this.props.data.avg_speed);
-    formData.append('distance', this.props.data.distance);
-    formData.append('is_flag', !this.props.data.is_flag);
+    var run_details = this.state.data.results[0];
+    var path = "http://localhost:8000/api/ced/runupdate/" + run_details.run_id+'/'
+    const formData = new FormData();
+    var new_distance = (this.state.added_distance*1) + this.state.current_distance
+    var new_amount = (this.state.added_distance*10) + this.state.current_amount
+    console.log("return put saved for ",new_distance,new_amount);
+    formData.append('user_id', run_details.user_id);
+    formData.append('start_time', run_details.start_time);
+    formData.append('run_amount', new_amount);
+    formData.append('run_duration', run_details.run_duration);
+    formData.append('avg_speed', run_details.avg_speed);
+    formData.append('distance', new_distance);
+    // formData.append('is_flag', !run_details.is_flag);
     console.log('inside put top run',formData);
     this.setState({ showModal: false })
     return fetch(path, {
@@ -162,7 +174,42 @@ export default class RunDetail extends Component {
       .then((responseJson) => {
         console.log('inside put run', responseJson);
         // window.location = "/feedback";
-        // window.location.reload();
+        window.location.reload();
+
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+
+
+  flagRun() {
+    var run_details = this.state.data.results[0];
+    
+    var path = "http://localhost:8000/api/ced/runupdate/" + run_details.run_id+'/'
+    const formData = new FormData();
+    
+    console.log("return put saved for ",path);
+    formData.append('user_id', run_details.user_id);
+    formData.append('start_time', run_details.start_time);
+    formData.append('run_amount', run_details.run_amount);
+    formData.append('run_duration', run_details.run_duration);
+    formData.append('avg_speed', run_details.avg_speed);
+    formData.append('distance', run_details.distance);
+    formData.append('is_flag', !run_details.is_flag);
+    console.log('inside put top run',formData);
+    this.setState({ showModal: false })
+    return fetch(path, {
+      method: 'PUT',
+      body: formData,
+     
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log('inside put run', responseJson);
+        // window.location = "/feedback";
+        window.location.reload();
 
       })
       .catch((error) => {
@@ -213,19 +260,19 @@ export default class RunDetail extends Component {
                       <thead>
                         <tr>
                           <th>Location</th>
+                          <th>Is Flagged</th>
                           <th>Device</th>
                           <th>Speed</th>
                           <th>Raised</th>
-
                         </tr>
                       </thead>
                       <tbody>
                         <tr>
                           <td>{ this.state.position ? this.state.position.results[0].formatted_address :"No data"}</td>
+                          <td>{runDetails.results[0].is_flag ? "Yes" : "No"}</td>
                           <td>{runDetails.results[0].is_ios ? "iOS" : "android"}</td>
                           <td>{Math.round(runDetails.results[0].avg_speed*100) / 100} km/s</td>
                           <td>{runDetails.results[0].run_amount}</td>
-
                         </tr>
                       </tbody>
                     </Table>            
@@ -422,12 +469,26 @@ export default class RunDetail extends Component {
                 <Modal.Title> Flagging Run</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-               <tr >
-                <td>
-                  by how many kilometers do you want to increase the run distance
-                </td>
-              </tr>
-
+              <div className='row'>
+                <div className='col-sm-6'>
+                  Increase distance by 
+                </div>
+                <div className='col-sm-6'>
+                  <input type="text" value={this.state.added_distance} onChange={this.handleChange} name="my-input-field"/>
+                </div>
+                <div className='col-sm-6'>
+                  Updated distance -  
+                </div>
+                <div className='col-sm-6'>
+                  {(this.state.added_distance*1) + this.state.current_distance}
+                </div>
+                <div className='col-sm-6'>
+                  Updated amount 
+                </div>
+                <div className='col-sm-6'>
+                  {(this.state.added_distance*10) + this.state.current_amount}
+                </div>
+              </div>
               </Modal.Body>
               <Modal.Footer>
                 <Button onClick={() => this.updateRun()}>Update</Button>
@@ -440,7 +501,7 @@ export default class RunDetail extends Component {
             bsStyle="default"
             bsSize="large"
             onClick={() => this.setState({ showFlagModal: true })}>
-            Flag Run
+            {this.state.is_flag ? 'Unflag Run': 'Flag Run'}
           </Button>
           <Modal show={this.state.showFlagModal} onHide={() => this.setState({ showFlagModal: false })}>
               <Modal.Header closeButton>
@@ -449,7 +510,7 @@ export default class RunDetail extends Component {
               <Modal.Body>
                <tr >
                 <td>
-                Are you sure you want to {this.props.data ? "unflag" : "flag" } this run ?
+                Are you sure you want to {this.state.is_flag ? "unflag" : "flag" } this run ?
                 </td>
               </tr>
 
