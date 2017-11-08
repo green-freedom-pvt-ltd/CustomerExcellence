@@ -132,7 +132,7 @@ export default class Run extends Component {
             <tr key={index} className={run.is_flag ? "danger" : "default"}>
               <td>{index + 1}</td>
               <td>
-                <Link to={"/userdetail/" + run.user_id}>
+                <Link to={"/userdetail/" + run.user_id} target='_blank'>
                   {run.user_id}
                 </Link>
               </td>

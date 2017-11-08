@@ -17,7 +17,6 @@ export default class RunDetail extends Component {
   constructor(props) {
   	var path = window.location.pathname;
     path = path.split("/");
-    // console.log("inside feedback container", props);
     super(props);
     this.state = {
       data: null,
@@ -32,7 +31,6 @@ export default class RunDetail extends Component {
     if (path[2]) {
        this.state.fetchUrl+= '?run_id=' + path[2]
        this.state.fetchLocationUrl+= path[2] +'/'
-      // console.log("inside feedback fetchUrl", this.state.fetchUrl);
     }
     this.handleChange = this.handleChange.bind(this);
 
@@ -46,28 +44,7 @@ export default class RunDetail extends Component {
   componentWillMount() {
     this.fetchRunDetails(this.state.fetchUrl);
     this.fetchRunLocation(this.state.fetchLocationUrl);
-    // this.fetchMapLocation(this.state.fetchPositionUrl);
   }
-
-  // fetchMapLocation(path) {
-  //   console.log('this.state.data.runDetails.results[0].start_location_lat----',this.state.data);
-  //   fetch(path, {
-  //     method: 'GET'
-  //   })
-  //     .then((response) => response.json())
-  //     .then((responseJson) => {
-  //       this.setState({
-  //         position: responseJson,
-
-  //       });
-  //       console.log('inside run location detail ', this.state.position);
-  //     })
-  //     .catch((error) => {
-  //      console.error(error);
-  //       // window.location = "/logout";
-  //     });
-  //   }
-
 
   fetchRunDetails(path) {
     fetch(path, {
@@ -103,7 +80,6 @@ export default class RunDetail extends Component {
         window.location = "/logout";
       });
   	}
-
 
   fetchRunLocation(path) {
     fetch(path, {
@@ -232,7 +208,7 @@ export default class RunDetail extends Component {
                       <tbody>
                         <tr>
                           <td>
-                            <Link to={"/userdetail/" + runDetails.results[0].user_id}>
+                            <Link to={"/userdetail/" + runDetails.results[0].user_id} target='_blank'>
                               {runDetails.results[0].user_id}
                             </Link>
                           </td>
@@ -287,7 +263,7 @@ export default class RunDetail extends Component {
                           <td>{runDetails.results[0].num_spikes}</td>
                           <td>{Math.round(runDetails.results[0].calories_burnt)}</td>
                           <td>
-                            <Link to={"/teammembers/"+runDetails.results[0].team_id +"/"}>
+                            <Link to={"/teammembers/"+runDetails.results[0].team_id +"/" } target='_blank'>
                               {runDetails.results[0].team_id}
                             </Link>
                           </td>                          
@@ -304,7 +280,6 @@ export default class RunDetail extends Component {
               <div>
                 No data
               </div>
-
               )
           }
         };
