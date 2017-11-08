@@ -85,7 +85,6 @@ export default class RunDetail extends Component {
           is_flag: responseJson.results[0].is_flag,
           current_distance: responseJson.results[0].distance,
           current_amount: responseJson.results[0].run_amount,
-
         });
         var location_path = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+this.state.data.results[0].start_location_lat+','+this.state.data.results[0].start_location_long+'&sensor=true'
         fetch(location_path, {
@@ -95,21 +94,13 @@ export default class RunDetail extends Component {
           .then((responseJson) => {
             this.setState({
               position: responseJson,
-
             });
-            // console.log('inside run location detail ', this.state.is_flag);
           })
           .catch((error) => {
-           console.error(error);
-            // window.location = "/logout";
           });
-
-
-        // console.log('inside run detail ', this.state.data);
       })
       .catch((error) => {
-       console.error(error);
-        // window.location = "/logout";
+        window.location = "/logout";
       });
   	}
 
@@ -127,13 +118,10 @@ export default class RunDetail extends Component {
       .then((responseJson) => {
         this.setState({
           runLocation: responseJson,
-
         });
-        // console.log('inside run location detail ', this.state.runLocation);
       })
       .catch((error) => {
        console.error(error);
-        // window.location = "/logout";
       });
     }      
 
@@ -173,9 +161,7 @@ export default class RunDetail extends Component {
       .then((response) => response.json())
       .then((responseJson) => {
         console.log('inside put run', responseJson);
-        // window.location = "/feedback";
         window.location.reload();
-
       })
       .catch((error) => {
         console.error(error);
@@ -245,7 +231,11 @@ export default class RunDetail extends Component {
                       </thead>
                       <tbody>
                         <tr>
-                          <td>{runDetails.results[0].user_id}</td>
+                          <td>
+                            <Link to={"/userdetail/" + runDetails.results[0].user_id}>
+                              {runDetails.results[0].user_id}
+                            </Link>
+                          </td>
                           <td>{runDetails.results[0].start_time}</td>
                           <td>{Math.round(runDetails.results[0].distance*100) / 100} km</td>
                           <td>{runDetails.results[0].run_duration}</td>
@@ -296,7 +286,11 @@ export default class RunDetail extends Component {
                           <td>{runDetails.results[0].end_time}</td>
                           <td>{runDetails.results[0].num_spikes}</td>
                           <td>{Math.round(runDetails.results[0].calories_burnt)}</td>
-                          <td>{runDetails.results[0].team_id}</td>
+                          <td>
+                            <Link to={"/teammembers/"+runDetails.results[0].team_id +"/"}>
+                              {runDetails.results[0].team_id}
+                            </Link>
+                          </td>                          
                         </tr>
                       </tbody>
                     </Table>            
