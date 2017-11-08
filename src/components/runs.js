@@ -137,7 +137,7 @@ export default class Run extends Component {
                 </Link>
               </td>
               <td>
-                <Link to={"/rundetail/" + run.run_id}>
+                <Link to={"/rundetail/" + run.run_id} target="_blank">
                   {run.run_id}
                 </Link>
               </td>

@@ -35,7 +35,7 @@ export default class Team extends Component{
           return (
               <tr key={index}  >
                   <td>{index +1}</td>
-                  <td>{league.impactleague}</td>
+                  <td>{league.id}</td>
                   <td>
                     <Link to={"/teammembers/"+league.id +"/"}>
                       {league.team_name}
@@ -60,7 +60,7 @@ export default class Team extends Component{
                   <thead>
                     <tr>
                       <th>#</th>
-                      <th>League</th>
+                      <th>Team Id</th>
                       <th>Team Name</th>
                       <th>Team Captain</th>
                       <th>Captain Phone</th>
