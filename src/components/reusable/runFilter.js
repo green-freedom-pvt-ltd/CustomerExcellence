@@ -84,7 +84,7 @@ export default class RunFilter extends Component {
 
   onClickSearch() {
     
-    var path = "http://localhost:8000/api/ced/runs/?"
+    var path = "http://dev.impactrun.com/api/ced/runs/?"
     const formData = new FormData();
     console.log('inside search run filter', this.state);
     if(this.state.user_id){
@@ -183,7 +183,7 @@ export default class RunFilter extends Component {
 
 onClickClear() {
     
-    var path = "http://localhost:8000/api/ced/runs/?"
+    var path = "http://dev.impactrun.com/api/ced/runs/?"
     this.state = {
       data: null,
       fetchUrl: 'http://dev.impactrun.com/api/ced/userFeedback/',

@@ -95,7 +95,7 @@ export default class UserDetail extends Component {
             return (
 
               // <li key={index}>{item.run_id}</li>
-              <tr className={color} style={{ cursor: "pointer" }} key={index} onClick={() => this.loadLocation(item, item.run_id)}>
+              <tr className={item.is_flag ? "danger" : "color"} style={{ cursor: "pointer" }}  key={index} onClick={() => this.loadLocation(item, item.run_id)}>
                 <td>{startDateTime}</td>
                 <td>{item.cause_run_title}</td>
                 <td>{totalDistance}km</td>

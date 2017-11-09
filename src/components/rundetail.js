@@ -24,7 +24,7 @@ export default class RunDetail extends Component {
       showFlagModal: false,
       loading: true,
       is_flag: false,
-      fetchUrl: 'http://localhost:8000/api/ced/runs/',
+      fetchUrl: 'http://dev.impactrun.com/api/ced/runs/',
       fetchLocationUrl: 'http://dev.impactrun.com/api/ced/runLocations/',
       fetchPositionUrl: 'https://maps.googleapis.com/maps/api/geocode/json?latlng=19.21193940000,72.97623070000&sensor=true'
     }
@@ -115,7 +115,7 @@ export default class RunDetail extends Component {
   updateRun() {
     
     var run_details = this.state.data.results[0];
-    var path = "http://localhost:8000/api/ced/runupdate/" + run_details.run_id+'/'
+    var path = "http://dev.impactrun.com/api/ced/runupdate/" + run_details.run_id+'/'
     const formData = new FormData();
     var new_distance = (this.state.added_distance*1) + this.state.current_distance
     var new_amount = (this.state.added_distance*10) + this.state.current_amount
@@ -149,7 +149,7 @@ export default class RunDetail extends Component {
   flagRun() {
     var run_details = this.state.data.results[0];
     
-    var path = "http://localhost:8000/api/ced/runupdate/" + run_details.run_id+'/'
+    var path = "http://dev.impactrun.com/api/ced/runupdate/" + run_details.run_id+'/'
     const formData = new FormData();
     
     console.log("return put saved for ",path);

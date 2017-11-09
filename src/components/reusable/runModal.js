@@ -28,7 +28,7 @@ export default class RunModal extends Component{
 
 
   putRun() {
-    var path = "http://localhost:8000/api/ced/runupdate/" + this.props.data.run_id+'/'
+    var path = "http://dev.impactrun.com/api/ced/runupdate/" + this.props.data.run_id+'/'
     const formData = new FormData();
     
     console.log("return put saved for ",this.props.data)
