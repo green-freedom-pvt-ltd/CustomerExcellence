@@ -231,7 +231,7 @@ export default class Feedback extends Component {
             <tr key={index} className={feedback.is_replied ? "success" : "default"}>
               <td>{index + 1}</td>
               <td>
-                <Link to={"/userdetail/" + feedback.user_id}>
+                <Link to={"/userdetail/" + feedback.user_id} target='_blank'>
                   {feedback.user_id}
                 </Link>
               </td>
@@ -240,8 +240,12 @@ export default class Feedback extends Component {
               <td>{tag_lable ? tag_lable.label : "No Tag"}</td>
               <td>{sub_tag_lable ? sub_tag_lable.label : "No Sub Tag"}</td>
               <td>{feedback.feedback ? feedback.feedback : "-"}</td>
-              {replyFeedback(feedback,index)}
-              <td>{feedback.run_id}</td>
+                {replyFeedback(feedback,index)}
+              <td>
+                <Link to={"/rundetail/" + feedback.user_id} target='_blank'>
+                  {feedback.run_id}
+                </Link>
+              </td>
               <td>{feedback.phone_number}</td>
               <td>{feedback.is_chat ? "Yes" : "No"}</td>
               <td>{feedback.client_run_id}</td>

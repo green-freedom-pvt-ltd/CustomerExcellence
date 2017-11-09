@@ -144,14 +144,14 @@ export default class GoogleMap2 extends Component {
 
         }
 
+        // console.log("DATA", this.props);
         var state = this.props.location.results;
-        console.log("DATA", this.props);
         finalData = _.map(state, getLocation);
 
         finalData = _.remove(finalData, function (n) {
             return n[0].finalData.length > 0;
         });
-        console.log("Final Data", finalData);
+        // console.log("Final Data", finalData);
         if (this.props.location != null && this.props.location != "" && this.props.location.count > 0 && finalData.length > 0) {
             return (
                 <div style={{ height: `100%` }}>

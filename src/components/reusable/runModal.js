@@ -7,19 +7,18 @@ import {
 } from 'react-router-dom'
 
 
-export default class FeedbackModal extends Component{
+export default class RunModal extends Component{
     constructor(props) {
       super(props);
         this.state = {
         showModal: false,
-        feedback_id:0,
+        run_id:0,
         resolution: '',
       }
     this.handleChange = this.handleChange.bind(this);
       
-     if (props.feedback_id) {
-          this.state.feedback_id = props.feedback_id;
-          // console.log("inside feedback fetchUrl", props.feedback_id);
+     if (props) {
+          console.log("inside feedback fetchUrl", props);
         }
     }
     
@@ -28,13 +27,20 @@ export default class FeedbackModal extends Component{
   }
 
 
-  putFeedbackReply(feedback_id) {
-    var path = "http://dev.impactrun.com/api/userFeedback/" + feedback_id+'/'
+  putRun() {
+    var path = "http://dev.impactrun.com/api/ced/runupdate/" + this.props.data.run_id+'/'
     const formData = new FormData();
-    formData.append('resolution', this.state.resolution);
-    formData.append('is_replied', true);
-    console.log('inside put top feedback', formData);
-    // return console.log("return put saved for ", this.state.resolution)
+    
+    console.log("return put saved for ",this.props.data)
+    formData.append('user_id', this.props.data.user_id);
+    formData.append('start_time', this.props.data.start_time);
+    formData.append('run_amount', this.props.data.run_amount);
+    formData.append('run_duration', this.props.data.run_duration);
+    formData.append('avg_speed', this.props.data.avg_speed);
+    formData.append('distance', this.props.data.distance);
+    formData.append('is_flag', !this.props.data.is_flag);
+    console.log('inside put top run',formData);
+    this.setState({ showModal: false })
     return fetch(path, {
       method: 'PUT',
       body: formData,
@@ -42,8 +48,7 @@ export default class FeedbackModal extends Component{
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        this.setState({ showModal: false })
-        console.log('inside put feedback', responseJson);
+        console.log('inside put run', responseJson);
         // window.location = "/feedback";
         // window.location.reload();
 
@@ -66,31 +71,27 @@ export default class FeedbackModal extends Component{
         return (
           <div>
             <Button
-              bsStyle="primary"
-              bsSize="large"
+              bsStyle="default"
+              bsSize="small"
               onClick={() => this.setState({ showModal: true })}>
-              Resolve
+              {this.props.data.is_flag ? "unflag" : "flag" }
             </Button>
 
-            <Modal show={this.state.showModal} onHide={this.close}>
+            <Modal show={this.state.showModal} onHide={() => this.setState({ showModal: false })}>
               <Modal.Header closeButton>
-                <Modal.Title> reply for  {this.state.feedback_id}</Modal.Title>
+                <Modal.Title> Flagging Run</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-               <tr key={this.state.feedback_id} >
+               <tr key={this.state.run_id} >
                 <td>
-                  <input type="text" value={this.state.resolution} onChange={this.handleChange} name="my-input-field"/>
-                </td>
-                <td>
-                  <Button onClick={() => this.putFeedbackReply(this.state.feedback_id)}>
-                      Save
-                  </Button>
+                Are you sure you want to {this.props.data.is_flag ? "unflag" : "flag" } this run ?
                 </td>
               </tr>
 
               </Modal.Body>
               <Modal.Footer>
-                <Button onClick={() => this.setState({ showModal: false })}>Close</Button>
+                <Button onClick={() => this.putRun()}>Yes</Button>
+                <Button onClick={() => this.setState({ showModal: false })}>No</Button>
               </Modal.Footer>
             </Modal>
           </div>
