@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import UserComponent from './usercomponent';
 import Map from "./map.js";
 import Feedback from './feedback';
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
 
 var totalRuns;
 export default class UserDetail extends Component {
@@ -32,7 +35,7 @@ export default class UserDetail extends Component {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': 'Basic bmlra2k6Z3JlZW5mcmVlZG9tIQ=='
+        'Authorization': cookies.get('authorization')
       }
     })
       .then((Response) => Response.json())
@@ -51,7 +54,8 @@ export default class UserDetail extends Component {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': 'Basic bmlra2k6Z3JlZW5mcmVlZG9tIQ=='
+        'Authorization': cookies.get('authorization')
+        
       }
     })
       .then((Response) => Response.json())
