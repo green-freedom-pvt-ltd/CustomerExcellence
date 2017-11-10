@@ -254,7 +254,7 @@ export default class UserDetail extends Component {
         )
       })
       return (
-        <div className="run-detail" style={{ overflowY: "scroll", overflowX: "hidden", maxHeight: "250px" }}>
+        <div className="run-detail" style={{ overflowY: "scroll", overflowX: "hidden", maxHeight: "350px" }}>
           {runInformation}
         </div>
       )
@@ -292,7 +292,7 @@ export default class UserDetail extends Component {
                     <div className="row">
                       <div className="col-sm-5">
                         <div className="box-top-left" style={{ minHeight: "400px", width: "100%" }}>
-                          <div style={{ width: "100%", height: "274px", marginBottom: "15px", backgroundColor: "rgba(173, 186, 216, 0.45)", border: "6px solid rgba(51, 122, 183, 0.61)" }}>
+                          <div style={{ width: "100%", height: "320px", marginBottom: "15px", backgroundColor: "rgba(173, 186, 216, 0.45)", border: "6px solid rgba(51, 122, 183, 0.61)" }}>
                             {this.loadMap()}
                           </div>
                           <div>
@@ -303,9 +303,9 @@ export default class UserDetail extends Component {
 
                     </div>
                     <div className="row">
-                      <div className="col-sm-5">
+               
                         <Feedback user_id={dataObject.user_id} />
-                      </div>
+                      
                     </div>
 
                   </div>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import logo from './images/logo_large.png';
+import logo from './images/logo1.png';
 import './App.css';
 import Runs from './components/runs';
 import RunsDetail from './components/rundetail';
@@ -39,8 +39,8 @@ class App extends Component {
                     <span className="icon-bar"></span>
                     <span className="icon-bar"></span>
                   </button>
-                  <a className="navbar-brand" href="/login" style={{ padding: "10px" }}>
-                    <img src={logo} style={{ width: "150px" }} alt="site-logo" />
+                  <a className="navbar-brand" href="/login" style={{ padding: "5px" }}>
+                    <img src={logo}  alt="site-logo" />
                   </a>
                 </div>
                 {/* <!-- Collect the nav links, forms, and other content for toggling --> */}
