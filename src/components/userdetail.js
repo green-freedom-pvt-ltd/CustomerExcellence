@@ -91,7 +91,7 @@ export default class UserDetail extends Component {
         }
         else {
           var runList = this.state.userRun.results.map((item, index) => {
-            var color = (this.state.id === item.run_id) ? 'active-item' : '';
+            // var color = (this.state.id === item.run_id) ? 'active-item' : '';
             let startTime = this.getTime(item.start_time)
             let totalDistance = parseFloat(item.distance).toFixed(2);
             let startEpochTime = new Date(item.start_time);
@@ -99,7 +99,7 @@ export default class UserDetail extends Component {
             return (
 
               // <li key={index}>{item.run_id}</li>
-              <tr className={item.is_flag ? "danger" : "color"} style={{ cursor: "pointer" }}  key={index} onClick={() => this.loadLocation(item, item.run_id)}>
+              <tr className={item.is_flag ? "danger" : (this.state.id === item.run_id) ? 'active-item' : ''} style={{ cursor: "pointer" }}  key={index} onClick={() => this.loadLocation(item, item.run_id)}>
                 <td>{startDateTime}</td>
                 <td>{item.cause_run_title}</td>
                 <td>{totalDistance}km</td>
