@@ -40,9 +40,11 @@ export default class TeamMembers extends Component{
                       {league.user}
                     </Link>
                   </td>
-                  <td>{league.team_code}</td>
-                  <td>{league.city}</td>
-                  <td>{league.department}</td>
+                  <td>{league.date_registered}</td>
+                  <td>{league.is_logout ? 'No' : 'Yes'}</td>
+                  <td>{league.team}</td>
+                  <td>{league.department ? league.department : '-' }</td>
+                  <td>{league.id}</td>
               </tr>)
             });
     }
@@ -57,8 +59,11 @@ export default class TeamMembers extends Component{
                     <tr>
                       <th>#</th>
                       <th>User</th>
-                      <th>City</th>
+                      <th>Registration Date</th>
+                      <th>Logged In</th>
+                      <th>Code</th>
                       <th>Department</th>
+                      <th>Employee Id</th>
                     </tr>
                   </thead>
                   <tbody>
