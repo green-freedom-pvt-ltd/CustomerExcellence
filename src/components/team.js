@@ -6,6 +6,8 @@ import {
   Link
 } from 'react-router-dom';
 import {CSVLink, CSVDownload} from 'react-csv';
+import {RingLoader, PropagateLoader} from 'react-spinners';
+
 
 export default class Team extends Component{
   constructor(props) {
@@ -17,7 +19,7 @@ export default class Team extends Component{
       
       this.state = {
       data: null,
-      loading:false,
+      loading:true,
       fetchUrl:'http://dev.impactrun.com/api/ced/teams/',
       league_id: null,
       csvData:[['index', 'Team Id', 'Team Name', 'Captain', 'Phone Number','Email', 'Code', 'Count']],
@@ -66,6 +68,13 @@ export default class Team extends Component{
            <div className="col-md-6">
               <h1> Team list </h1>
            </div>
+           <div className='col-sm-offset-6 col-sm-6 col-centered'>
+              <PropagateLoader
+                color={'#123abc'} 
+                size={20}
+                loading={this.state.loading} 
+              /> 
+            </div>   
            <div className="col-md-6">
               <br/>
               <br/>
@@ -110,7 +119,7 @@ export default class Team extends Component{
       .then((responseJson) => {
         this.setState({
           data: responseJson,
-          loading:true
+          loading:false
 
         });
         console.log('inside componentWillMount Team',this.state.data);

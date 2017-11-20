@@ -242,7 +242,7 @@ export default class Feedback extends Component {
               <td>{feedback.feedback ? feedback.feedback : "-"}</td>
                 {replyFeedback(feedback,index)}
               <td>
-                <Link to={"/rundetail/" + feedback.user_id} target='_blank'>
+                <Link to={"/rundetail/" + feedback.run_id} target='_blank'>
                   {feedback.run_id}
                 </Link>
               </td>

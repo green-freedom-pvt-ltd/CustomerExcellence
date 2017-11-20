@@ -119,29 +119,33 @@ export default class RunDetail extends Component {
     const formData = new FormData();
     var new_distance = (this.state.added_distance*1) + this.state.current_distance
     var new_amount = (this.state.added_distance*10) + this.state.current_amount
-    console.log("return put saved for ",new_distance,new_amount);
-    formData.append('user_id', run_details.user_id);
-    formData.append('start_time', run_details.start_time);
-    formData.append('run_amount', new_amount);
-    formData.append('run_duration', run_details.run_duration);
-    formData.append('avg_speed', run_details.avg_speed);
-    formData.append('distance', new_distance);
-    // formData.append('is_flag', !run_details.is_flag);
-    console.log('inside put top run',formData);
-    this.setState({ showModal: false })
-    return fetch(path, {
-      method: 'PUT',
-      body: formData,
-     
-    })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        console.log('inside put run', responseJson);
-        window.location.reload();
+    if(new_distance){
+      console.log("return put saved for ",new_distance,new_amount);
+      formData.append('user_id', run_details.user_id);
+      formData.append('start_time', run_details.start_time);
+      formData.append('run_amount', new_amount);
+      formData.append('run_duration', run_details.run_duration);
+      formData.append('avg_speed', run_details.avg_speed);
+      formData.append('distance', new_distance);
+      // formData.append('is_flag', !run_details.is_flag);
+      console.log('inside put top run',formData);
+      this.setState({ showModal: false })
+      return fetch(path, {
+        method: 'PUT',
+        body: formData,
+       
       })
-      .catch((error) => {
-        console.error(error);
-      });
+        .then((response) => response.json())
+        .then((responseJson) => {
+          console.log('inside put run', responseJson);
+          window.location.reload();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      alert('Enter only numerical values');
+    }
   }
 
 

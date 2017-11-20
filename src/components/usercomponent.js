@@ -8,7 +8,10 @@ export default class userComponent extends Component {
         console.log("PROP",this.props);
         const { dataobject, runview, pagecount, activepage, handleselect,runcount } = this.props;
         let totalDistance = parseFloat(dataobject.total_distance.total_distance).toFixed(2);
-    
+        var email_subject = "Impact Feedback";
+        var email_body_content ="Hi ,%0A%0AThis is regarding your feedback .%0A%0A%0AWe value your feedback, let us know if this answered your question.%0A%0AHappy Impacting. Get Fit Do Good.%0A%0AAbhijeet,%0ATeam Impact.%0A%0AIf everyone is moving forward together, success takes care of itself.";
+
+
         return (
             
             <div className="col-sm-7" >
@@ -22,7 +25,7 @@ export default class userComponent extends Component {
                             <div>
                                 <h4 style={{ margin: "auto" }}>{dataobject.user_id + ' ' + dataobject.first_name + ' ' + dataobject.last_name}</h4>
                                 <ul style={{ listStyle: "none", padding: "0px" }}>
-                                    <li>Email : <a href={"mailto:" + dataobject.email}>{dataobject.email}</a></li>
+                                    <li>Email : <a href={"https://mail.google.com/mail/u/1/?view=cm&fs=1&to="+dataobject.email+"&su="+email_subject+"&body="+email_body_content+"&tf=1"} target="_blank">{dataobject.email}</a></li>
                                     <li>Gender : {dataobject.gender_user}</li>
                                     <li>Weight : {dataobject.body_weight}</li>
                                 </ul>
@@ -67,7 +70,7 @@ export default class userComponent extends Component {
                                 <th>Cause</th>
                                 <th>Distance</th>
                                 <th>Impact</th>
-                                <th>Calories</th>
+                                <th>Team</th>
                                 <th>Duration</th>
                             </tr>
                         </thead>
