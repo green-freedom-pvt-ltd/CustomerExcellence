@@ -24,6 +24,8 @@ export default class RunFilter extends Component {
       run_id:"",
       client_run_id:"",
       filterOptions:"less",
+      loading: false,
+
     }
     this.logUserId = this.logUserId.bind(this);
     this.logRunId = this.logRunId.bind(this);
@@ -83,7 +85,9 @@ export default class RunFilter extends Component {
 
 
   onClickSearch() {
-    
+    this.setState({
+      loading: true,
+    });
     var path = "http://dev.impactrun.com/api/ced/runs/?"
     const formData = new FormData();
     console.log('inside search run filter', this.state);
@@ -305,11 +309,11 @@ onClickClear() {
     var moreFilterOptions = () => {
           if(this.state.filterOptions === "less"){
 
-          	console.log("------------------", this.state.filterOptions);
+            console.log("------------------", this.state.filterOptions);
             return (
               <div className='col-sm-offset-9 col-sm-3'>
-              		<a onClick={() => {this.setState({filterOptions:"more"})}} > more options</a>
- 			        </div>
+                  <a onClick={() => {this.setState({filterOptions:"more"})}} > more options</a>
+              </div>
           )
           } else {
             return (
@@ -322,11 +326,11 @@ onClickClear() {
                   </div>
                 </div>
                 <div className = 'row'>
-    			         <div className='col-sm-12'>
+                   <div className='col-sm-12'>
 
 
-    		               <div className='col-sm-3'>
-    		                  <div className = 'row'>
+                       <div className='col-sm-3'>
+                          <div className = 'row'>
                             <div className='col-sm-3'>
                               <h5>League</h5>
                             </div>
@@ -339,7 +343,7 @@ onClickClear() {
                               />
                             </div>
                           </div>
-    		 			        	</div>
+                        </div>
 
                         <div className='col-sm-3'>
                           <div className = 'row'>
@@ -503,7 +507,7 @@ onClickClear() {
                    />
                   </div>
                 </div>
-			        </div>
+              </div>
           )
           }
         };
@@ -511,8 +515,13 @@ onClickClear() {
     return (
      <div className = 'row'>
       <div className = 'row'>
-        <div className='col-sm-12 col-centered'>
-        </div>
+        <div className='col-sm-offset-8 col-sm-4 col-centered'>
+            <PropagateLoader
+                    color={'#123abc'} 
+                    size={20}
+                    loading={this.state.loading} 
+                  />
+          </div>
         <div className='col-sm-2'>
           <div className = 'row'>
             <div className='col-sm-12'>
@@ -520,7 +529,7 @@ onClickClear() {
             </div>
             <div className='col-sm-12'>
               <input type="text" value={this.state.user_id} onChange={this.logUserId} name="my-input-field"/>
-          	</div>
+            </div>
           </div>
         </div>
 
@@ -531,23 +540,23 @@ onClickClear() {
             </div>
             <div className='col-sm-12'>
               <input type="text" value={this.state.run_id} onChange={this.logRunId} name="my-input-field"/>
-          	</div>
+            </div>
           </div>
         </div>
 
 
-    	<div className='col-sm-2'>
+      <div className='col-sm-2'>
           <div className = 'row'>
             <div className='col-sm-12'>
               <h5>Client Id</h5>
             </div>
             <div className='col-sm-12'>
               <input type="text" value={this.state.client_run_id} onChange={this.logClientRunId} name="my-input-field"/>
-          	</div>
+            </div>
           </div>
         </div>
 
- 		<div className='col-sm-2'>
+    <div className='col-sm-2'>
           <div className = 'row'>
             <div className='col-sm-12'>
               <h5>Flag</h5>
@@ -581,7 +590,7 @@ onClickClear() {
         <div className = 'row'>
           <br/>
               {moreFilterOptions()}
- 		</div>
+    </div>
      </div>
     );
   }
