@@ -6,6 +6,7 @@ import {
   Link
 } from 'react-router-dom'
 import Cookies from 'universal-cookie';
+import {RingLoader, PropagateLoader} from 'react-spinners';
 
 const cookies = new Cookies();
 
@@ -16,7 +17,7 @@ export default class LeagueList extends Component{
     super(props);
     this.state = {
       data: null,
-      loading:false,
+      loading:true,
      
     }
   }
@@ -48,6 +49,7 @@ export default class LeagueList extends Component{
          <div>
             <div className="row">
               <div className="col-sm-10">
+                             
                <div>
                   <Table striped bordered condensed hover>
                     <thead>
@@ -70,7 +72,14 @@ export default class LeagueList extends Component{
       );
     } else {
       return (
-         <div>
+         <div className='row'>
+            <div className='col-sm-offset-6 col-sm-6 col-centered'>
+              <PropagateLoader
+                color={'#123abc'} 
+                size={20}
+                loading={this.state.loading} 
+              /> 
+            </div>   
         </div>   
       );
     }
@@ -89,7 +98,7 @@ export default class LeagueList extends Component{
       .then((responseJson) => {
         this.setState({
           data: responseJson,
-          loading:true
+          loading:false
 
         });
       })

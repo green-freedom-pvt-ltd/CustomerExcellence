@@ -5,6 +5,7 @@ import {
   Route,
   Link
 } from 'react-router-dom'
+import {RingLoader, PropagateLoader} from 'react-spinners';
 
 
 export default class TeamMembers extends Component{
@@ -14,10 +15,9 @@ export default class TeamMembers extends Component{
      var path = window.location.pathname;
       path = path.split("/");
       console.log("------member------",path);
-      
       this.state = {
       data: null,
-      loading:false,
+      loading:true,
       fetchUrl:'http://dev.impactrun.com/api/ced/employeelist/',
       team_id: null,     
 
@@ -53,6 +53,13 @@ export default class TeamMembers extends Component{
     return (
        <div>
          <div className="row">
+         <div className='col-sm-offset-6 col-sm-6 col-centered'>
+              <PropagateLoader
+                color={'#123abc'} 
+                size={20}
+                loading={this.state.loading} 
+              /> 
+            </div>   
            <div className="col-sm-6">
                 <Table striped bordered condensed hover>
                   <thead>
@@ -89,7 +96,7 @@ export default class TeamMembers extends Component{
       .then((responseJson) => {
         this.setState({
           data: responseJson,
-          loading:true
+          loading:false
 
         });
         console.log('inside componentWillMount Team',this.state.data);
