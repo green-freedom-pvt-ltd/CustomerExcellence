@@ -21,7 +21,7 @@ export default class UserDetail extends Component {
       activeItem: '',
       id: '',
     }
-    this.Viewruns = this.Viewruns.bind(this);
+    this.viewRuns = this.viewRuns.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
 
     // searchedItem = window.location.search;       
@@ -73,7 +73,7 @@ export default class UserDetail extends Component {
       });
   }
 
-  Viewruns() {
+  viewRuns() {
 
     if (this.state.userRun === null) {
       return;
@@ -104,7 +104,7 @@ export default class UserDetail extends Component {
                 <td>{item.cause_run_title}</td>
                 <td>{totalDistance}km</td>
                 <td>&#8377; {item.run_amount}</td>
-                <td>{parseFloat(item.calories_burnt).toFixed(2)}</td>
+                <td>{item.team_id}</td>
                 <td>{item.run_duration}</td>
 
               </tr>
@@ -182,7 +182,7 @@ export default class UserDetail extends Component {
 
 
         })
-        this.Viewruns();
+        this.viewRuns();
       });
 
   }
@@ -246,7 +246,7 @@ export default class UserDetail extends Component {
       var runInformation = renderRuns.map((item, index) => {
         return (
           <div key={index} className="form-group row">
-            <label htmlFor={item.id} className="col-sm-4 col-form-label">{item.text}</label>
+            <label htmlFor={item.id} className="col-sm-4 col-form-label"  onClick={() => console.log("clicked run detail")}>{item.text}</label>
             <div className="col-sm-8">
               <input className="form-control" readOnly type="text" value={item.state === null ? "" : item.state} id={item.id} />
             </div>
@@ -285,7 +285,7 @@ export default class UserDetail extends Component {
                       handleselect={this.handleSelect}
                       dataobject={dataObject}
                       activepage={this.state.activePage}
-                      runview={this.Viewruns()}
+                      runview={this.viewRuns()}
                       pagecount={this.state.pageCount}
                       runcount={totalRuns}
                     />

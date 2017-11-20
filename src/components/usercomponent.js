@@ -70,7 +70,7 @@ export default class userComponent extends Component {
                                 <th>Cause</th>
                                 <th>Distance</th>
                                 <th>Impact</th>
-                                <th>Calories</th>
+                                <th>Team</th>
                                 <th>Duration</th>
                             </tr>
                         </thead>
