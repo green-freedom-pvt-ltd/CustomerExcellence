@@ -244,14 +244,26 @@ export default class UserDetail extends Component {
 
     if (this.state.runInform !== null) {
       var runInformation = renderRuns.map((item, index) => {
-        return (
-          <div key={index} className="form-group row">
-            <label htmlFor={item.id} className="col-sm-4 col-form-label"  onClick={() => console.log("clicked run detail")}>{item.text}</label>
-            <div className="col-sm-8">
-              <input className="form-control" readOnly type="text" value={item.state === null ? "" : item.state} id={item.id} />
+         if (item.id === "run-input") {
+          return (
+            <div key={index} className="form-group row">
+              <label htmlFor={item.id} className="col-sm-4 col-form-label" >{item.text}</label>
+              <div className="col-sm-8"  onClick={() => { return this.state.run_id === undefined? "": window.open('/rundetail/' + this.state.run_id) }}>
+                <input className="form-control" readOnly type="text" value={item.state === null ? "" : item.state} id={item.id} />
+              </div>
             </div>
-          </div>
-        )
+          )
+        }
+        else {
+          return (
+            <div key={index} className="form-group row">
+              <label htmlFor={item.id} className="col-sm-4 col-form-label">{item.text}</label>
+              <div className="col-sm-8">
+                <input className="form-control" readOnly type="text" value={item.state === null ? "" : item.state} id={item.id} />
+              </div>
+            </div>
+          )
+        }
       })
       return (
         <div className="run-detail" style={{ overflowY: "scroll", overflowX: "hidden", maxHeight: "672px" }}>
