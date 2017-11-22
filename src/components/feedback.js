@@ -65,6 +65,9 @@ export default class Feedback extends Component {
   }
 
   fetchResults(path) {
+    this.setState({
+          loading: true,
+        });
     fetch(path, {
       method: 'GET',
       headers: {
@@ -262,23 +265,38 @@ export default class Feedback extends Component {
     return (
       <div>
         <div className='row'>
-          <div className='col-sm-offset-6 col-sm-6 col-centered'>
-            <PropagateLoader
-                    color={'#123abc'} 
-                    size={20}
-                    loading={this.state.loading} 
+            <div className='col-sm-offset-6 col-sm-6 col-centered'>
+              <PropagateLoader
+                      color={'#123abc'} 
+                      size={20}
+                      loading={this.state.loading} 
                   />
-          </div>
+            </div>
           <div className='col-sm-6'>
               <h1> Feedback list </h1>
           </div>
+
           <div className='col-sm-6'>
               <h1> Total Count {this.state.count} </h1>
           </div>
           <div className='col-sm-12'>
               <FeedbackFilter callbackFromParent={this.myCallback} />
           </div>
-          
+          <div className='col-sm-6'>
+            <div style={{display:this.state.pageCount>1?"block":"none"}} id="pagination">
+                  <Pagination
+                    prev
+                    next
+                    first
+                    last
+                    ellipsis
+                    boundaryLinks
+                    items={this.state.pageCount}
+                    maxButtons={5}
+                    activePage={this.state.activePage}
+                    onSelect={this.handleSelect} />
+                </div>
+              </div>
         </div>
 
           <div className='row'>
@@ -305,19 +323,28 @@ export default class Feedback extends Component {
                 {feedbackList}
               </tbody>
             </Table>
-            <div style={{display:this.state.pageCount>1?"block":"none"}} id="pagination">
-              <Pagination
-                prev
-                next
-                first
-                last
-                ellipsis
-                boundaryLinks
-                items={this.state.pageCount}
-                maxButtons={5}
-                activePage={this.state.activePage}
-                onSelect={this.handleSelect} />
+            <div className='col-sm-offset-6 col-sm-6 col-centered'>
+              <PropagateLoader
+                      color={'#123abc'} 
+                      size={20}
+                      loading={this.state.loading} 
+                  />
             </div>
+            <div className='col-sm-6'>
+            <div style={{display:this.state.pageCount>1?"block":"none"}} id="pagination">
+                  <Pagination
+                    prev
+                    next
+                    first
+                    last
+                    ellipsis
+                    boundaryLinks
+                    items={this.state.pageCount}
+                    maxButtons={5}
+                    activePage={this.state.activePage}
+                    onSelect={this.handleSelect} />
+                </div>
+              </div>
           </div>
       </div>
     );
