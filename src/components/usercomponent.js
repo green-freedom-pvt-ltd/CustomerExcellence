@@ -69,7 +69,7 @@ export default class userComponent extends Component {
                                 <th>Start Time</th>
                                 <th>Cause</th>
                                 <th>Distance</th>
-                                <th>Impact</th>
+                                <th>Run Id</th>
                                 <th>Team</th>
                                 <th>Duration</th>
                             </tr>

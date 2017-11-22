@@ -103,7 +103,7 @@ export default class UserDetail extends Component {
                 <td>{startDateTime}</td>
                 <td>{item.cause_run_title}</td>
                 <td>{totalDistance}km</td>
-                <td>&#8377; {item.run_amount}</td>
+                <td>{item.run_id}</td>
                 <td>{item.team_id}</td>
                 <td>{item.run_duration}</td>
 
