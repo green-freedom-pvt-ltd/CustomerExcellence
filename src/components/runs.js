@@ -8,6 +8,7 @@ import RunModal from "./reusable/runModal"
 import {RingLoader, PropagateLoader} from 'react-spinners';
 import Cookies from 'universal-cookie';
 import _ from "lodash";
+import moment from 'moment';
 
 const cookies = new Cookies();
 
@@ -38,7 +39,7 @@ export default class Run extends Component {
  
 
   handleReply(event) {
-    console.log("inside handle reply ",event);
+    // console.log("inside handle reply ",event);
   }
 
   handleSelect(eventKey) {
@@ -96,7 +97,7 @@ export default class Run extends Component {
   }
 
    handleCheckbox(event) {
-      console.log("inside handleCheckbox",event, this);
+      // console.log("inside handleCheckbox",event, this);
       if (this) {
       this.setState({childVisible: !this.state.childVisible});
       } 
@@ -119,14 +120,20 @@ export default class Run extends Component {
     if (run_data) {
     // console.log("------111--------", run_data.count);
       if (this.state.prevPage === null) {
-        this.state.pageCount = Math.ceil(run_data.count / run_data.results.length);
-      }
-      this.state.count = run_data.count;
+          this.state.pageCount = Math.ceil(run_data.count / run_data.results.length);
+        }
+        this.state.count = run_data.count;
+
 
         var email_subject = "Impact Feedback"
 
         var runsList = run_data.results.map((run, index) => {
-        // console.log('Run--------------------------',Run);
+        var runDuration = moment.duration(run.run_duration);
+        var timeMinutes = (runDuration.seconds()/60) +runDuration.minutes() + (runDuration.hours()*60);
+        var averageSpeed = (60*run.distance)/timeMinutes;
+        var redColor = 100 + Math.round(averageSpeed*2);
+        var greenColor = Math.round(200 - (averageSpeed*3));
+        var backgroundColor = "rgb( "+redColor+", "+greenColor+", 0)";
           return (
             
             <tr key={index} className={run.is_flag ? "danger" : "default"}>
@@ -145,6 +152,7 @@ export default class Run extends Component {
               <td>{run.run_duration}</td>
               <td>{run.distance}</td>
               <td>{run.run_amount}</td>
+              <td style={{backgroundColor: backgroundColor}}>{averageSpeed}</td>
               <td>{run.is_flag ? "Yes" : "No"}</td>
                 <RunModal data={run}/>
             </tr>)
@@ -188,6 +196,7 @@ export default class Run extends Component {
                   <th>Time</th>
                   <th>Distance</th>
                   <th>Amount</th>
+                  <th>Speed km/h </th>
                   <th>Flag</th>
                 </tr>
               </thead>
