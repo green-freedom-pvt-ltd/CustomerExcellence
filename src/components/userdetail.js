@@ -3,6 +3,9 @@ import UserComponent from './usercomponent';
 import Map from "./map.js";
 import Feedback from './feedback';
 import Cookies from 'universal-cookie';
+import moment from 'moment';
+
+
 
 const cookies = new Cookies();
 
@@ -96,6 +99,13 @@ export default class UserDetail extends Component {
             let totalDistance = parseFloat(item.distance).toFixed(2);
             let startEpochTime = new Date(item.start_time);
             let startDateTime = startEpochTime.getDate() + "/" + (startEpochTime.getMonth() + 1) + "/" + startEpochTime.getFullYear() + "  " + startTime
+            
+            var runDuration = moment.duration(item.run_duration);
+            var timeMinutes = (runDuration.seconds()/60) +runDuration.minutes() + (runDuration.hours()*60);
+            var averageSpeed = (60*item.distance)/timeMinutes;
+            var redColor = 100 + Math.round(averageSpeed*2);
+            var greenColor = Math.round(200 - (averageSpeed*3));
+            var backgroundColor = "rgb( "+redColor+", "+greenColor+", 0)";
             return (
 
               // <li key={index}>{item.run_id}</li>
@@ -105,7 +115,7 @@ export default class UserDetail extends Component {
                 <td>{totalDistance}km</td>
                 <td>{item.run_id}</td>
                 <td>{item.team_id}</td>
-                <td>{item.run_duration}</td>
+                <td style={{backgroundColor: backgroundColor}}>{item.run_duration}</td>
 
               </tr>
             )

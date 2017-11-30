@@ -18,7 +18,7 @@ export default class RunModal extends Component{
     this.handleChange = this.handleChange.bind(this);
       
      if (props) {
-          console.log("inside feedback fetchUrl", props);
+          // console.log("inside feedback fetchUrl", props);
         }
     }
     
