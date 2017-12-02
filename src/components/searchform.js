@@ -1,34 +1,48 @@
 import React, { Component } from 'react';
-import { Button, ButtonToolbar, ToggleButtonGroup,
+import {
+  Button, ButtonToolbar, ToggleButtonGroup,
   ToggleButton, Col, Table, FormControl, Form, FormGroup, ControlLabel
 } from 'react-bootstrap';
 
 
 class SearchForm extends Component {
+
   constructor(props) {
     super(props);
+
+    var queryString = window.location.search;
+    queryString = queryString.substring(1);
+    this.parseQueryString = this.parseQueryString.bind(this);
+    queryString =this.parseQueryString(queryString);
     this.state = {
-      first_name: '',
-      last_name: '',
+      first_name: queryString.first_name=== undefined ?"":queryString.first_name,
+      last_name: queryString.last_name=== undefined ?"":queryString.last_name,
       user_id: '',
-      user_email: '',
+      user_email: queryString.email=== undefined ?"":queryString.email,
       search_by: 1,
-      error: "none"
+      error: "none",
+     
     };
 
-    this.handleChange = this.handleChange.bind(this);
     this.handleFNameChange = this.handleFNameChange.bind(this);
     this.handleLNameChange = this.handleLNameChange.bind(this);
     this.handleIdChange = this.handleIdChange.bind(this);
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
-
+   
   }
-
-  handleChange(event) {
-    this.setState({ value: event.target.value });
-  }
+  parseQueryString( queryString ){
+    var params = {}, queries, temp, i, l;
+    // Split into key/value pairs
+    queries = queryString.split("&");
+    // Convert the array of strings into an object
+    for ( i = 0, l = queries.length; i < l; i++ ) {
+        temp = queries[i].split('=');
+        params[temp[0]] = temp[1];
+    }
+    return params;
+};
 
   handleFNameChange(event) {
     this.setState({ first_name: event.target.value });
@@ -110,35 +124,35 @@ class SearchForm extends Component {
 
 
   render() {
-   
+
     return (
       <div>
-        <ButtonToolbar style={{marginBottom:"10px"}} >
+        <ButtonToolbar style={{ marginBottom: "10px" }} >
           <ToggleButtonGroup type="radio" name="options" defaultValue={1}>
-            <ToggleButton onClick={() =>this.handleSearch(1)}  value={1}>
+            <ToggleButton onClick={() => this.handleSearch(1)} value={1}>
               Search By Name
           </ToggleButton>
-            <ToggleButton onClick={() =>this.handleSearch(2)}  value={2}>Search By User ID</ToggleButton>
+            <ToggleButton onClick={() => this.handleSearch(2)} value={2}>Search By User ID</ToggleButton>
 
-            <ToggleButton onClick={() =>this.handleSearch(3)}  value={3}>Search By Email</ToggleButton>
+            <ToggleButton onClick={() => this.handleSearch(3)} value={3}>Search By Email</ToggleButton>
           </ToggleButtonGroup>
         </ButtonToolbar>
-        <span style={{ display: this.state.error }}>Enter search parameters</span>
+        <span style={{ display: this.state.error,color:"red" }}>Enter search parameters</span>
         <Form style={{ paddingBottom: "10px" }} onSubmit={this.handleSubmit}>
-          <FormGroup style={this.state.search_by === 1 ? { display: "flex",marginBottom:"10px" } : { display: "none" }} controlId="formInlineFirstName">
-            <div className="col-sm-6" style={{marginRight:"10px"}}>
+          <FormGroup style={this.state.search_by === 1 ? { display: "flex", marginBottom: "10px" } : { display: "none" }} controlId="formInlineFirstName">
+            <div className="col-sm-6" style={{ marginRight: "10px" }}>
               <div className="row">
-              <ControlLabel>First Name</ControlLabel>
-              {' '}
-              <FormControl type="text" placeholder="Jane" ref="firstName" value={this.state.user_name} onChange={this.handleFNameChange} />
+                <ControlLabel>First Name</ControlLabel>
+                {' '}
+                <FormControl type="text" placeholder="Jane" ref="firstName" value={this.state.first_name} onChange={this.handleFNameChange} />
               </div>
             </div>
             <div className="col-sm-6">
-            <div className="row">
-              <ControlLabel>Last Name</ControlLabel>
-              {' '}
-              <FormControl type="text" placeholder="Doe" ref="lastName" value={this.state.user_name} onChange={this.handleLNameChange} />
-            </div>
+              <div className="row">
+                <ControlLabel>Last Name</ControlLabel>
+                {' '}
+                <FormControl type="text" placeholder="Doe" ref="lastName" value={this.state.last_name} onChange={this.handleLNameChange} />
+              </div>
             </div>
             {' '}
 
