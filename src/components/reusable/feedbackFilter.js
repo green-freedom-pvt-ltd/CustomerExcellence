@@ -40,10 +40,10 @@ export default class FeedbackFilter extends Component {
       path+='sub_tag='+this.state.sub_tag.value + '&'
     }
     if(this.state.is_chat){
-      path+='is_chat='+this.state.is_chat.value + '&'
+      path+='is_chat='+this.state.is_chat.label + '&'
     }
     if(this.state.is_replied){
-      path+='is_replied='+this.state.is_replied.value + '&'
+      path+='is_replied='+this.state.is_replied.label + '&'
     }
     console.log('inside search feedback filter', path);
     return fetch(path, {
