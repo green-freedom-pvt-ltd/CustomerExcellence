@@ -152,6 +152,7 @@ export default class UserDetail extends Component {
         return Response.json()
       })
       .then((responseJson) => {
+        //console.log("ITEM...",item);
         let startEpochTime = new Date(item.start_time_epoch);
         let endEpochTime = new Date(item.end_time_epoch);
         this.setState({
@@ -188,8 +189,13 @@ export default class UserDetail extends Component {
           num_updates: item.num_updates,
           os_version: item.os_version,
           peak_speed: item.peak_speed,
-          team_id: item.team_id
-
+          team_id: item.team_id,
+          estimated_calories:item.estimated_calories,
+          estimated_distance:item.estimated_distance/1000,
+          estimated_steps:item.estimated_steps,
+          google_fit_distance:item.google_fit_distance/1000,
+          google_fit_steps:item.google_fit_steps,
+          usain_bolt_count:item.usain_bolt_count
 
         })
         this.viewRuns();
@@ -248,18 +254,24 @@ export default class UserDetail extends Component {
       { "id": "start_location_lat-input", "text": "Start Location Lat", "state": this.state.start_location_lat },
       { "id": "start_location_long-input", "text": "Start Location Long", "state": this.state.start_location_long },
       { "id": "end_location_lat-input", "text": "End Location Lat", "state": this.state.end_location_lat },
-      { "id": "end_location_long-input", "text": "End Location Long", "state": this.state.end_location_long }
+      { "id": "end_location_long-input", "text": "End Location Long", "state": this.state.end_location_long },
+      { "id": "estimated_calories-input", "text": "Estimated calories", "state": this.state.estimated_calories },
+      { "id": "estimated_distance-input", "text": "Estimated distance", "state": this.state.estimated_distance },
+      { "id": "estimated_steps-input", "text": "Estimated steps", "state": this.state.estimated_steps },
+      { "id": "google_fit_distance-input", "text": "Google fit steps", "state": this.state.google_fit_steps },
+      { "id": "usain_bolt_count-input", "text": "Usain bolt count", "state": this.state.usain_bolt_count },
+      { "id": "google_fit_distance-input", "text": "Google fit distance", "state": this.state.google_fit_distance }
 
     ]
-
+ 
     if (this.state.runInform !== null) {
       var runInformation = renderRuns.map((item, index) => {
          if (item.id === "run-input") {
           return (
-            <div key={index} className="form-group row">
-              <label htmlFor={item.id} className="col-sm-4 col-form-label" >{item.text}</label>
-              <div className="col-sm-8"  onClick={() => { return this.state.run_id === undefined? "": window.open('/rundetail/' + this.state.run_id) }}>
-                <input className="form-control" readOnly type="text" value={item.state === null ? "" : item.state} id={item.id} />
+            <div key={index} className="form-group row" title="click to see run detail">
+              <label htmlFor={item.id} className="col-sm-4 col-form-label" style={{cursor:"pointer"}}>{item.text}</label>
+              <div className="col-sm-8" onClick={() => { return this.state.run_id === undefined? "": window.open('/rundetail/' + this.state.run_id) }}>
+                <input className="form-control" style={{cursor:"pointer"}}  readOnly type="text" value={item.state === null ? "" : item.state} id={item.id} />
               </div>
             </div>
           )
