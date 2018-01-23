@@ -24,7 +24,7 @@ export default class Feedback extends Component {
       prevPage: '',
       childVisible: false,
       count: 0,
-      fetchUrl: 'http://dev.impactrun.com/api/ced/userFeedback/'
+      fetchUrl: 'http://localhost:8000/v0/ced/userFeedback/'
     }
     this.handleSelect = this.handleSelect.bind(this);
     this.myCallback = this.myCallback.bind(this);
@@ -72,7 +72,7 @@ export default class Feedback extends Component {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
         'Authorization': cookies.get('authorization')
       }
     })
@@ -121,10 +121,10 @@ export default class Feedback extends Component {
   render() {
     var feedback_data = this.state.data;
     if (feedback_data) {
-    console.log("------111--------", feedback_data.count);
       if (this.state.prevPage === null) {
-        this.state.pageCount = Math.ceil(feedback_data.count / feedback_data.results.length);
+        this.state.pageCount = Math.ceil(feedback_data.count / feedback_data.rows.length);
       }
+      console.log("------111--------", feedback_data);
       this.state.count = feedback_data.count;
       // if (this.state.data.results.length < 1) {
       //   return <tr><td colSpan="12" style={{textAlign:"center"}}>No Record Found..!!</td></tr>
@@ -218,9 +218,9 @@ export default class Feedback extends Component {
 
         var email_subject = "Impact Feedback"
 
-        var feedbackList = feedback_data.results.map((feedback, index) => {
-          var epoch_timestamp = feedback.client_time_stamp
-          var feedback_date_time = new Date(epoch_timestamp)
+        var feedbackList = feedback_data.rows.map((feedback, index) => {
+          var epoch_timestamp = feedback.client_time_stamp;
+          var feedback_date_time = new Date(epoch_timestamp*1);
           var tag_lable = _.find(tag_options, function(o) { return o.value == feedback.tag; });
           var sub_tag_lable = _.find(sub_tag_options, function(o) { return o.value == feedback.sub_tag; });
           var email_body = _.find(email_options, function(o) { return o.value == feedback.sub_tag; });
@@ -235,7 +235,7 @@ export default class Feedback extends Component {
               <td>{index + 1}</td>
               <td>
                 <Link to={"/userdetail/" + feedback.user_id} target='_blank'>
-                  {feedback.user_id}
+                  {feedback.user_id_id}
                 </Link>
               </td>
               <td><a href={"https://mail.google.com/mail/u/1/?view=cm&fs=1&to="+feedback.email+"&su="+email_subject+"&body="+email_body_content+"&tf=1"} target="_blank">{feedback.email}</a></td>
