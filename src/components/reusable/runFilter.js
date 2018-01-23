@@ -9,7 +9,7 @@ import _ from "lodash";
 import Select from 'react-select';
 import {defaultRanges, Calendar, DateRange } from 'react-date-range';
 import moment from 'moment';
-
+import 'react-select/dist/react-select.css';
 const cookies = new Cookies();
 
 
