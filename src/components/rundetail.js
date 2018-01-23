@@ -465,7 +465,7 @@ export default class RunDetail extends Component {
               </Modal.Body>
               <Modal.Footer>
                 <Button onClick={() => this.updateRun()}>Update</Button>
-                <Button onClick={() => this.setState({ showDistanceModal: false })}>Cancle</Button>
+                <Button onClick={() => this.setState({ showDistanceModal: false })}>Cancel</Button>
               </Modal.Footer>
             </Modal>
         </div>
