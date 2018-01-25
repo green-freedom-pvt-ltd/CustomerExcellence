@@ -25,7 +25,7 @@ export default class Run extends Component {
       prevPage: '',
       childVisible: false,
       count: 0,
-      fetchUrl: 'http://dev.impactrun.com/api/ced/runs/'
+      fetchUrl: 'http://localhost:8000/v0/ced/runs/'
     }
     this.handleSelect = this.handleSelect.bind(this);
     this.myCallback = this.myCallback.bind(this);
@@ -76,9 +76,11 @@ export default class Run extends Component {
     })
       .then((response) => response.json())
       .then((responseJson) => {
+        console.log('responseJson------------------',responseJson);
         var data_results = responseJson.results;
         var data_set = _.uniqBy(data_results, 'cause_run_title');
-        var final_data_set = _.map(data_set,function(leg){ return {value: leg.cause_run_title.split(" ").join("%20"), label: leg.cause_run_title}});
+        // var final_data_set = _.map(data_set,function(leg){ return {value: leg.cause_run_title.split(" ").join("%20"), label: leg.cause_run_title}});
+        var final_data_set = "blank value";
         this.setState({
           data: responseJson,
           loading: false,
@@ -134,13 +136,14 @@ export default class Run extends Component {
         var redColor = 100 + Math.round(averageSpeed*2);
         var greenColor = Math.round(200 - (averageSpeed*3));
         var backgroundColor = "rgb( "+redColor+", "+greenColor+", 0)";
+              // <td>{run.run_duration}</td>
           return (
             
             <tr key={index} className={run.is_flag ? "danger" : "default"}>
               <td>{index + 1}</td>
               <td>
                 <Link to={"/userdetail/" + run.user_id} target='_blank'>
-                  {run.user_id}
+                  {run.user_id_id}
                 </Link>
               </td>
               <td>
@@ -149,7 +152,6 @@ export default class Run extends Component {
                 </Link>
               </td>
               <td>{run.start_time}</td>
-              <td>{run.run_duration}</td>
               <td>{run.distance}</td>
               <td>{run.run_amount}</td>
               <td style={{backgroundColor: backgroundColor}}>{averageSpeed}</td>

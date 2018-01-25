@@ -86,7 +86,7 @@ export default class Feedback extends Component {
           nextPage: responseJson.next,
 
         });
-        // console.log('inside componentWillMount feedback', this.state.data);
+        console.log('inside componentWillMount feedback', responseJson);
       })
       .catch((error) => {
        console.error(error);
@@ -122,7 +122,7 @@ export default class Feedback extends Component {
     var feedback_data = this.state.data;
     if (feedback_data) {
       if (this.state.prevPage === null) {
-        this.state.pageCount = Math.ceil(feedback_data.count / feedback_data.rows.length);
+        this.state.pageCount = Math.ceil(feedback_data.count / feedback_data.results.length);
       }
       console.log("------111--------", feedback_data);
       this.state.count = feedback_data.count;
@@ -218,7 +218,7 @@ export default class Feedback extends Component {
 
         var email_subject = "Impact Feedback"
 
-        var feedbackList = feedback_data.rows.map((feedback, index) => {
+        var feedbackList = feedback_data.results.map((feedback, index) => {
           var epoch_timestamp = feedback.client_time_stamp;
           var feedback_date_time = new Date(epoch_timestamp*1);
           var tag_lable = _.find(tag_options, function(o) { return o.value == feedback.tag; });
