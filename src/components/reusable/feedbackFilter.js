@@ -6,7 +6,7 @@ import {
 import {RingLoader, PropagateLoader} from 'react-spinners';
 import Cookies from 'universal-cookie';
 import Select from 'react-select';
-
+import 'react-select/dist/react-select.css';
 
 const cookies = new Cookies();
 
