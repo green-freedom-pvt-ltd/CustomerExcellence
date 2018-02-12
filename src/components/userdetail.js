@@ -95,7 +95,7 @@ export default class UserDetail extends Component {
         else {
           var runList = this.state.userRun.results.map((item, index) => {
             // var color = (this.state.id === item.run_id) ? 'active-item' : '';
-            console.log('item-0-------0000000000000-------------',item);
+            // console.log('item-0-------0000000000000-------------',item);
             let startTime = this.getTime(item.start_time)
             
             let totalDistance = parseFloat(item.distance).toFixed(2);
