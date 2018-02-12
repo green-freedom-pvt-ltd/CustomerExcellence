@@ -103,10 +103,10 @@ export default class UserDetail extends Component {
             let googleFitDistance = parseFloat((item.google_fit_distance/1000) - totalDistance).toFixed(2);
             var distance  = totalDistance + '  km / ' + estimatedDistance + ' / ' + googleFitDistance;
             
-            let totalSteps = parseFloat(item.no_of_steps);
-            let estimatedSteps = parseFloat(item.estimated_steps - item.no_of_steps);
-            let googleFitSteps = parseFloat(item.google_fit_steps - item.no_of_steps);
-            var steps  = totalSteps + ' / ' + estimatedSteps + ' / ' + googleFitSteps;
+            let totalSteps = parseFloat(item.no_of_steps*.0007).toFixed(2);
+            let estimatedSteps = parseFloat((item.estimated_steps)*.0007).toFixed(2);
+            let googleFitSteps = parseFloat((item.google_fit_steps)*.0007).toFixed(2);
+            var steps  = item.no_of_steps+ ' steps / ' + totalSteps + ' / ' + estimatedSteps + ' / ' + googleFitSteps;
             
             let totalCalories = parseFloat(item.calories_burnt).toFixed(2);
             let estimadedCalories = parseFloat(item.estimated_calories - item.calories_burnt).toFixed(2);
@@ -128,7 +128,7 @@ export default class UserDetail extends Component {
                 <td>{startDateTime}</td>
                 <td>{item.cause_run_title}</td>
                 <td>{distance}</td>
-                <td>{steps}</td>
+                <td>{steps} km</td>
                 <td>{calories}</td>
                 <td>{item.run_id}</td>
                 <td>{item.team_id}</td>
