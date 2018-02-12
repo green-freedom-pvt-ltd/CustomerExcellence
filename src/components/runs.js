@@ -134,6 +134,24 @@ export default class Run extends Component {
         var redColor = 100 + Math.round(averageSpeed*2);
         var greenColor = Math.round(200 - (averageSpeed*3));
         var backgroundColor = "rgb( "+redColor+", "+greenColor+", 0)";
+
+        let totalDistance = parseFloat(run.distance).toFixed(2);
+        let estimatedDistance = parseFloat((run.estimated_distance/1000) - totalDistance).toFixed(2);
+        let googleFitDistance = parseFloat((run.google_fit_distance/1000) - totalDistance).toFixed(2);
+        var distance  = totalDistance + '  km / ' + estimatedDistance + ' / ' + googleFitDistance;
+        
+        let totalSteps = parseFloat(run.no_of_steps*.0007).toFixed(2);
+        let estimatedSteps = parseFloat((run.estimated_steps)*.0007).toFixed(2);
+        let googleFitSteps = parseFloat((run.google_fit_steps)*.0007).toFixed(2);
+        var steps  = run.no_of_steps+ ' steps / ' + totalSteps + ' / ' + estimatedSteps + ' / ' + googleFitSteps;
+        
+        let totalCalories = parseFloat(run.calories_burnt).toFixed(2);
+        let estimadedCalories = parseFloat(run.estimated_calories - run.calories_burnt).toFixed(2);
+        var calories  = totalCalories + ' / ' + estimadedCalories;
+
+
+
+
           return (
             
             <tr key={index} className={run.is_flag ? "danger" : "default"}>
@@ -150,7 +168,9 @@ export default class Run extends Component {
               </td>
               <td>{run.start_time}</td>
               <td>{run.run_duration}</td>
-              <td>{run.distance}</td>
+              <td>{distance}</td>
+              <td>{steps} km</td>
+              <td>{calories}</td>
               <td>{run.run_amount}</td>
               <td style={{backgroundColor: backgroundColor}}>{averageSpeed}</td>
               <td>{run.is_flag ? "Yes" : "No"}</td>
@@ -194,7 +214,9 @@ export default class Run extends Component {
                   <th>Run Id</th>
                   <th>Date</th>
                   <th>Time</th>
-                  <th>Distance</th>
+                  <th>Distance O/E/G</th>
+                  <th>Steps O/E/G</th>
+                  <th>Calories O/E</th>
                   <th>Amount</th>
                   <th>Speed km/h </th>
                   <th>Flag</th>
