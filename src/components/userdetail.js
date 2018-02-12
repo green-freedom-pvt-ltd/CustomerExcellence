@@ -95,11 +95,26 @@ export default class UserDetail extends Component {
         else {
           var runList = this.state.userRun.results.map((item, index) => {
             // var color = (this.state.id === item.run_id) ? 'active-item' : '';
+            // console.log('item-0-------0000000000000-------------',item);
             let startTime = this.getTime(item.start_time)
+            
             let totalDistance = parseFloat(item.distance).toFixed(2);
+            let estimatedDistance = parseFloat((item.estimated_distance/1000) - totalDistance).toFixed(2);
+            let googleFitDistance = parseFloat((item.google_fit_distance/1000) - totalDistance).toFixed(2);
+            var distance  = totalDistance + '  km / ' + estimatedDistance + ' / ' + googleFitDistance;
+            
+            let totalSteps = parseFloat(item.no_of_steps*.0007).toFixed(2);
+            let estimatedSteps = parseFloat((item.estimated_steps)*.0007).toFixed(2);
+            let googleFitSteps = parseFloat((item.google_fit_steps)*.0007).toFixed(2);
+            var steps  = item.no_of_steps+ ' steps / ' + totalSteps + ' / ' + estimatedSteps + ' / ' + googleFitSteps;
+            
+            let totalCalories = parseFloat(item.calories_burnt).toFixed(2);
+            let estimadedCalories = parseFloat(item.estimated_calories - item.calories_burnt).toFixed(2);
+            var calories  = totalCalories + ' / ' + estimadedCalories;
+
+
             let startEpochTime = new Date(item.start_time);
             let startDateTime = startEpochTime.getDate() + "/" + (startEpochTime.getMonth() + 1) + "/" + startEpochTime.getFullYear() + "  " + startTime
-            
             var runDuration = moment.duration(item.run_duration);
             var timeMinutes = (runDuration.seconds()/60) +runDuration.minutes() + (runDuration.hours()*60);
             var averageSpeed = (60*item.distance)/timeMinutes;
@@ -112,7 +127,9 @@ export default class UserDetail extends Component {
               <tr className={item.is_flag ? "danger" : (this.state.id === item.run_id) ? 'active-item' : ''} style={{ cursor: "pointer" }}  key={index} onClick={() => this.loadLocation(item, item.run_id)}>
                 <td>{startDateTime}</td>
                 <td>{item.cause_run_title}</td>
-                <td>{totalDistance}km</td>
+                <td>{distance}</td>
+                <td>{steps} km</td>
+                <td>{calories}</td>
                 <td>{item.run_id}</td>
                 <td>{item.team_id}</td>
                 <td style={{backgroundColor: backgroundColor}}>{item.run_duration}</td>
