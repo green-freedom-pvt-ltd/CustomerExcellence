@@ -68,9 +68,9 @@ export default class userComponent extends Component {
                             <tr>
                                 <th>Start Time</th>
                                 <th>Cause</th>
-                                <th>Distance O/E/G</th>
-                                <th>Steps O/E/G</th>
-                                <th>Calories O/E</th>
+                                <th>Distance / δE / δG</th>
+                                <th>Steps / D / δE / δG</th>
+                                <th>Calories / δE</th>
                                 <th>Run Id</th>
                                 <th>Team</th>
                                 <th>Duration</th>
