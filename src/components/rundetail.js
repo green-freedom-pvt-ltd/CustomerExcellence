@@ -21,6 +21,7 @@ export default class RunDetail extends Component {
     this.state = {
       data: null,
       showDistanceModal: false,
+      showTeamModal: false,
       showFlagModal: false,
       loading: true,
       is_flag: false,
@@ -32,13 +33,17 @@ export default class RunDetail extends Component {
        this.state.fetchUrl+= '?run_id=' + path[2]
        this.state.fetchLocationUrl+= path[2] +'/'
     }
-    this.handleChange = this.handleChange.bind(this);
-
+    this.handleChangeDistance = this.handleChangeDistance.bind(this);
+    this.handleChangeTeam = this.handleChangeTeam.bind(this);
   }
 
 
-  handleChange(event) {
+  handleChangeDistance(event) {
     this.setState({added_distance: event.target.value});
+  }
+
+  handleChangeTeam(event) {
+    this.setState({team_id: event.target.value});
   }
 
   componentWillMount() {
@@ -143,6 +148,46 @@ export default class RunDetail extends Component {
         .catch((error) => {
           console.error(error);
         });
+    } else {
+      alert('Enter only numerical values');
+    }
+  }
+
+  updateTeam() {
+    
+    var run_details = this.state.data.results[0];
+    var path = "http://dev.impactrun.com/api/ced/runupdate/" + run_details.run_id+'/'
+    const formData = new FormData();
+    var team_id = this.state.team_id*1;
+    console.log('inside put top run',team_id);
+    if(team_id){
+      console.log("return put saved for ",team_id);
+      formData.append('user_id', run_details.user_id);
+      formData.append('start_time', run_details.start_time);
+      formData.append('team_id', team_id);
+      formData.append('run_duration', run_details.run_duration);
+      formData.append('avg_speed', run_details.avg_speed);
+      formData.append('distance', run_details.distance);
+      formData.append('run_amount', run_details.run_amount);
+
+      // formData.append('is_flag', !run_details.is_flag);
+      console.log('inside put top run',formData);
+      this.setState({ showModal: false })
+      return fetch(path, {
+        method: 'PUT',
+        body: formData,
+       
+      })
+        .then((response) => response.json())
+        .then((responseJson) => {
+          console.log('inside put run', responseJson);
+          window.location.reload();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+
+
     } else {
       alert('Enter only numerical values');
     }
@@ -430,7 +475,7 @@ export default class RunDetail extends Component {
     return (
       <div>
         <div className='row'>
-        <div className='col-sm-offset-4 col-xs-2'>
+        <div className='col-sm-offset-2 col-xs-2'>
            <Button
             bsStyle="default"
             bsSize="large"
@@ -439,7 +484,7 @@ export default class RunDetail extends Component {
           </Button>
           <Modal show={this.state.showDistanceModal} onHide={() => this.setState({ showDistanceModal: false })}>
               <Modal.Header closeButton>
-                <Modal.Title> Flagging Run</Modal.Title>
+                <Modal.Title> Updating distance</Modal.Title>
               </Modal.Header>
               <Modal.Body>
               <div className='row'>
@@ -447,7 +492,7 @@ export default class RunDetail extends Component {
                   Increase distance by 
                 </div>
                 <div className='col-sm-6'>
-                  <input type="text" value={this.state.added_distance} onChange={this.handleChange} name="my-input-field"/>
+                  <input type="text" value={this.state.added_distance} onChange={this.handleChangeDistance} name="my-input-field"/>
                 </div>
                 <div className='col-sm-6'>
                   Updated distance -  
@@ -494,6 +539,33 @@ export default class RunDetail extends Component {
               </Modal.Footer>
             </Modal>
           </div>
+          <div className='col-xs-2'>
+           <Button
+            bsStyle="default"
+            bsSize="large"
+            onClick={() => this.setState({ showTeamModal: true })}>
+            Update Team
+          </Button>
+          <Modal show={this.state.showTeamModal} onHide={() => this.setState({ showTeamModal: false })}>
+              <Modal.Header closeButton>
+                <Modal.Title> Updating team</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+              <div className='row'>
+                <div className='col-sm-6'>
+                  New Team id 
+                </div>
+                <div className='col-sm-6'>
+                  <input type="text" value={this.state.team_id} onChange={this.handleChangeTeam} name="my-input-field"/>
+                </div>                
+              </div>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button onClick={() => this.updateTeam()}>Update</Button>
+                <Button onClick={() => this.setState({ showTeamModal: false })}>Cancel</Button>
+              </Modal.Footer>
+            </Modal>
+        </div>
         	<div className="col-sm-12">
             <div style={{  width: "100%",marginTop: "10px" }}>
               <div style={{ width: "100%", height: "350px"}}>
