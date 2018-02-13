@@ -141,8 +141,8 @@ export default class Run extends Component {
         var distance  = totalDistance + '  km / ' + estimatedDistance + ' / ' + googleFitDistance;
         
         let totalSteps = parseFloat(run.no_of_steps*.0007).toFixed(2);
-        let estimatedSteps = parseFloat((run.estimated_steps)*.0007).toFixed(2);
-        let googleFitSteps = parseFloat((run.google_fit_steps)*.0007).toFixed(2);
+        let estimatedSteps = parseFloat((run.estimated_steps-run.no_of_steps)*.0007).toFixed(2);
+        let googleFitSteps = parseFloat((run.google_fit_steps-run.no_of_steps)*.0007).toFixed(2);
         var steps  = run.no_of_steps+ ' steps / ' + totalSteps + ' / ' + estimatedSteps + ' / ' + googleFitSteps;
         
         let totalCalories = parseFloat(run.calories_burnt).toFixed(2);
@@ -214,9 +214,9 @@ export default class Run extends Component {
                   <th>Run Id</th>
                   <th>Date</th>
                   <th>Time</th>
-                  <th>Distance O/E/G</th>
-                  <th>Steps O/E/G</th>
-                  <th>Calories O/E</th>
+                  <th>Distance / δE / δG</th>
+                  <th>Steps / D / δE / δG</th>
+                  <th>Calories / δE</th>
                   <th>Amount</th>
                   <th>Speed km/h </th>
                   <th>Flag</th>
