@@ -21,6 +21,7 @@ export default class RunDetail extends Component {
     this.state = {
       data: null,
       showDistanceModal: false,
+      showTeamModal: false,
       showFlagModal: false,
       loading: true,
       is_flag: false,
@@ -430,7 +431,7 @@ export default class RunDetail extends Component {
     return (
       <div>
         <div className='row'>
-        <div className='col-sm-offset-4 col-xs-2'>
+        <div className='col-sm-offset-2 col-xs-2'>
            <Button
             bsStyle="default"
             bsSize="large"
@@ -439,7 +440,7 @@ export default class RunDetail extends Component {
           </Button>
           <Modal show={this.state.showDistanceModal} onHide={() => this.setState({ showDistanceModal: false })}>
               <Modal.Header closeButton>
-                <Modal.Title> Flagging Run</Modal.Title>
+                <Modal.Title> Updating distance</Modal.Title>
               </Modal.Header>
               <Modal.Body>
               <div className='row'>
@@ -494,6 +495,33 @@ export default class RunDetail extends Component {
               </Modal.Footer>
             </Modal>
           </div>
+          <div className='col-xs-2'>
+           <Button
+            bsStyle="default"
+            bsSize="large"
+            onClick={() => this.setState({ showTeamModal: true })}>
+            Update Team
+          </Button>
+          <Modal show={this.state.showTeamModal} onHide={() => this.setState({ showTeamModal: false })}>
+              <Modal.Header closeButton>
+                <Modal.Title> Updating team</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+              <div className='row'>
+                <div className='col-sm-6'>
+                  New Team id 
+                </div>
+                <div className='col-sm-6'>
+                  <input type="text" value={this.state.team_id} onChange={this.handleChange} name="my-input-field"/>
+                </div>                
+              </div>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button onClick={() => this.updateRun()}>Update</Button>
+                <Button onClick={() => this.setState({ showTeamModal: false })}>Cancel</Button>
+              </Modal.Footer>
+            </Modal>
+        </div>
         	<div className="col-sm-12">
             <div style={{  width: "100%",marginTop: "10px" }}>
               <div style={{ width: "100%", height: "350px"}}>
