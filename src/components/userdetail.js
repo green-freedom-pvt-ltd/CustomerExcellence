@@ -305,7 +305,7 @@ export default class UserDetail extends Component {
         }
       })
       return (
-        <div className="run-detail" style={{ overflowY: "scroll", overflowX: "hidden", maxHeight: "672px" }}>
+        <div className="run-detail" style={{ overflowY: "scroll", overflowX: "hidden", maxHeight: "372px" }}>
           {runInformation}
         </div>
       )
