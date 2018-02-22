@@ -17,7 +17,7 @@ export default class userComponent extends Component {
             <div className="col-sm-7" >
                 <div className="box-top-left" >
     
-                    <div className="col-sm-8">
+                    <div className="col-sm-10">
                         <div style={{ display: "flex", padding: "10px 0px" }}>
                             <div style={{ marginRight: "10px" }}>
                                 <img src={dataobject.social_thumb} alt={"social-thumb-" + dataobject.first_name} style={{ width: "80px" }} className="img-circle" />
@@ -52,18 +52,27 @@ export default class userComponent extends Component {
                                     </Link>
                                 </p>
                             </div>
+                            <div className="item">
+                                <p style={{ color: "rgba(0, 0, 0, 0.37)", fontWeight: "bold" }}>Mobile No.</p>
+                                <p>{dataobject.phone_number === "NaN" ? 0 : dataobject.phone_number}</p>
+                            </div>
+                            <div className="item">
+                                <p style={{ color: "rgba(0, 0, 0, 0.37)", fontWeight: "bold" }}>Birthday</p>
+                                <p>{dataobject.birthday === "NaN" ? 0 : dataobject.birthday}</p>
+                            </div>
+                           
                         </div>
     
     
                     </div>
-                    <div className="col-sm-4">
+                    <div className="col-sm-2">
     
                     </div>
     
                 </div>
-                <div className="box-top-left" style={{ width: "100%" }}>
+                <div className="box-top-left" style={{ maxHeight: "840px",overflowY: "auto",overflowX:"hidden" }}>
     
-                    <table className="table table-striped">
+                    <table className="table table-striped" >
                         <thead>
                             <tr>
                                 <th>Start Time</th>
@@ -76,7 +85,7 @@ export default class userComponent extends Component {
                                 <th>Duration</th>
                             </tr>
                         </thead>
-                        <tbody style={{ color: "rgba(0, 0, 0, 0.37)", fontWeight: "bold", fontSize: "12px" }}>
+                        <tbody style={{ color: "rgba(0, 0, 0, 0.37)", fontWeight: "bold", fontSize: "12px"}}>
                             {runview}
                         </tbody>
                     </table>
