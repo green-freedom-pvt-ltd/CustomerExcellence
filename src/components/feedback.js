@@ -296,7 +296,7 @@ export default class Feedback extends Component {
               loading={this.state.loading}
             />
           </div>
-          <div className='col-sm-6'>
+          <div id="feedback" className='col-sm-6'>
             <h1> Feedback list </h1>
           </div>
 
