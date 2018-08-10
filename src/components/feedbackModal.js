@@ -33,7 +33,6 @@ export default class FeedbackModal extends Component{
     const formData = new FormData();
     formData.append('resolution', this.state.resolution);
     formData.append('is_replied', true);
-    console.log('inside put top feedback', formData);
     // return console.log("return put saved for ", this.state.resolution)
     return fetch(path, {
       method: 'PUT',
@@ -43,7 +42,6 @@ export default class FeedbackModal extends Component{
       .then((response) => response.json())
       .then((responseJson) => {
         this.setState({ showModal: false })
-        console.log('inside put feedback', responseJson);
         // window.location = "/feedback";
         // window.location.reload();
 

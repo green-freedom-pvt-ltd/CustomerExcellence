@@ -18,7 +18,6 @@ export default class Logout extends Component{
       error: "none"
     };
     cookies.set('authorization','asdasdasdasdasdasdasdasd', { path: '/' });
-    console.log("cookie--------------------",cookies.get('authorization'));
 
   }
 

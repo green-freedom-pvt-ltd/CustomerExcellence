@@ -38,14 +38,9 @@ export default class Feedback extends Component {
 
 
   handleReply(event) {
-    console.log("inside handle reply ", event);
   }
 
   handleSelect(eventKey) {
-    console.log("Current Page.....", eventKey)
-    console.log("Active Page...", this.state.activePage)
-
-    console.log("Prev Page....", this.state.prevPage)
     if (this.state.activePage === eventKey - 1) {
       this.fetchResults(this.state.nextPage);
     }
@@ -84,7 +79,6 @@ export default class Feedback extends Component {
   }
 
   fetchResults(path) {
-    console.log("PATH.......", path);
     this.setState({
       loading: true,
     });
@@ -119,7 +113,6 @@ export default class Feedback extends Component {
   }
 
   handleCheckbox(event) {
-    console.log("inside handleCheckbox", event, this);
     if (this) {
       this.setState({ childVisible: !this.state.childVisible });
     }
@@ -127,7 +120,6 @@ export default class Feedback extends Component {
 
   onClickReply(feedback_id) {
     // this.setState({childVisible: !this.state.childVisible});
-    console.log("feedback_id----------", feedback_id);
   }
 
   myCallback(dataFromChild) {
@@ -139,13 +131,11 @@ export default class Feedback extends Component {
       nextPage: dataFromChild.next,
 
     });
-    console.log('----------listDataFromChild', this.state.listDataFromChild);
   }
 
   render() {
     var feedback_data = this.state.data;
     if (feedback_data) {
-      console.log("------111--------", feedback_data.count);
       if (this.state.prevPage === null) {
         this.state.pageCount = Math.ceil(feedback_data.count / feedback_data.results.length);
       }

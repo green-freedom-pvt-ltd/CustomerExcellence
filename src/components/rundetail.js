@@ -125,7 +125,6 @@ export default class RunDetail extends Component {
     var new_distance = (this.state.added_distance*1) + this.state.current_distance
     var new_amount = (this.state.added_distance*10) + this.state.current_amount
     if(new_distance){
-      console.log("return put saved for ",new_distance,new_amount);
       formData.append('user_id', run_details.user_id);
       formData.append('start_time', run_details.start_time);
       formData.append('run_amount', new_amount);
@@ -133,7 +132,6 @@ export default class RunDetail extends Component {
       formData.append('avg_speed', run_details.avg_speed);
       formData.append('distance', new_distance);
       // formData.append('is_flag', !run_details.is_flag);
-      console.log('inside put top run',formData);
       this.setState({ showModal: false })
       return fetch(path, {
         method: 'PUT',
@@ -142,7 +140,6 @@ export default class RunDetail extends Component {
       })
         .then((response) => response.json())
         .then((responseJson) => {
-          console.log('inside put run', responseJson);
           window.location.reload();
         })
         .catch((error) => {
@@ -159,9 +156,7 @@ export default class RunDetail extends Component {
     var path = "http://dev.impactrun.com/api/ced/runupdate/" + run_details.run_id+'/'
     const formData = new FormData();
     var team_id = this.state.team_id*1;
-    console.log('inside put top run',team_id);
     if(team_id){
-      console.log("return put saved for ",team_id);
       formData.append('user_id', run_details.user_id);
       formData.append('start_time', run_details.start_time);
       formData.append('team_id', team_id);
@@ -171,7 +166,6 @@ export default class RunDetail extends Component {
       formData.append('run_amount', run_details.run_amount);
 
       // formData.append('is_flag', !run_details.is_flag);
-      console.log('inside put top run',formData);
       this.setState({ showModal: false })
       return fetch(path, {
         method: 'PUT',
@@ -180,7 +174,6 @@ export default class RunDetail extends Component {
       })
         .then((response) => response.json())
         .then((responseJson) => {
-          console.log('inside put run', responseJson);
           window.location.reload();
         })
         .catch((error) => {
@@ -201,7 +194,6 @@ export default class RunDetail extends Component {
     var path = "http://dev.impactrun.com/api/ced/runupdate/" + run_details.run_id+'/'
     const formData = new FormData();
     
-    console.log("return put saved for ",path);
     formData.append('user_id', run_details.user_id);
     formData.append('start_time', run_details.start_time);
     formData.append('run_amount', run_details.run_amount);
@@ -209,7 +201,6 @@ export default class RunDetail extends Component {
     formData.append('avg_speed', run_details.avg_speed);
     formData.append('distance', run_details.distance);
     formData.append('is_flag', !run_details.is_flag);
-    console.log('inside put top run',formData);
     this.setState({ showModal: false })
     return fetch(path, {
       method: 'PUT',
@@ -218,7 +209,6 @@ export default class RunDetail extends Component {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log('inside put run', responseJson);
         // window.location = "/feedback";
         window.location.reload();
 

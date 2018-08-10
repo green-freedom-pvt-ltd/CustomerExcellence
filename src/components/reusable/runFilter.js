@@ -15,7 +15,6 @@ const cookies = new Cookies();
 
 export default class RunFilter extends Component {
   constructor(props) {
-    console.log("inside runssssssssss container", props);
     super(props);
     this.state = {
       data: null,
@@ -90,7 +89,6 @@ export default class RunFilter extends Component {
     });
     var path = "http://dev.impactrun.com/api/ced/runs/?"
     const formData = new FormData();
-    console.log('inside search run filter', this.state);
     if(this.state.user_id){
       path+='user_id='+this.state.user_id + '&'
     }
@@ -156,7 +154,6 @@ export default class RunFilter extends Component {
       }  
     }
 
-    console.log('inside end_date_query --------------', start_date_query,end_date_query);
 
 
     return fetch(path, {
@@ -178,7 +175,6 @@ export default class RunFilter extends Component {
 
         });
         this.props.callbackFromParent(responseJson);
-        console.log('inside componentWillMount feedback', this.state);
       })
       .catch((error) => {
         console.error(error);
@@ -196,7 +192,6 @@ onClickClear() {
       client_run_id:"",
       filterOptions:"more",
     }
-    console.log('inside search path', path);
     return fetch(path, {
       method: 'GET',
       headers: {
@@ -216,7 +211,6 @@ onClickClear() {
 
         });
         this.props.callbackFromParent(responseJson);
-        console.log('inside componentWillMount feedback', this.state);
       })
       .catch((error) => {
         console.error(error);
@@ -240,11 +234,9 @@ onClickClear() {
   }
 
   handleChange() {
-    console.log('Change');
   }
 
   logIsFlag(val) {
-    console.log("Selected: " + JSON.stringify(val));
     this.setState({
       is_flag: val
     });
@@ -252,17 +244,14 @@ onClickClear() {
 
 
   logLeague(val) {
-    console.log("Selected: " + JSON.stringify(val));
     this.setState({league: val});
   }
 
   logCause(val) {
-    console.log("Selected: " + JSON.stringify(val));
     this.setState({cause: val});
   }
 
   logIsIOs(val) {
-    console.log("Selected: " + JSON.stringify(val));
     this.setState({is_iOS: val});
   }
 
@@ -309,7 +298,6 @@ onClickClear() {
     var moreFilterOptions = () => {
           if(this.state.filterOptions === "less"){
 
-            console.log("------------------", this.state.filterOptions);
             return (
               <div className='col-sm-offset-9 col-sm-3'>
                   <a onClick={() => {this.setState({filterOptions:"more"})}} > more options</a>
@@ -583,8 +571,6 @@ onClickClear() {
             </div>
           </div>
         </div>
-
-
       </div>
 
         <div className = 'row'>

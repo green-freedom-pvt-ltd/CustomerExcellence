@@ -32,7 +32,6 @@ export default class FeedbackFilter extends Component {
 
     var path = "http://dev.impactrun.com/api/ced/userFeedback/" + '?'
     const formData = new FormData();
-    console.log('inside search feedback filter', path);
     if(this.state.tag){
       path+='tag='+this.state.tag.value + '&'
     }
@@ -45,7 +44,6 @@ export default class FeedbackFilter extends Component {
     if(this.state.is_replied){
       path+='is_replied='+this.state.is_replied.value + '&'
     }
-    console.log('inside search feedback filter', path);
     return fetch(path, {
       method: 'GET',
       headers: {
@@ -65,7 +63,6 @@ export default class FeedbackFilter extends Component {
 
         });
         this.props.callbackFromParent(responseJson);
-        console.log('inside componentWillMount feedback', this.state.data);
       })
       .catch((error) => {
         console.error(error);
@@ -74,28 +71,24 @@ export default class FeedbackFilter extends Component {
 
 
   logIsResolved(val) {
-    console.log("Selected: " + JSON.stringify(val));
     this.setState({
       is_replied: val
     });
   }
 
   logIsChat(val) {
-    console.log("Selected: " + JSON.stringify(val));
     this.setState({
       is_chat: val
     });
   }
 
   logTag(val) {
-    console.log("Selected: " + JSON.stringify(val));
     this.setState({
       tag: val
     });
   }
 
  logSubTag(val) {
-    console.log("Selected: " + JSON.stringify(val));
     this.setState({
       sub_tag: val
     });

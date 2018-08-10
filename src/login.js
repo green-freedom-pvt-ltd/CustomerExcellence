@@ -36,7 +36,6 @@ export default class Login extends Component{
   
   requestLogin(user_name, password){
 
-      console.log("cookie--------------------",cookies.get('authorization'),password);
       return fetch('http://dev.impactrun.com/api/ced/login/', {
         method: 'GET',
         headers: {
@@ -52,7 +51,6 @@ export default class Login extends Component{
           this.setState({
             is_login: true
           });
-          console.log('data_results-------------------------',data_results);
           window.location = "/user";
         })
         .catch((error) => {
