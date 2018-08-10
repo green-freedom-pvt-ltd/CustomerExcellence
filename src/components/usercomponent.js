@@ -5,7 +5,6 @@ import { Pagination } from 'react-bootstrap';
 
 export default class userComponent extends Component {
     render() {
-        console.log("PROP", this.props);
         const { dataobject, runview, pagecount, activepage, handleselect, runcount } = this.props;
         let totalDistance = parseFloat(dataobject.total_distance.total_distance).toFixed(2);
         var email_subject = "Impact Feedback";

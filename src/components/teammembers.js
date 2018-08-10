@@ -10,11 +10,9 @@ import {RingLoader, PropagateLoader} from 'react-spinners';
 
 export default class TeamMembers extends Component{
   constructor(props) {
-    console.log("inside team member container", props);
     super(props);
      var path = window.location.pathname;
       path = path.split("/");
-      console.log("------member------",path);
       this.state = {
       data: null,
       loading:true,
@@ -24,7 +22,6 @@ export default class TeamMembers extends Component{
     }
     if (path[2]) {
        this.state.fetchUrl+= '?team_id=' + path[2]
-      console.log("inside feedback fetchUrl", this.state.fetchUrl);
     }
   }
 
@@ -99,7 +96,6 @@ export default class TeamMembers extends Component{
           loading:false
 
         });
-        console.log('inside componentWillMount Team',this.state.data);
       })
       .catch((error) => {
         console.error(error);

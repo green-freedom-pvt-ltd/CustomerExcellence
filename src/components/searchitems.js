@@ -12,7 +12,6 @@ const cookies = new Cookies();
 export default class SearchItem extends Component {
     constructor(props) {
         super(props);
-        console.log("SEARCH PAGE", window.location.search);
         var searchQuery = window.location.search;
         this.state = {
             query: searchQuery,
@@ -26,7 +25,6 @@ export default class SearchItem extends Component {
         this.handleSelect = this.handleSelect.bind(this);
     }
     fetchResults(query) {
-        console.log("Data", 'http://dev.impactrun.com/api/ced/users' + query)
         fetch(query, {
             method: 'GET',
             headers: {
@@ -44,7 +42,6 @@ export default class SearchItem extends Component {
                     nextPage: responseJson.next,
                     loading: false,
                 })
-                console.log("Data",this.state.data);
             });
     }
 
@@ -62,7 +59,6 @@ export default class SearchItem extends Component {
               }
            else{
             var runList = this.state.data.results.map((item, index) => {
-                console.log("RUN USER", item);
                 return (
                     // <li key={index}>{item.run_id}</li>
                     <tr key={index}>
@@ -82,9 +78,6 @@ export default class SearchItem extends Component {
         }
     }
     handleSelect(eventKey) {
-        console.log("Current Page", eventKey)
-        console.log("Page", this.state.userPath)
-        console.log("Prev Page", this.state.prevPage)
         if (this.state.activePage < eventKey) {
           this.fetchResults(this.state.nextPage);
         }

@@ -66,30 +66,24 @@ class SearchForm extends Component {
 
   handleSubmit(event) {
 
-    console.log("/searchitem?first_name=" + this.state.first_name);
-    console.log('-------------------------------A name was submitted: ' + JSON.stringify(this.state));
     switch (this.state.search_by) {
       case 1:
         if ((this.state.first_name === "") && (this.state.last_name === "")) {
           this.setState({
             error: "block",
           })
-          console.log("/searchitem?first_name=" + this.state.first_name);
         }
         else if ((this.state.first_name !== "") && (this.state.last_name !== "")) {
           this.setState({
             error: "none",
           })
           window.location = "/search_list?first_name=" + this.state.first_name + "&last_name=" + this.state.last_name;
-          console.log("/searchitem?first_name=" + this.state.first_name + "&last_name=" + this.state.last_name);
         }
         else if ((this.state.first_name !== "") && (this.state.last_name === "")) {
           window.location = "/search_list?first_name=" + this.state.first_name;
-          console.log("SEARCh /searchitem?first_name=" + this.state.first_name);
         }
         else {
           window.location = "/search_list?last_name=" + this.state.last_name;
-          console.log("/searchitem?last_name=" + this.state.last_name);
         }
 
         break;

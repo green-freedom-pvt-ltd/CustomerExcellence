@@ -13,7 +13,6 @@ const cookies = new Cookies();
 
 export default class LeagueList extends Component{
   constructor(props) {
-    console.log("inside league container", props);
     super(props);
     this.state = {
       data: null,
@@ -24,8 +23,6 @@ export default class LeagueList extends Component{
 
   render() {
     var  league_data = this.state.data;
-    console.log("------league data--------",league_data);
-    console.log("cookie--------------------",cookies.get('authorization'));
 
     if(league_data){
     var leagueList = league_data.results.map((league, index) => {

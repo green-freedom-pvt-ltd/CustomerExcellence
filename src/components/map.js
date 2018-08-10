@@ -132,7 +132,6 @@ export default class GoogleMap2 extends Component {
                     paused_data = [last_location, last_location]
                 }
                 paused_data_object = { finalData: paused_data };
-                console.log('paused_data', paused_data, paused_data_object);
             } else {
                 paused_data = [_.first(finalData), _.first(finalData)]
                 paused_data_object = { finalData: paused_data };

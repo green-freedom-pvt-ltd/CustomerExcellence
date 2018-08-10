@@ -65,7 +65,6 @@ export default class Overall extends Component{
         if(next_url){
         	final_fetch_url = next_url;
         }
-	    console.log('final_fetch_url-------------------------',final_fetch_url);
 
 	    return fetch(final_fetch_url, {
 	      method: 'GET',
@@ -90,7 +89,6 @@ export default class Overall extends Component{
     		var state_date  = this.state.date;
     		let startTime = moment(state_date.startDate);
 
-	      	console.log('next_url-------------------------',next_url);
 	        
 	        for (var i = 0; i < days; i++) {
 

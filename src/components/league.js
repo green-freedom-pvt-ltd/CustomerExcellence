@@ -5,7 +5,6 @@ import Team from './team';
 
 export default class League extends Component{
   constructor(props) {
-    console.log("inside league container", props);
     super(props);
     var path = window.location.pathname;
     path = path.split("/");

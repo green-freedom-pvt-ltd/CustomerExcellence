@@ -33,21 +33,27 @@ export default class UserDetail extends Component {
     this.fetchRuns('http://dev.impactrun.com/api/ced/runs/?user_id=' + this.state.user_id);
   }
   componentDidMount() {
-    fetch('http://dev.impactrun.com/api/ced/users/' + this.state.user_id + '/', {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': cookies.get('authorization')
-      }
-    })
-      .then((Response) => Response.json())
-      .then((responseJson) => {
-        this.setState({
-          data: responseJson,
+    try {
+      fetch('http://api.impactrun.com/ced/v0/users/' + this.state.user_id + '/', {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': cookies.get('authorization')
+        }
+      })
+        .then((Response) => Response.json())
+        .then((responseJson) => {
+          this.setState({
+            data: responseJson,
+          })
+          // console.log(this.state.data);
         })
-        // console.log(this.state.data);
-      });
+    } catch (error) {
+      return error;
+    }
+
+
   }
 
 
@@ -58,7 +64,7 @@ export default class UserDetail extends Component {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Authorization': cookies.get('authorization')
-        
+
       }
     })
       .then((Response) => Response.json())
@@ -83,7 +89,7 @@ export default class UserDetail extends Component {
     }
     else {
       if (this.state.prevPage === null) {
-        totalRuns= this.state.userRun.count;
+        totalRuns = this.state.userRun.count;
         this.state.pageCount = Math.ceil(this.state.userRun.count / this.state.userRun.results.length);
       }
       if (this.state.userRun != null) {
@@ -97,34 +103,34 @@ export default class UserDetail extends Component {
             // var color = (this.state.id === item.run_id) ? 'active-item' : '';
             // console.log('item-0-------0000000000000-------------',item);
             let startTime = this.getTime(item.start_time)
-            
+
             let totalDistance = parseFloat(item.distance).toFixed(2);
-            let estimatedDistance = parseFloat((item.estimated_distance/1000) - totalDistance).toFixed(2);
-            let googleFitDistance = parseFloat((item.google_fit_distance/1000) - totalDistance).toFixed(2);
-            var distance  = totalDistance + ' / ' + estimatedDistance + ' / ' + googleFitDistance;
-            
-            let totalSteps = parseFloat(item.no_of_steps*.0007).toFixed(2);
-            let estimatedSteps = parseFloat((item.estimated_steps-item.no_of_steps)*.0007).toFixed(2);
-            let googleFitSteps = parseFloat((item.google_fit_steps-item.no_of_steps)*.0007).toFixed(2);
-            var steps  = item.no_of_steps+ ' steps / ' + totalSteps + ' / ' + estimatedSteps + ' / ' + googleFitSteps;
-            
+            let estimatedDistance = parseFloat((item.estimated_distance / 1000) - totalDistance).toFixed(2);
+            let googleFitDistance = parseFloat((item.google_fit_distance / 1000) - totalDistance).toFixed(2);
+            var distance = totalDistance + ' / ' + estimatedDistance + ' / ' + googleFitDistance;
+
+            let totalSteps = parseFloat(item.no_of_steps * .0007).toFixed(2);
+            let estimatedSteps = parseFloat((item.estimated_steps - item.no_of_steps) * .0007).toFixed(2);
+            let googleFitSteps = parseFloat((item.google_fit_steps - item.no_of_steps) * .0007).toFixed(2);
+            var steps = item.no_of_steps + ' steps / ' + totalSteps + ' / ' + estimatedSteps + ' / ' + googleFitSteps;
+
             let totalCalories = parseFloat(item.calories_burnt).toFixed(2);
             let estimadedCalories = parseFloat(item.estimated_calories - item.calories_burnt).toFixed(2);
-            var calories  = totalCalories + ' / ' + estimadedCalories;
+            var calories = totalCalories + ' / ' + estimadedCalories;
 
 
             let startEpochTime = new Date(item.start_time);
             let startDateTime = startEpochTime.getDate() + "/" + (startEpochTime.getMonth() + 1) + "/" + startEpochTime.getFullYear() + "  " + startTime
             var runDuration = moment.duration(item.run_duration);
-            var timeMinutes = (runDuration.seconds()/60) +runDuration.minutes() + (runDuration.hours()*60);
-            var averageSpeed = (60*item.distance)/timeMinutes;
-            var redColor = 100 + Math.round(averageSpeed*2);
-            var greenColor = Math.round(200 - (averageSpeed*3));
-            var backgroundColor = "rgb( "+redColor+", "+greenColor+", 0)";
+            var timeMinutes = (runDuration.seconds() / 60) + runDuration.minutes() + (runDuration.hours() * 60);
+            var averageSpeed = (60 * item.distance) / timeMinutes;
+            var redColor = 100 + Math.round(averageSpeed * 2);
+            var greenColor = Math.round(200 - (averageSpeed * 3));
+            var backgroundColor = "rgb( " + redColor + ", " + greenColor + ", 0)";
             return (
 
               // <li key={index}>{item.run_id}</li>
-              <tr className={item.is_flag ? "danger" : (this.state.id === item.run_id) ? 'active-item' : ''} style={{ cursor: "pointer" }}  key={index} onClick={() => this.loadLocation(item, item.run_id)}>
+              <tr className={item.is_flag ? "danger" : (this.state.id === item.run_id) ? 'active-item' : ''} style={{ cursor: "pointer" }} key={index} onClick={() => this.loadLocation(item, item.run_id)}>
                 <td>{startDateTime}</td>
                 <td>{item.cause_run_title}</td>
                 <td>{distance} km</td>
@@ -132,7 +138,7 @@ export default class UserDetail extends Component {
                 <td>{calories}</td>
                 <td>{item.run_id}</td>
                 <td>{item.team_id}</td>
-                <td style={{backgroundColor: backgroundColor}}>{item.run_duration}</td>
+                <td style={{ backgroundColor: backgroundColor }}>{item.run_duration}</td>
 
               </tr>
             )
@@ -207,12 +213,12 @@ export default class UserDetail extends Component {
           os_version: item.os_version,
           peak_speed: item.peak_speed,
           team_id: item.team_id,
-          estimated_calories:item.estimated_calories,
-          estimated_distance:item.estimated_distance/1000,
-          estimated_steps:item.estimated_steps,
-          google_fit_distance:item.google_fit_distance/1000,
-          google_fit_steps:item.google_fit_steps,
-          usain_bolt_count:item.usain_bolt_count
+          estimated_calories: item.estimated_calories,
+          estimated_distance: item.estimated_distance / 1000,
+          estimated_steps: item.estimated_steps,
+          google_fit_distance: item.google_fit_distance / 1000,
+          google_fit_steps: item.google_fit_steps,
+          usain_bolt_count: item.usain_bolt_count
 
         })
         this.viewRuns();
@@ -220,9 +226,6 @@ export default class UserDetail extends Component {
 
   }
   handleSelect(eventKey) {
-    console.log("Current Page", eventKey)
-
-    console.log("Prev Page", this.state.prevPage)
     if (this.state.activePage + 1 === eventKey) {
       this.fetchRuns(this.state.nextPage);
     }
@@ -231,7 +234,6 @@ export default class UserDetail extends Component {
     }
     else {
       let runPath = "http://dev.impactrun.com/api/ced/runs/?page=" + eventKey + "&user_id=" + this.state.user_id
-      console.log("Run Path", runPath);
       this.fetchRuns(runPath);
     }
     this.setState({
@@ -280,15 +282,15 @@ export default class UserDetail extends Component {
       { "id": "google_fit_distance-input", "text": "Google fit distance", "state": this.state.google_fit_distance }
 
     ]
- 
+
     if (this.state.runInform !== null) {
       var runInformation = renderRuns.map((item, index) => {
-         if (item.id === "run-input") {
+        if (item.id === "run-input") {
           return (
             <div key={index} className="form-group row" title="click to see run detail">
-              <label htmlFor={item.id} className="col-sm-4 col-form-label" style={{cursor:"pointer"}}>{item.text}</label>
-              <div className="col-sm-8" onClick={() => { return this.state.run_id === undefined? "": window.open('/rundetail/' + this.state.run_id) }}>
-                <input className="form-control" style={{cursor:"pointer"}}  readOnly type="text" value={item.state === null ? "" : item.state} id={item.id} />
+              <label htmlFor={item.id} className="col-sm-4 col-form-label" style={{ cursor: "pointer" }}>{item.text}</label>
+              <div className="col-sm-8" onClick={() => { return this.state.run_id === undefined ? "" : window.open('/rundetail/' + this.state.run_id) }}>
+                <input className="form-control" style={{ cursor: "pointer" }} readOnly type="text" value={item.state === null ? "" : item.state} id={item.id} />
               </div>
             </div>
           )
@@ -354,9 +356,9 @@ export default class UserDetail extends Component {
 
                     </div>
                     <div className="row">
-               
-                        <Feedback user_id={dataObject.user_id} />
-                      
+
+                      <Feedback user_id={dataObject.user_id} />
+
                     </div>
 
                   </div>

@@ -8,7 +8,6 @@ const leaguecausedata = require('./leaguecausedata.js');
 export default class LineChartOverall extends Component{
 	
 	constructor(props) {
-    console.log("inside runsinfo container", props);
     super(props);
       this.state = {
       loading:false,
@@ -33,7 +32,6 @@ export default class LineChartOverall extends Component{
       .then((response) => response.json())
       .then((responseJson) => {
       	var data_results = responseJson.results;
-      	console.log('data_results-----------------',data_results);
       	// console.log(_.filter(data_results,{event_date:'2017-09-01T05:30:00'}));
       	// console.log("2017-09-01T05:30:00" ,_.filter(data_results,function(num){ return num.event_date == '2017-09-01T05:30:00'}));
       	// console.log("2017-09-02T05:30:00" ,_.filter(data_results,function(num){ return num.event_date == '2017-09-02T05:30:00'}));
@@ -69,13 +67,11 @@ export default class LineChartOverall extends Component{
               user_count:user_count,
                })
       	}
-      	console.log('data_set------------',final_data);
         this.setState({
           data: final_data,
           loading:true
 
         });
-        console.log('inside componentWillMount runsinfo',this.state.data);
       })
       .catch((error) => {
         console.error(error);

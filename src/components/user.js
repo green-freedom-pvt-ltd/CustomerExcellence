@@ -24,7 +24,6 @@ class User extends Component {
       }
     
       componentWillMount() {
-        console.log("In Will MOunt");
     
         this.fetchLeaderboard(this.state.userPath);
       }
@@ -49,7 +48,6 @@ class User extends Component {
               nextPage: responseJson.next,
     
             })
-            console.log("Data", this.state.data);
     
           })
           .catch((error) => {
@@ -117,9 +115,7 @@ class User extends Component {
         }
       }
       handleSelect(eventKey) {
-        console.log("Current Page", eventKey)
-        console.log("Page", this.state.userPath)
-        console.log("Prev Page", this.state.prevPage)
+       
         if (this.state.activePage < eventKey) {
           this.fetchLeaderboard(this.state.nextPage);
         }
