@@ -42,7 +42,12 @@ export default class UserDetail extends Component {
           'Authorization': cookies.get('authorization')
         }
       })
-        .then((Response) => Response.json())
+        .then((Response) => {
+          if(Response.status === 401){
+            window.location = "/logout";
+          }
+          return Response.json();
+        })
         .then((responseJson) => {
           this.setState({
             data: responseJson,
@@ -50,6 +55,7 @@ export default class UserDetail extends Component {
           // console.log(this.state.data);
         })
     } catch (error) {
+
       return error;
     }
 
