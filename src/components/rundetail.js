@@ -76,7 +76,6 @@ export default class RunDetail extends Component {
         })
           .then((response) => response.json())
           .then((responseJson) => {
-            console.log("responseJson", responseJson)
             if (responseJson.results.length > 0) {
               this.setState({
                 position: responseJson,
