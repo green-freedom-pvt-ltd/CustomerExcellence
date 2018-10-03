@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { Pagination, Table,Checkbox , Button, Modal} from 'react-bootstrap';
+import { Pagination, Table, Checkbox, Button, Modal } from 'react-bootstrap';
 import {
   Link
 } from 'react-router-dom';
 import RunFilter from "./reusable/runFilter"
 import RunModal from "./reusable/runModal"
-import {RingLoader, PropagateLoader} from 'react-spinners';
+import { RingLoader, PropagateLoader } from 'react-spinners';
 import Cookies from 'universal-cookie';
 import _ from "lodash";
 import Map from "./map.js";
@@ -15,7 +15,7 @@ const cookies = new Cookies();
 
 export default class RunDetail extends Component {
   constructor(props) {
-  	var path = window.location.pathname;
+    var path = window.location.pathname;
     path = path.split("/");
     super(props);
     this.state = {
@@ -30,8 +30,8 @@ export default class RunDetail extends Component {
       fetchPositionUrl: 'https://maps.googleapis.com/maps/api/geocode/json?latlng=19.21193940000,72.97623070000&sensor=true'
     }
     if (path[2]) {
-       this.state.fetchUrl+= '?run_id=' + path[2]
-       this.state.fetchLocationUrl+= path[2] +'/'
+      this.state.fetchUrl += '?run_id=' + path[2]
+      this.state.fetchLocationUrl += path[2] + '/'
     }
     this.handleChangeDistance = this.handleChangeDistance.bind(this);
     this.handleChangeTeam = this.handleChangeTeam.bind(this);
@@ -39,11 +39,11 @@ export default class RunDetail extends Component {
 
 
   handleChangeDistance(event) {
-    this.setState({added_distance: event.target.value});
+    this.setState({ added_distance: event.target.value });
   }
 
   handleChangeTeam(event) {
-    this.setState({team_id: event.target.value});
+    this.setState({ team_id: event.target.value });
   }
 
   componentWillMount() {
@@ -68,15 +68,25 @@ export default class RunDetail extends Component {
           current_distance: responseJson.results[0].distance,
           current_amount: responseJson.results[0].run_amount,
         });
-        var location_path = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+this.state.data.results[0].start_location_lat+','+this.state.data.results[0].start_location_long+'&sensor=true'
+
+        var location_path = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + this.state.data.results[0].start_location_lat + ',' + this.state.data.results[0].start_location_long + '&sensor=true&key=AIzaSyDUf0TBE9wQ3CV7uu6I1cyZCeBucNEwjXI'
+
         fetch(location_path, {
           method: 'GET'
         })
           .then((response) => response.json())
           .then((responseJson) => {
-            this.setState({
-              position: responseJson,
-            });
+            if (responseJson.results.length > 0) {
+              this.setState({
+                position: responseJson,
+              });
+            }
+            else {
+              this.setState({
+                position: '',
+              });
+            }
+
           })
           .catch((error) => {
           });
@@ -84,7 +94,7 @@ export default class RunDetail extends Component {
       .catch((error) => {
         window.location = "/logout";
       });
-  	}
+  }
 
   fetchRunLocation(path) {
     fetch(path, {
@@ -97,34 +107,35 @@ export default class RunDetail extends Component {
     })
       .then((response) => response.json())
       .then((responseJson) => {
+
         this.setState({
           runLocation: responseJson,
         });
       })
       .catch((error) => {
-       console.error(error);
+        console.error(error);
       });
-    }      
+  }
 
- loadMap() {
-  if(this.state.runLocation){
-        return (<Map location={this.state.runLocation} />);
-        } else {
-        return (
-          <div className='col-xs-12'>
-              No location data
+  loadMap() {
+    if (this.state.runLocation) {
+      return (<Map location={this.state.runLocation} />);
+    } else {
+      return (
+        <div className='col-xs-12'>
+          No location data
           </div>);
-        }
+    }
   }
 
   updateRun() {
-    
+
     var run_details = this.state.data.results[0];
-    var path = "http://dev.impactrun.com/api/ced/runupdate/" + run_details.run_id+'/'
+    var path = "http://dev.impactrun.com/api/ced/runupdate/" + run_details.run_id + '/'
     const formData = new FormData();
-    var new_distance = (this.state.added_distance*1) + this.state.current_distance
-    var new_amount = (this.state.added_distance*10) + this.state.current_amount
-    if(new_distance){
+    var new_distance = (this.state.added_distance * 1) + this.state.current_distance;
+    var new_amount = (this.state.added_distance * 10) + this.state.current_amount;
+    if (new_distance) {
       formData.append('user_id', run_details.user_id);
       formData.append('start_time', run_details.start_time);
       formData.append('run_amount', new_amount);
@@ -136,7 +147,7 @@ export default class RunDetail extends Component {
       return fetch(path, {
         method: 'PUT',
         body: formData,
-       
+
       })
         .then((response) => response.json())
         .then((responseJson) => {
@@ -151,12 +162,12 @@ export default class RunDetail extends Component {
   }
 
   updateTeam() {
-    
+
     var run_details = this.state.data.results[0];
-    var path = "http://dev.impactrun.com/api/ced/runupdate/" + run_details.run_id+'/'
+    var path = "http://dev.impactrun.com/api/ced/runupdate/" + run_details.run_id + '/'
     const formData = new FormData();
-    var team_id = this.state.team_id*1;
-    if(team_id){
+    var team_id = this.state.team_id * 1;
+    if (team_id) {
       formData.append('user_id', run_details.user_id);
       formData.append('start_time', run_details.start_time);
       formData.append('team_id', team_id);
@@ -170,7 +181,7 @@ export default class RunDetail extends Component {
       return fetch(path, {
         method: 'PUT',
         body: formData,
-       
+
       })
         .then((response) => response.json())
         .then((responseJson) => {
@@ -190,10 +201,10 @@ export default class RunDetail extends Component {
 
   flagRun() {
     var run_details = this.state.data.results[0];
-    
-    var path = "http://dev.impactrun.com/api/ced/runupdate/" + run_details.run_id+'/'
+
+    var path = "http://dev.impactrun.com/api/ced/runupdate/" + run_details.run_id + '/'
     const formData = new FormData();
-    
+
     formData.append('user_id', run_details.user_id);
     formData.append('start_time', run_details.start_time);
     formData.append('run_amount', run_details.run_amount);
@@ -205,7 +216,7 @@ export default class RunDetail extends Component {
     return fetch(path, {
       method: 'PUT',
       body: formData,
-     
+
     })
       .then((response) => response.json())
       .then((responseJson) => {
@@ -221,111 +232,113 @@ export default class RunDetail extends Component {
 
 
   render() {
-        var runDetails = this.state.data;
-        // if(runDetails){
-        // console.log("runDetails-----------------------",runDetails.results[0]);
-        // }
+   
+    // this.state.position.results[0].formatted_address
+    var runDetails = this.state.data;
+    // if(runDetails){
+    // console.log("runDetails-----------------------",runDetails.results[0]);
+    // }
 
-        var detailSection = () =>{
-          if(runDetails){
-            // console.log("runDetails-----------------------",runDetails.results[0]);
-            return (
-              <div className='row box-top-left'>
-                <div className='col-xs-12'>
-                  <div className='row'>
-                    <Table striped bordered hover>
-                      <thead>
-                        <tr>
-                          <th>User Id</th>
-                          <th>Start Time</th>
-                          <th>Distance</th>
-                          <th>Duration</th>
-                          <th>Cause</th>
-                          <th>Steps</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>
-                            <Link to={"/userdetail/" + runDetails.results[0].user_id} target='_blank'>
-                              {runDetails.results[0].user_id}
-                            </Link>
-                          </td>
-                          <td>{runDetails.results[0].start_time}</td>
-                          <td>{Math.round(runDetails.results[0].distance*100) / 100} km</td>
-                          <td>{runDetails.results[0].run_duration}</td>
-                          <td>{runDetails.results[0].cause_run_title}</td>
-                          <td>{runDetails.results[0].no_of_steps}</td>
-                        </tr>
-                      </tbody>
-                    </Table>            
-                  </div>
-                  <div className='row'>
-                    <Table striped bordered hover>
-                      <thead>
-                        <tr>
-                          <th>Location</th>
-                          <th>Is Flagged</th>
-                          <th>Device</th>
-                          <th>Speed</th>
-                          <th>Raised</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>{ this.state.position ? this.state.position.results[0].formatted_address :"No data"}</td>
-                          <td>{runDetails.results[0].is_flag ? "Yes" : "No"}</td>
-                          <td>{runDetails.results[0].is_ios ? "iOS" : "android"}</td>
-                          <td>{Math.round(runDetails.results[0].avg_speed*100) / 100} km/s</td>
-                          <td>{runDetails.results[0].run_amount}</td>
-                        </tr>
-                      </tbody>
-                    </Table>            
-                  </div>
-                  <div className='row'>
-                    <Table striped bordered hover>
-                      <thead>
-                        <tr>
-                          <th>Run Id</th>
-                          <th>Client Run Id</th>
-                          <th>End Time</th>
-                          <th>Spikes</th>
-                          <th>Calories</th>
-                          <th>Team Id</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>{runDetails.results[0].run_id}</td>
-                          <td>{runDetails.results[0].client_run_id}</td>
-                          <td>{runDetails.results[0].end_time}</td>
-                          <td>{runDetails.results[0].num_spikes}</td>
-                          <td>{Math.round(runDetails.results[0].calories_burnt)}</td>
-                          <td>
-                            <Link to={"/teammembers/"+runDetails.results[0].team_id +"/" } target='_blank'>
-                              {runDetails.results[0].team_id}
-                            </Link>
-                          </td>                          
-                        </tr>
-                      </tbody>
-                    </Table>            
-                  </div>
-                </div>
-                
+    var detailSection = () => {
+      if (runDetails) {
+        // console.log("runDetails-----------------------",runDetails.results[0]);
+        return (
+          <div className='row box-top-left'>
+            <div className='col-xs-12'>
+              <div className='row'>
+                <Table striped bordered hover>
+                  <thead>
+                    <tr>
+                      <th>User Id</th>
+                      <th>Start Time</th>
+                      <th>Distance</th>
+                      <th>Duration</th>
+                      <th>Cause</th>
+                      <th>Steps</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <Link to={"/userdetail/" + runDetails.results[0].user_id} target='_blank'>
+                          {runDetails.results[0].user_id}
+                        </Link>
+                      </td>
+                      <td>{runDetails.results[0].start_time}</td>
+                      <td>{Math.round(runDetails.results[0].distance * 100) / 100} km</td>
+                      <td>{runDetails.results[0].run_duration}</td>
+                      <td>{runDetails.results[0].cause_run_title}</td>
+                      <td>{runDetails.results[0].no_of_steps}</td>
+                    </tr>
+                  </tbody>
+                </Table>
               </div>
-              )
-          } else {
-            return (
-              <div>
-                No data
+              <div className='row'>
+                <Table striped bordered hover>
+                  <thead>
+                    <tr>
+                      <th>Location</th>
+                      <th>Is Flagged</th>
+                      <th>Device</th>
+                      <th>Speed</th>
+                      <th>Raised</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{this.state.position ? this.state.position.results[0].formatted_address : "No data"}</td>
+                      <td>{runDetails.results[0].is_flag ? "Yes" : "No"}</td>
+                      <td>{runDetails.results[0].is_ios ? "iOS" : "android"}</td>
+                      <td>{Math.round(runDetails.results[0].avg_speed * 100) / 100} km/s</td>
+                      <td>{runDetails.results[0].run_amount}</td>
+                    </tr>
+                  </tbody>
+                </Table>
               </div>
-              )
-          }
-        };
+              <div className='row'>
+                <Table striped bordered hover>
+                  <thead>
+                    <tr>
+                      <th>Run Id</th>
+                      <th>Client Run Id</th>
+                      <th>End Time</th>
+                      <th>Spikes</th>
+                      <th>Calories</th>
+                      <th>Team Id</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{runDetails.results[0].run_id}</td>
+                      <td>{runDetails.results[0].client_run_id}</td>
+                      <td>{runDetails.results[0].end_time}</td>
+                      <td>{runDetails.results[0].num_spikes}</td>
+                      <td>{Math.round(runDetails.results[0].calories_burnt)}</td>
+                      <td>
+                        <Link to={"/teammembers/" + runDetails.results[0].team_id + "/"} target='_blank'>
+                          {runDetails.results[0].team_id}
+                        </Link>
+                      </td>
+                    </tr>
+                  </tbody>
+                </Table>
+              </div>
+            </div>
+
+          </div>
+        )
+      } else {
+        return (
+          <div>
+            No data
+              </div>
+        )
+      }
+    };
 
 
     // TODO: logic for calculating the distance between all lat long and adding individial distances
-    
+
 
     //     var finalData = [];
     //     var finalDataObject = {};
@@ -376,7 +389,7 @@ export default class RunDetail extends Component {
     //           return n[0].finalData.length > 0;
     //       });
     //       console.log("Final Dataaaaaaaaaaaa", finalData[0][0]);
-          
+
 
     //       var totalLength = _.map(finalData[0][0].finalData, addDistance);
 
@@ -385,7 +398,7 @@ export default class RunDetail extends Component {
     //   function addDistance(location) {
 
     //       var distance = calculateDistance(location.position)
-          
+
     //         return dist
     //     }
 
@@ -447,80 +460,81 @@ export default class RunDetail extends Component {
 
     //     }
 
-  	// var mapSection = () =>{
-   //    if(this.state.runLocation){
-   //      return (
-   //          <div className='col-xs-12'>
-   //            <Map location={this.state.runLocation} />
-   //          </div>
-   //        )
-   //      } else {
-   //        <div className='col-xs-12'>
-   //            No location data
-   //        </div>
-   //      }
-  	// };
+    // var mapSection = () =>{
+    //    if(this.state.runLocation){
+    //      return (
+    //          <div className='col-xs-12'>
+    //            <Map location={this.state.runLocation} />
+    //          </div>
+    //        )
+    //      } else {
+    //        <div className='col-xs-12'>
+    //            No location data
+    //        </div>
+    //      }
+    // };
 
 
     return (
+
       <div>
         <div className='row'>
-        <div className='col-sm-offset-2 col-xs-2'>
-           <Button
-            bsStyle="default"
-            bsSize="large"
-            onClick={() => this.setState({ showDistanceModal: true })}>
-            Update Distance
+          <div className='col-sm-offset-2 col-xs-2'>
+            <Button
+              bsStyle="default"
+              bsSize="large"
+              onClick={() => this.setState({ showDistanceModal: true })}>
+              Update Distance
           </Button>
-          <Modal show={this.state.showDistanceModal} onHide={() => this.setState({ showDistanceModal: false })}>
+            <Modal show={this.state.showDistanceModal} onHide={() => this.setState({ showDistanceModal: false })}>
               <Modal.Header closeButton>
                 <Modal.Title> Updating distance</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-              <div className='row'>
-                <div className='col-sm-6'>
-                  Increase distance by 
+                <div className='row'>
+                  <div className='col-sm-6'>
+                    Increase distance by
                 </div>
-                <div className='col-sm-6'>
-                  <input type="text" value={this.state.added_distance} onChange={this.handleChangeDistance} name="my-input-field"/>
+                  <div className='col-sm-6'>
+                    <input type="text" value={this.state.added_distance} onChange={this.handleChangeDistance} name="my-input-field" />
+                  </div>
+                  <div className='col-sm-6'>
+                    {isFinite(this.state.added_distance) ? 'Updated distance -' : 'Current distance -'}
+                  </div>
+                  <div className='col-sm-6'>
+                    {isNaN((this.state.added_distance * 1) + this.state.current_distance) ? this.state.current_distance : (this.state.added_distance * 1) + this.state.current_distance}
+                  </div>
+                  <div className='col-sm-6'>
+                    {isFinite(this.state.added_distance) ? 'Updated amount -' : 'Current amount -'}
+                  </div>
+                  <div className='col-sm-6'>
+                    {isNaN((this.state.added_distance * 10) + this.state.current_amount) ? this.state.current_amount : (this.state.added_distance * 10) + this.state.current_amount}
+                  </div>
                 </div>
-                <div className='col-sm-6'>
-                  Updated distance -  
-                </div>
-                <div className='col-sm-6'>
-                  {(this.state.added_distance*1) + this.state.current_distance}
-                </div>
-                <div className='col-sm-6'>
-                  Updated amount 
-                </div>
-                <div className='col-sm-6'>
-                  {(this.state.added_distance*10) + this.state.current_amount}
-                </div>
-              </div>
               </Modal.Body>
               <Modal.Footer>
                 <Button onClick={() => this.updateRun()}>Update</Button>
                 <Button onClick={() => this.setState({ showDistanceModal: false })}>Cancel</Button>
               </Modal.Footer>
             </Modal>
-        </div>
-        <div className='col-xs-2'>
-           <Button
-            bsStyle="default"
-            bsSize="large"
-            onClick={() => this.setState({ showFlagModal: true })}>
-            {this.state.is_flag ? 'Unflag Run': 'Flag Run'}
-          </Button>
-          <Modal show={this.state.showFlagModal} onHide={() => this.setState({ showFlagModal: false })}>
+          </div>
+          <div className='col-xs-2'>
+            <Button
+              bsStyle="default"
+              bsSize="large"
+              onClick={() => this.setState({ showFlagModal: true })}>
+              {this.state.is_flag ? 'Unflag Run' : 'Flag Run'}
+            </Button>
+            <Modal show={this.state.showFlagModal} onHide={() => this.setState({ showFlagModal: false })}>
               <Modal.Header closeButton>
                 <Modal.Title> Flagging Run</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-               <tr >
-                <td>
-                Are you sure you want to {this.state.is_flag ? "unflag" : "flag" } this run ?
+                <tr >
+                  <td>
+                    Are you sure you want to {this.state.is_flag ? "unflag" : "flag"} this run ?
                 </td>
-              </tr>
+                </tr>
 
               </Modal.Body>
               <Modal.Footer>
@@ -530,35 +544,35 @@ export default class RunDetail extends Component {
             </Modal>
           </div>
           <div className='col-xs-2'>
-           <Button
-            bsStyle="default"
-            bsSize="large"
-            onClick={() => this.setState({ showTeamModal: true })}>
-            Update Team
+            <Button
+              bsStyle="default"
+              bsSize="large"
+              onClick={() => this.setState({ showTeamModal: true })}>
+              Update Team
           </Button>
-          <Modal show={this.state.showTeamModal} onHide={() => this.setState({ showTeamModal: false })}>
+            <Modal show={this.state.showTeamModal} onHide={() => this.setState({ showTeamModal: false })}>
               <Modal.Header closeButton>
                 <Modal.Title> Updating team</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-              <div className='row'>
-                <div className='col-sm-6'>
-                  New Team id 
+                <div className='row'>
+                  <div className='col-sm-6'>
+                    New Team id
                 </div>
-                <div className='col-sm-6'>
-                  <input type="text" value={this.state.team_id} onChange={this.handleChangeTeam} name="my-input-field"/>
-                </div>                
-              </div>
+                  <div className='col-sm-6'>
+                    <input type="text" value={this.state.team_id} onChange={this.handleChangeTeam} name="my-input-field" />
+                  </div>
+                </div>
               </Modal.Body>
               <Modal.Footer>
                 <Button onClick={() => this.updateTeam()}>Update</Button>
                 <Button onClick={() => this.setState({ showTeamModal: false })}>Cancel</Button>
               </Modal.Footer>
             </Modal>
-        </div>
-        	<div className="col-sm-12">
-            <div style={{  width: "100%",marginTop: "10px" }}>
-              <div style={{ width: "100%", height: "350px"}}>
+          </div>
+          <div className="col-sm-12">
+            <div style={{ width: "100%", marginTop: "10px" }}>
+              <div style={{ width: "100%", height: "350px" }}>
                 {this.loadMap()}
               </div>
             </div>
@@ -566,8 +580,8 @@ export default class RunDetail extends Component {
         </div>
         <div className='row'>
           <div className="col-sm-12">
-            <br/>
-            <div style={{  marginLeft: "10px", width: "100%", height: "100%"}}>
+            <br />
+            <div style={{ marginLeft: "10px", width: "100%", height: "100%" }}>
               {detailSection()}
             </div>
           </div>
