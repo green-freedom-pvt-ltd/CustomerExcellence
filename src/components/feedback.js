@@ -24,7 +24,7 @@ export default class Feedback extends Component {
       prevPage: '',
       childVisible: false,
       count: 0,
-      fetchUrl: 'http://api.impactrun.com//ced/v1/userFeedback/'
+      fetchUrl: 'http://api.impactrun.com/ced/v1/userFeedback/'
     }
     this.handleSelect = this.handleSelect.bind(this);
     this.myCallback = this.myCallback.bind(this);

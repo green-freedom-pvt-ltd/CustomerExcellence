@@ -59,7 +59,6 @@ export default class SearchItem extends Component {
                     this.state.pageCount = Math.ceil(this.state.data.count / this.state.data.results.length );
                 }
               }
-              console.log("this.state.data", this.state.data);
               if (this.state.data.error || this.state.data.results.length < 1) {
                 return <tr><td colSpan="4" style={{textAlign:"center"}}>No Record Found..!!</td></tr>
       
