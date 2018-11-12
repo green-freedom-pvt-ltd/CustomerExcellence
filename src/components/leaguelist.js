@@ -83,7 +83,7 @@ export default class LeagueList extends Component{
   }
 
   componentWillMount(){
-    return fetch('http://dev.impactrun.com/api/ced/impactleague/', {
+    return fetch('http://api.impactrun.com/ced/v1/impactleague/', {
       method: 'GET',
       headers: {
         'Accept': 'application/json',

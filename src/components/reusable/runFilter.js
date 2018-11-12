@@ -186,7 +186,7 @@ onClickClear() {
     var path = "http://dev.impactrun.com/api/ced/runs/?"
     this.state = {
       data: null,
-      fetchUrl: 'http://dev.impactrun.com/api/ced/userFeedback/',
+      fetchUrl: 'http://api.impactrun.com/ced/v1/userFeedback/',
       user_id:"",
       run_id:"",
       client_run_id:"",

@@ -17,7 +17,7 @@ export default class FeedbackFilter extends Component {
     super(props);
     this.state = {
       data: null,
-      fetchUrl: 'http://dev.impactrun.com/api/ced/userFeedback/'
+      fetchUrl: 'http://api.impactrun.com/ced/v1/userFeedback/'
     }
     this.logTag = this.logTag.bind(this);
     this.logSubTag = this.logSubTag.bind(this);
@@ -30,8 +30,8 @@ export default class FeedbackFilter extends Component {
   onClickReply() {
     
 
-    var path = "http://dev.impactrun.com/api/ced/userFeedback/" + '?'
-    const formData = new FormData();
+    var path = "http://api.impactrun.com/ced/v1/userFeedback/" + '?'
+
     if(this.state.tag){
       path+='tag='+this.state.tag.value + '&'
     }
@@ -97,29 +97,29 @@ export default class FeedbackFilter extends Component {
   render() {
     var tag_options = [
       { label: 'Past Workout', value: 'pastworkout' },
-      { label: 'Question', value: 'question' },
-      { label: 'Feedback', value: 'feedback' },
-      { label: 'Else', value: 'else' },
-      { label: 'Flag', value: 'flag' },
-      { label: 'Sad', value: 'sad' },
+      { label: 'Question',     value: 'question' },
+      { label: 'Feedback',     value: 'feedback' },
+      { label: 'Else',         value: 'else' },
+      { label: 'Flag',         value: 'flag' },
+      { label: 'Sad',          value: 'sad' },
     ];
 
     var boolean_options = [
-      { value: 'True', label: 'Yes' },
-      { value: 'False', label: 'No' },
+      { value: 'true',  label: 'Yes' },
+      { value: 'false', label: 'No' },
     ];
 
     var sub_tag_options = [
-      { value: 'less', label: 'Less distance recorded' },
-      { value: 'more', label: 'More distance recorded' },
-      { value: 'scratched', label: 'Why is it scratched off' },
-      { value: 'notvehicle', label: 'I was not in a vehicle' },
-      { value: 'leaderboardadd', label: 'Impact missing in Leaderboard' },
-      { value: 'stillelse', label: 'Something else' },
-      { value: 'notaccurate', label: 'Distance not accurate' },
-      { value: 'workoutmissing', label: 'Workout missing from history' },
-      { value: 'gpsissue', label: 'Issue with GPS' },
-      { value: 'zerodistance', label: 'Zero distance recorded' },
+      { value: 'less',          label: 'Less distance recorded' },
+      { value: 'more',          label: 'More distance recorded' },
+      { value: 'scratched',     label: 'Why is it scratched off' },
+      { value: 'notvehicle',    label: 'I was not in a vehicle' },
+      { value: 'leaderboardadd',label: 'Impact missing in Leaderboard' },
+      { value: 'stillelse',     label: 'Something else' },
+      { value: 'notaccurate',   label: 'Distance not accurate' },
+      { value: 'workoutmissing',label: 'Workout missing from history' },
+      { value: 'gpsissue',      label: 'Issue with GPS' },
+      { value: 'zerodistance',  label: 'Zero distance recorded' },
     ];
 
     return (

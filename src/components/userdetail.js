@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import UserComponent from './usercomponent';
 import Map from "./map.js";
 import Feedback from './feedback';
-import Cookies from 'universal-cookie';
 import moment from 'moment';
-
-
-
+import Cookies from 'universal-cookie';
 const cookies = new Cookies();
+
+
+
 
 var totalRuns;
 export default class UserDetail extends Component {
@@ -34,7 +34,7 @@ export default class UserDetail extends Component {
   }
   componentDidMount() {
     try {
-      fetch('http://api.impactrun.com/ced/v0/users/' + this.state.user_id + '/', {
+      fetch('http://api.impactrun.com/ced/v1/users/' + this.state.user_id + '/', {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
@@ -168,12 +168,12 @@ export default class UserDetail extends Component {
 
   loadLocation(item, itemId) {
 
-    fetch('http://dev.impactrun.com/api/ced/runLocations/' + item.run_id + '/', {
+    fetch('http://api.impactrun.com/ced/v1/runLocations/' + item.run_id + '/', {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': 'Basic bmlra2k6Z3JlZW5mcmVlZG9tIQ=='
+        'Authorization': cookies.get('authorization')
       }
     })
       .then((Response) => {

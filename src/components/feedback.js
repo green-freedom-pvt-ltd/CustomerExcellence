@@ -24,17 +24,17 @@ export default class Feedback extends Component {
       prevPage: '',
       childVisible: false,
       count: 0,
-      fetchUrl: 'http://dev.impactrun.com/api/ced/userFeedback/'
+      fetchUrl: 'http://api.impactrun.com//ced/v1/userFeedback/'
     }
     this.handleSelect = this.handleSelect.bind(this);
     this.myCallback = this.myCallback.bind(this);
     if (props.user_id) {
-      this.state.fetchUrl += '?user_id=' + props.user_id
+      this.state.fetchUrl += '?user_id_id=' + props.user_id
       // console.log("inside feedback fetchUrl", this.state.fetchUrl);
     }
   }
 
-
+  
 
 
   handleReply(event) {
@@ -159,7 +159,7 @@ export default class Feedback extends Component {
             <td>
               <Button onClick={() => { this.onClickReply(feedback.id) }}>
                 Save
-                  </Button>
+              </Button>
             </td>
           </tr>
         )
@@ -200,8 +200,8 @@ export default class Feedback extends Component {
       ];
 
       var boolean_options = [
-        { value: 'True', label: 'Yes' },
-        { value: 'False', label: 'No' },
+        { value: 'true', label: 'Yes' },
+        { value: 'false', label: 'No' },
       ];
 
       var sub_tag_options = [

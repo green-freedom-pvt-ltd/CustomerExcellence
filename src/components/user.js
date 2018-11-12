@@ -14,7 +14,7 @@ class User extends Component {
     this.state = {
       data: null,
       loading: false,
-      userPath: 'http://dev.impactrun.com/api/ced/users/',
+      userPath: 'http://api.impactrun.com/ced/v1/users/',
       nextPage: '',
       prevPage: '',
       activePage: 1,

@@ -36,7 +36,7 @@ export default class Login extends Component{
   
   requestLogin(user_name, password){
 
-      return fetch('http://dev.impactrun.com/api/ced/login/', {
+      return fetch('http://api.impactrun.com/ced/v1/login', {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
@@ -54,7 +54,6 @@ export default class Login extends Component{
           window.location = "/user";
         })
         .catch((error) => {
-          console.error("error-------------------",error);
           cookies.set('authorization','IsImVtYWlsIjoiaW5pdCIsIl9fdiI6ImluaXQiLCJfaWQiOiJpbml0In0sInN0Y', { path: '/' });
           this.setState({
             is_login: false
@@ -89,19 +88,19 @@ export default class Login extends Component{
     return (
       <div>
         <Form style={{ paddingBottom: "10px" }} onSubmit={this.handleSubmit}>
-          <FormGroup style={{ display: "flex",marginBottom:"10px" }} controlId="formInlineFirstName">
+          <FormGroup style={{ display: "flex",marginBottom:"10px" }} >
             <div className="col-sm-6" style={{marginRight:"10px"}}>
               <div className="row">
               <ControlLabel>User Name</ControlLabel>
               {' '}
-              <FormControl type="text" placeholder="wolverine" ref="user_name" value={this.state.user_name} onChange={this.handleFNameChange} />
+              <FormControl id="user_name" type="text" placeholder="wolverine" ref="user_name" value={this.state.user_name} onChange={this.handleFNameChange} />
               </div>
             </div>
             <div className="col-sm-6">
             <div className="row">
               <ControlLabel>Password</ControlLabel>
               {' '}
-              <FormControl type="password" placeholder=".'.'.'.'.'.'." ref="password" value={this.state.password} onChange={this.handleLNameChange} />
+              <FormControl id="password" type="password" placeholder=".'.'.'.'.'.'." ref="password" value={this.state.password} onChange={this.handleLNameChange} />
             </div>
             </div>
             {' '}

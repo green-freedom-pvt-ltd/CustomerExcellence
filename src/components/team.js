@@ -7,6 +7,8 @@ import {
 } from 'react-router-dom';
 import {CSVLink, CSVDownload} from 'react-csv';
 import {RingLoader, PropagateLoader} from 'react-spinners';
+import Cookies from 'universal-cookie';
+const cookies = new Cookies();
 
 
 export default class Team extends Component{
@@ -18,7 +20,7 @@ export default class Team extends Component{
       this.state = {
       data: null,
       loading:true,
-      fetchUrl:'http://dev.impactrun.com/api/ced/teams/',
+      fetchUrl:'http://api.impactrun.com/ced/v1/teams/',
       league_id: null,
       csvData:[['index', 'Team Id', 'Team Name', 'Captain', 'Phone Number','Email', 'Code', 'Count']],
 
@@ -109,7 +111,7 @@ export default class Team extends Component{
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': 'Basic bmlra2k6Z3JlZW5mcmVlZG9tIQ=='
+        'Authorization': cookies.get('authorization')
       }
     })
       .then((response) => response.json())

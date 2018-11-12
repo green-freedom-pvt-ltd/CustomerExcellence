@@ -21,7 +21,7 @@ export default class SearchItem extends Component {
             activePage: 1,
             loading: true,
         }
-        this.fetchResults("http://dev.impactrun.com/api/ced/users/" + searchQuery);
+        this.fetchResults("http://api.impactrun.com/ced/v1/users/" + searchQuery);
         this.handleSelect = this.handleSelect.bind(this);
     }
     fetchResults(query) {
@@ -51,13 +51,21 @@ export default class SearchItem extends Component {
         }
         else {
             if (this.state.prevPage === null) {
-                this.state.pageCount = Math.ceil(this.state.data.count / this.state.data.results.length);
+                if(this.state.data.error){
+                    return this.state.pageCount =1
+                }
+                else{
+
+                    this.state.pageCount = Math.ceil(this.state.data.count / this.state.data.results.length );
+                }
               }
-              if (this.state.data.results.length < 1) {
+              console.log("this.state.data", this.state.data);
+              if (this.state.data.error || this.state.data.results.length < 1) {
                 return <tr><td colSpan="4" style={{textAlign:"center"}}>No Record Found..!!</td></tr>
       
               }
            else{
+
             var runList = this.state.data.results.map((item, index) => {
                 return (
                     // <li key={index}>{item.run_id}</li>
@@ -152,9 +160,7 @@ export default class SearchItem extends Component {
                 </div>
             );
         }
-        else {
-            <div>Test</div>
-        }
+       
     }
 
 }
